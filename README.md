@@ -1,5 +1,7 @@
 # Mantine + TanStack Start Template
 
+> Warning, this is a work in progress.
+
 The easiest way to initialize a new project with [Mantine](https://mantine.dev/) and [TanStack Start](https://tanstack.com/start).
 
 ## Features
