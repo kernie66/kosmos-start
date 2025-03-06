@@ -1,0 +1,7 @@
+.button {
+  border-radius: var(--mantine-radius-md);
+
+  @mixin hover {
+    background: var(--mantine-color-red-6);
+  }
+}
