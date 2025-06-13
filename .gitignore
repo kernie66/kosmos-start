@@ -1,6 +1,0 @@
-node_modules
-pnpm-lock.json
-!.env
-.DS_Store
-.output
-.vinxi
