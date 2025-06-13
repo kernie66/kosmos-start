@@ -1,0 +1,19 @@
+{
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.associations": {
+    "*.css": "postcss"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.removeUnusedImports": "explicit"
+  },
+  "cssVariables.lookupFiles": ["**/*.css", "node_modules/@mantine/core/styles.css"]
+}

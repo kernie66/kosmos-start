@@ -1,0 +1,21 @@
+.splash {
+  width: 100%;
+  max-width: rem(500px);
+  aspect-ratio: 1;
+  background: center center / contain no-repeat;
+  @mixin light {
+    background-image: url('/splash-light.webp');
+  }
+  @mixin dark {
+    background-image: url('/splash-dark.webp');
+  }
+  @mixin larger-than 450px {
+    margin-top: var(--mantine-spacing-xl);
+  }
+}
+
+.tagline {
+  text-align: center;
+  font-size: rem(24px);
+  font-weight: bold;
+}

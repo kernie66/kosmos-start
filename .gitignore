@@ -1,0 +1,10 @@
+node_modules
+.tanstack-start
+routeTree.gen.ts
+.env
+.nitro
+.output
+
+# Drizzle & SQLite files
+drizzle
+db.sqlite
