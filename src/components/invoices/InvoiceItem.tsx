@@ -1,5 +1,4 @@
 import { ActionIcon, Autocomplete, Box, Loader, NumberFormatter, NumberInput, TextInput } from '@mantine/core';
-import { useMounted } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import { useState } from 'react';
@@ -26,8 +25,6 @@ export function InvoiceItem({ provided, form, index, onTotalChange }: InvoiceIte
 
   const { quantity, unitPrice } = form.getValues().items[index];
   const [total, setTotal] = useState(quantity * unitPrice);
-
-  const isMounted = useMounted();
 
   form.watch(`items.${index}.quantity`, ({ value }) => {
     setTotal(value * form.getValues().items[index].unitPrice);
@@ -77,7 +74,7 @@ export function InvoiceItem({ provided, form, index, onTotalChange }: InvoiceIte
           key={form.key(`items.${index}.unit`)}
           {...form.getInputProps(`items.${index}.unit`)}
           data={unitOptions.data}
-          rightSection={isMounted && unitOptions.isFetching && <Loader size="xs" />}
+          rightSection={unitComboOpened && unitOptions.isFetching && <Loader size="xs" />}
         />
         <NumberInput
           className={classes.field}

@@ -1,5 +1,4 @@
 import { ActionIcon, Autocomplete, Loader } from '@mantine/core';
-import { useMounted } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { TbTrash } from 'react-icons/tb';
@@ -32,7 +31,6 @@ export function InvoiceField({ provided, form, type, index }: InvoiceFieldsProps
   });
 
   const trpc = useTRPC();
-  const isMounted = useMounted();
 
   const [nameComboOpened, setNameComboOpened] = useState(false);
   const nameOptions = useQuery({
@@ -64,7 +62,7 @@ export function InvoiceField({ provided, form, type, index }: InvoiceFieldsProps
         key={form.key(`${type}.${index}.name`)}
         {...form.getInputProps(`${type}.${index}.name`)}
         data={nameOptions.data}
-        rightSection={isMounted && nameOptions.isFetching && <Loader size="xs" />}
+        rightSection={nameComboOpened && nameOptions.isFetching && <Loader size="xs" />}
       />
       <Autocomplete
         comboboxProps={{
@@ -77,7 +75,7 @@ export function InvoiceField({ provided, form, type, index }: InvoiceFieldsProps
         key={form.key(`${type}.${index}.value`)}
         {...form.getInputProps(`${type}.${index}.value`)}
         data={valueOptions.data}
-        rightSection={isMounted && valueOptions.isFetching && <Loader size="xs" />}
+        rightSection={valueComboOpened && valueOptions.isFetching && <Loader size="xs" />}
       />
       <ActionIcon variant="light" size="input-sm" color="red" onClick={handleDeleteClick} title="Delete field">
         <TbTrash />
