@@ -8,10 +8,8 @@
     "formulahendry.auto-rename-tag",
     "vunguyentuan.vscode-postcss",
     "csstools.postcss",
-    "prisma.prisma",
     "yoavbls.pretty-ts-errors",
     "esbenp.prettier-vscode",
-    "vitest.explorer",
-    "ms-playwright.playwright"
+    "vitest.explorer"
   ]
 }
