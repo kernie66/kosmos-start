@@ -16,7 +16,7 @@ This is an **opinionated** template that includes:
 
 ## Getting Started
 
-1. Clone the repository with `git clone https://github.com/icflorescu/mantine-start.git`
+1. Clone the repository (i.e. `git clone https://github.com/icflorescu/mantine-start.git`)
 2. Install dependencies with `pnpm i`
 3. Make a copy of `.env.example`, name it `.env` and make sure to set a strong password for the session cookie
 4. Generate the database file with `pnpm db:reset`
