@@ -56,7 +56,7 @@ Starring the repo on GitHub is also greatly appreciated.
 ## Hiring the author
 
 If you want to hire my services, don’t hesitate to drop me a line at the email address listed in my [GitHub profile](https://github.com/icflorescu).
-Mentioning “Mantine and TanStack” will result in a faster response.
+Mentioning *Mantine and TanStack or Next.js* will result in a faster response.
 
 ## Acknowledgements
 
