@@ -24,7 +24,7 @@ export function Nav() {
 
   return (
     <RemoveScroll enabled={mobileNavVisible}>
-      <nav className={clsx(classes.root, { [classes.visible]: mobileNavVisible })} onTouchStart={hideMobileNav}>
+      <nav className={clsx({ [classes.visible]: mobileNavVisible })} onTouchStart={hideMobileNav}>
         <ScrollArea className={classes.scrollArea} onTouchStart={(e) => e.stopPropagation()} onTouchEnd={hideMobileNav}>
           <RouterNavLink
             className={classes.navLink}

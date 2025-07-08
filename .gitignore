@@ -9,3 +9,5 @@ routeTree.gen.ts
 # Drizzle & SQLite files
 drizzle
 db.sqlite
+
+.env.keys
