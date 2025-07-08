@@ -3,7 +3,7 @@ import { ClerkProvider } from '@clerk/tanstack-react-start';
 import { AppShell, ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
 import { Footer } from '~/components/Footer';
 import { Header } from '~/components/header/Header';
@@ -48,7 +48,7 @@ function RootComponent() {
 }
 
 function RootDocument({ children }: PropsWithChildren) {
-  const mobileOpened = useAtomValue(mobileToggleState);
+  const [mobileOpened, toggleMobileOpened] = useAtom(mobileToggleState);
   const desktopOpened = useAtomValue(desktopToggleState);
 
   return (
@@ -64,7 +64,7 @@ function RootDocument({ children }: PropsWithChildren) {
             <Progress />
             <ModalsProvider>
               <AppShell
-                header={{ height: 60 }}
+                header={{ height: 62 }}
                 navbar={{
                   width: { sm: 240 },
                   breakpoint: 'sm',
@@ -76,7 +76,7 @@ function RootDocument({ children }: PropsWithChildren) {
                 <AppShell.Header>
                   <Header />
                 </AppShell.Header>
-                <AppShell.Navbar>
+                <AppShell.Navbar onClick={() => mobileOpened && toggleMobileOpened(false)}>
                   <Nav />
                 </AppShell.Navbar>
                 <AppShell.Main>{children}</AppShell.Main>

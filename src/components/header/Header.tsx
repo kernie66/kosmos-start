@@ -33,7 +33,6 @@ export function Header() {
             aria-label="Toggle navigation"
           />
           <DibberButton />
-          {mobileOpened ? 'mobile Opened' : 'mobile Closed'} {desktopOpened ? 'desktop Opened' : 'desktop Closed'}
         </Group>
         <Group gap="xs">
           <SignedIn>

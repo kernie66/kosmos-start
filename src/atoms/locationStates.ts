@@ -1,6 +1,6 @@
+import { atom } from 'jotai';
 import { atomWithDefault, atomWithStorage } from 'jotai/utils';
 import { atomStorage } from './atomStorage.js';
-import { atom } from 'jotai';
 
 const defaultLat = import.meta.env.VITE_DEFAULT_LATITUDE;
 const defaultLon = import.meta.env.VITE_DEFAULT_LONGITUDE;
@@ -17,11 +17,11 @@ export const currentLocationState = atomWithStorage(
     position: defaultPosition,
   },
   atomStorage,
-  { getOnInit: true }
+  { getOnInit: true },
 );
 
 export const currentPositionState = atom(
-  (get) => get(currentLocationState).position
+  (get) => get(currentLocationState).position,
   /* Not used
   (get, set, update) => {
     console.log('update', update);
@@ -33,13 +33,6 @@ export const currentPositionState = atom(
   */
 );
 
-export const historyLocationState = atomWithStorage(
-  'locationHistory',
-  [],
-  atomStorage,
-  { getOnInit: true }
-);
+export const historyLocationState = atomWithStorage('locationHistory', [], atomStorage, { getOnInit: true });
 
-export const mapLocationState = atomWithDefault((get) =>
-  get(currentLocationState)
-);
+export const mapLocationState = atomWithDefault((get) => get(currentLocationState));
