@@ -79,7 +79,7 @@ function RootDocument({ children }: PropsWithChildren) {
                 <AppShell.Navbar onClick={() => mobileOpened && toggleMobileOpened(false)}>
                   <Nav />
                 </AppShell.Navbar>
-                <AppShell.Main>{children}</AppShell.Main>
+                <AppShell.Main bg="teal.2">{children}</AppShell.Main>
                 <AppShell.Footer>
                   <Footer />
                 </AppShell.Footer>

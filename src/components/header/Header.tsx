@@ -1,4 +1,4 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/tanstack-react-start';
+import { SignedIn, UserButton } from '@clerk/tanstack-react-start';
 import { ActionIcon, Burger, Container, Group } from '@mantine/core';
 import { useAtom } from 'jotai';
 import { TbBrandGithub, TbHeartFilled } from 'react-icons/tb';
@@ -36,13 +36,8 @@ export function Header() {
         </Group>
         <Group gap="xs">
           <SignedIn>
-            <p>You are signed in</p>
             <UserButton />
           </SignedIn>
-          <SignedOut>
-            <p>You are signed out</p>
-            <SignInButton />
-          </SignedOut>
           <NewInvoiceButton />
           <LogoutButton />
           {import.meta.env.DEV && <DevtoolsActionIcon />}
