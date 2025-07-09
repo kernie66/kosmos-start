@@ -1,6 +1,7 @@
 import { SignOutButton, SignedIn, SignedOut } from '@clerk/tanstack-react-start';
 import { NavLink, RemoveScroll, ScrollArea } from '@mantine/core';
 import { useThrottledCallback } from '@mantine/hooks';
+import { useLocation } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
@@ -11,6 +12,19 @@ import { RouterNavLink } from './RouterNavLink';
 export function Nav() {
   const [mobileNavVisible, toggleMobileNav] = useAtom(mobileToggleState);
   const [desktopNavVisible, toggleDesktopNav] = useAtom(desktopToggleState);
+
+  let onSignInPage = false;
+
+  const pathName = useLocation({
+    select: (location) => location.pathname,
+  });
+
+  console.log('pathName', pathName);
+  if (pathName.startsWith('/sign-in')) {
+    onSignInPage = true;
+  } else {
+    onSignInPage = false;
+  }
 
   const hideMobileNav = () => {
     toggleMobileNav(false);
@@ -31,8 +45,8 @@ export function Nav() {
   return (
     <RemoveScroll enabled={mobileNavVisible}>
       <ScrollArea px="sm" py="md">
-        <RouterNavLink bdrs="md" to="/home" label="Hem" leftSection={<TbHome2 size={16} strokeWidth={1.5} />} />
         <SignedIn>
+          <RouterNavLink bdrs="md" to="/" label="Hem" leftSection={<TbHome2 size={16} strokeWidth={1.5} />} />
           <RouterNavLink
             bdrs="md"
             to="/invoices"
@@ -45,6 +59,11 @@ export function Nav() {
           </SignOutButton>
         </SignedIn>
         <SignedOut>
+          {onSignInPage ? (
+            <RouterNavLink bdrs="md" to="/home" label="Hem" leftSection={<TbHome2 size={16} strokeWidth={1.5} />} />
+          ) : (
+            <RouterNavLink bdrs="md" to="/" label="Hem" leftSection={<TbHome2 size={16} strokeWidth={1.5} />} />
+          )}
           <RouterNavLink
             bdrs="md"
             to="/sign-in/$"
