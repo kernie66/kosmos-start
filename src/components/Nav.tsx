@@ -1,25 +1,19 @@
-import { SignedIn, SignedOut, useClerk } from '@clerk/tanstack-react-start';
+import { SignedIn, SignedOut } from '@clerk/tanstack-react-start';
 import { NavLink, RemoveScroll, ScrollArea } from '@mantine/core';
 import { useThrottledCallback } from '@mantine/hooks';
-import { useLocation, useRouter } from '@tanstack/react-router';
+import { useLocation } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
+import { useSignOut } from '~/hooks/useSignOut';
 import classes from './Nav.module.css';
 import { RouterNavLink } from './RouterNavLink';
 
 export function Nav() {
   const [mobileNavVisible, toggleMobileNav] = useAtom(mobileToggleState);
   const [desktopNavVisible, toggleDesktopNav] = useAtom(desktopToggleState);
-  const clerk = useClerk();
-  const router = useRouter();
-
-  const signOut = async () => {
-    await clerk.signOut();
-    await router.invalidate();
-    router.navigate({ to: '/' });
-  };
+  const { signOut } = useSignOut();
 
   let onSignInPage = false;
 

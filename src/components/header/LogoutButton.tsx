@@ -1,17 +1,11 @@
-import { useClerk } from '@clerk/tanstack-react-start';
 import { ActionIcon, Button } from '@mantine/core';
-import { useRouteContext, useRouter } from '@tanstack/react-router';
+import { useRouteContext } from '@tanstack/react-router';
 import { TbLogout } from 'react-icons/tb';
+import { useSignOut } from '~/hooks/useSignOut';
 
 export function LogoutButton() {
   const { isAuthenticated } = useRouteContext({ from: '__root__' });
-  const clerk = useClerk();
-  const router = useRouter();
-
-  const signOut = () => {
-    clerk.signOut();
-    router.invalidate();
-  };
+  const { signOut } = useSignOut();
 
   // If the user is not authenticated, we don't render the button
   if (!isAuthenticated) return null;
