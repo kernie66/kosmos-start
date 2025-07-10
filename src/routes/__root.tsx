@@ -17,7 +17,7 @@ import cssHref from './__root.css?url';
 import classes from './__root.module.css';
 import type { PropsWithChildren } from 'react';
 
-const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
+export const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
   const { userId } = await getAuth(getWebRequest());
 
   return {
@@ -47,7 +47,6 @@ export const Route = createRootRouteWithContext<{ isAuthenticated: boolean }>()(
   }),
   beforeLoad: async () => {
     const { userId } = await fetchClerkAuth();
-    console.log('userId', userId);
     return { isAuthenticated: Boolean(userId) };
   },
   component: RootComponent,

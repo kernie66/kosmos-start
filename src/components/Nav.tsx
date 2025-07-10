@@ -1,7 +1,7 @@
-import { SignOutButton, SignedIn, SignedOut } from '@clerk/tanstack-react-start';
+import { SignedIn, SignedOut, useClerk } from '@clerk/tanstack-react-start';
 import { NavLink, RemoveScroll, ScrollArea } from '@mantine/core';
 import { useThrottledCallback } from '@mantine/hooks';
-import { useLocation } from '@tanstack/react-router';
+import { useLocation, useRouter } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
@@ -12,6 +12,14 @@ import { RouterNavLink } from './RouterNavLink';
 export function Nav() {
   const [mobileNavVisible, toggleMobileNav] = useAtom(mobileToggleState);
   const [desktopNavVisible, toggleDesktopNav] = useAtom(desktopToggleState);
+  const clerk = useClerk();
+  const router = useRouter();
+
+  const signOut = async () => {
+    await clerk.signOut();
+    await router.invalidate();
+    router.navigate({ to: '/' });
+  };
 
   let onSignInPage = false;
 
@@ -54,9 +62,13 @@ export function Nav() {
             leftSection={<TbFileUpload size={16} strokeWidth={1.5} />}
             preload={false}
           />
-          <SignOutButton>
-            <RouterNavLink bdrs="md" to="/" label="Logga ut" leftSection={<TbLogout size={16} strokeWidth={1.5} />} />
-          </SignOutButton>
+          <NavLink
+            bdrs="md"
+            component="button"
+            leftSection={<TbLogout size={16} strokeWidth={1.5} />}
+            onClick={signOut}
+            label="Logga ut"
+          />
         </SignedIn>
         <SignedOut>
           {onSignInPage ? (
