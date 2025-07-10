@@ -1,19 +1,29 @@
 import { svSE } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/tanstack-react-start';
+import { getAuth } from '@clerk/tanstack-react-start/server';
 import { AppShell, ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
+import { createServerFn } from '@tanstack/react-start';
+import { getWebRequest } from '@tanstack/react-start/server';
 import { useAtom, useAtomValue } from 'jotai';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
 import { Footer } from '~/components/Footer';
 import { Header } from '~/components/header/Header';
 import { Nav } from '~/components/Nav';
 import { Progress } from '~/components/Progress';
-import { isAuthenticated } from '~/fns/isAuthenticated';
 import { seo } from '~/lib/seo';
 import cssHref from './__root.css?url';
 import classes from './__root.module.css';
 import type { PropsWithChildren } from 'react';
+
+const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
+  const { userId } = await getAuth(getWebRequest());
+
+  return {
+    userId,
+  };
+});
 
 export const Route = createRootRouteWithContext<{ isAuthenticated: boolean }>()({
   head: () => ({
@@ -35,7 +45,11 @@ export const Route = createRootRouteWithContext<{ isAuthenticated: boolean }>()(
       { rel: 'manifest', href: '/site.webmanifest', color: '#fffff' },
     ],
   }),
-  beforeLoad: async () => ({ isAuthenticated: await isAuthenticated() }),
+  beforeLoad: async () => {
+    const { userId } = await fetchClerkAuth();
+    console.log('userId', userId);
+    return { isAuthenticated: Boolean(userId) };
+  },
   component: RootComponent,
 });
 
