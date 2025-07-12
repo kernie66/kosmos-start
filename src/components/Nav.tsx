@@ -6,6 +6,7 @@ import { useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
+import { useConfirmLogout } from '~/hooks/useConfirmModal';
 import { useSignOut } from '~/hooks/useSignOut';
 import classes from './Nav.module.css';
 import { RouterNavLink } from './RouterNavLink';
@@ -14,6 +15,7 @@ export function Nav() {
   const [mobileNavVisible, toggleMobileNav] = useAtom(mobileToggleState);
   const [desktopNavVisible, toggleDesktopNav] = useAtom(desktopToggleState);
   const { signOut } = useSignOut();
+  const { logoutModal } = useConfirmLogout();
 
   let onSignInPage = false;
 
@@ -44,6 +46,10 @@ export function Nav() {
     };
   }, [throttledHideMobileNav]);
 
+  const handleLogout = () => {
+    logoutModal({ onConfirm: signOut }); // Open the confirm modal
+  };
+
   return (
     <RemoveScroll enabled={mobileNavVisible}>
       <ScrollArea px="sm" py="md">
@@ -60,7 +66,7 @@ export function Nav() {
             bdrs="md"
             component="button"
             leftSection={<TbLogout size={16} strokeWidth={1.5} />}
-            onClick={signOut}
+            onClick={handleLogout}
             label="Logga ut"
           />
         </SignedIn>
