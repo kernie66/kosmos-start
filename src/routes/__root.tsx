@@ -1,7 +1,7 @@
 import { svSE } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/tanstack-react-start';
 import { getAuth } from '@clerk/tanstack-react-start/server';
-import { AppShell, ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { AppShell, Box, ColorSchemeScript, MantineProvider, ScrollArea, mantineHtmlProps } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
 import { createServerFn } from '@tanstack/react-start';
@@ -15,6 +15,7 @@ import { Progress } from '~/components/Progress';
 import { seo } from '~/lib/seo';
 import cssHref from './__root.css?url';
 import classes from './__root.module.css';
+import './styles.css';
 import type { PropsWithChildren } from 'react';
 
 export const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
@@ -84,15 +85,22 @@ function RootDocument({ children }: PropsWithChildren) {
                   collapsed: { mobile: !mobileOpened, desktop: !desktopOpened },
                 }}
                 footer={{ height: 100 }}
-                padding="md"
               >
-                <AppShell.Header>
+                <AppShell.Header zIndex={102}>
                   <Header />
                 </AppShell.Header>
                 <AppShell.Navbar onClick={() => mobileOpened && toggleMobileOpened(false)}>
                   <Nav />
                 </AppShell.Navbar>
-                <AppShell.Main bg="teal.2">{children}</AppShell.Main>
+                <AppShell.Main bg="teal.2">
+                  <ScrollArea
+                    className={classes.scrollArea} // Set height to the available main area
+                    offsetScrollbars
+                    type="auto"
+                  >
+                    <Box>{children}</Box>
+                  </ScrollArea>
+                </AppShell.Main>
                 <AppShell.Footer>
                   <Footer />
                 </AppShell.Footer>
