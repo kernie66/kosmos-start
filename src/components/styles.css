@@ -1,3 +1,7 @@
 body {
   overflow: hidden;
 }
+
+.mantine-Modal-content {
+  overflow: hidden;
+}
