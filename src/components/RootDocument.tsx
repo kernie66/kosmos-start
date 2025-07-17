@@ -47,7 +47,6 @@ export function RootDocument({ children }: PropsWithChildren) {
                 <AppShell.Main bg="teal.2">
                   <ScrollArea
                     className={classes.scrollArea} // Set height to the available main area
-                    offsetScrollbars
                     type="auto"
                   >
                     <Box>{children}</Box>

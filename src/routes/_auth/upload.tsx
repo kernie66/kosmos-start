@@ -1,9 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
+import FileModal from '../../components/upload/FileModal';
 
 export const Route = createFileRoute('/_auth/upload')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <div>Hello "/_auth/upload"!</div>;
+  return <FileModal />;
 }
