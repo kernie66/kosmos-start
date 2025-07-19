@@ -1,24 +1,22 @@
-import { Image, Loader, UnstyledButton } from '@mantine/core';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Image, LoadingOverlay, Text, UnstyledButton } from '@mantine/core';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useImageSize } from 'react-image-size';
-import type { FileStateProps } from './SelectFile';
 
 export type ImageStateProps = string | number;
+export type ImageProps = {
+  imageUrl: string;
+  fileName: string;
+};
 
 type PreviewImageProps = {
-  file: FileStateProps;
+  image: ImageProps;
   onImageClicked?: () => void;
   maxHeight?: string | number;
 };
 
-export default function PreviewImage({ file, onImageClicked, maxHeight = '100%' }: PreviewImageProps) {
-  if (file) {
-    console.log('PreviewImage file', file);
-  } else {
-    console.log('PreviewImage no file');
-  }
-  const imageUrl = useMemo(() => (file ? URL.createObjectURL(file) : ''), [file]);
-  const [dimensions, { loading, error }] = useImageSize(imageUrl);
+export default function PreviewImage({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) {
+  // const imageUrl = useMemo(() => (file ? URL.createObjectURL(file) : ''), [file]);
+  const [dimensions, { loading, error }] = useImageSize(image.imageUrl);
   const [imageHeight, setImageHeight] = useState<ImageStateProps>(0);
   const [imageWidth, setImageWidth] = useState('100%');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageStateProps>('80vh');
@@ -39,18 +37,18 @@ export default function PreviewImage({ file, onImageClicked, maxHeight = '100%' 
   }, [dimensions, maxHeight]);
 
   if (loading) {
-    return <Loader color="teal" />;
+    return <LoadingOverlay visible overlayProps={{ blur: 2 }} />;
   }
   if (error) {
     if (error === 'Url is not defined') {
+      console.warn('Image URL is not defined, returning null');
       return null;
     }
     console.error('Error loading image:', error);
-    return <div>Error loading image: {error}</div>;
+    return <Text>Error loading image: {error}</Text>;
   }
-  const fileName = file?.name.split('.').slice(0, -1).join('.');
 
-  console.log('fileName', fileName);
+  console.log('fileName', image.fileName);
   console.log('imageWidth', imageWidth);
   console.log('imageHeight', imageHeight);
   console.log('maxImageHeight', maxImageHeight);
@@ -58,11 +56,11 @@ export default function PreviewImage({ file, onImageClicked, maxHeight = '100%' 
   return (
     <UnstyledButton onClick={onImageClicked} h={imageHeight} mah={maxImageHeight} w={imageWidth} maw="100vw">
       <Image
-        key={fileName}
-        src={imageUrl}
-        onLoad={() => URL.revokeObjectURL(imageUrl)}
+        key={image.fileName}
+        src={image.imageUrl}
+        onLoad={() => URL.revokeObjectURL(image.imageUrl)}
         fit="contain"
-        alt={fileName}
+        alt={image.fileName}
         radius="md"
         ref={imageRef}
         h={imageHeight}

@@ -1,8 +1,9 @@
 import { Group, Stack, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
+import { checkFileError } from '~/lib/utils/checkFileError';
 
 export type FileStateProps = FileWithPath | null;
 
@@ -13,30 +14,16 @@ type SelectFileProps = {
 export default function SelectFile({ onSelectFile }: SelectFileProps) {
   const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
 
-  const checkFileError = (errorObject: FileRejection) => {
-    const error = errorObject.errors[0];
-    console.log('error', error);
-    if (error.code === 'file-invalid-type') {
-      setSubText('Ogiltig filtyp. Vänligen ladda upp en bildfil (jpg, png, gif).');
-    } else if (error.code === 'file-too-large') {
-      setSubText('Filen är för stor. Vänligen ladda upp en mindre bild.');
-    } else if (error.code === 'too-many-files') {
-      setSubText('För många filer. Vänligen ladda upp endast en bild.');
-    } else {
-      setSubText('Ett okänt fel inträffade, försök igen med en giltig fil.');
-    }
-  };
-
-  const handleDrop = (acceptedFiles: Array<FileWithPath>) => {
+  const handleDrop = useCallback((acceptedFiles: Array<FileWithPath>) => {
     console.log('acceptedFiles', acceptedFiles);
     setSubText('Välj en ny bildfil för att byta ut den nuvarande');
     onSelectFile(acceptedFiles[0]);
-  };
+  }, []);
 
-  const handleReject = (rejectedFiles: Array<FileRejection>) => {
+  const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
     console.log('rejectedFiles', rejectedFiles);
-    checkFileError(rejectedFiles[0]);
-  };
+    setSubText(checkFileError(rejectedFiles[0]));
+  }, []);
 
   const restoreSubText = () => {
     setSubText('Välj en bildfil att ladda upp');
