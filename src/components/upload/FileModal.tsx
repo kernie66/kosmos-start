@@ -14,49 +14,41 @@ export default function FileModal() {
   const { width: viewportWidth, height: viewportHeight } = useViewportSize();
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
 
-  const { ref: modalRef, width: modalWidth, height: modalHeight } = useElementSize();
-  const { ref: centerRef, width: centerWidth, height: centerHeight } = useElementSize();
+  const { ref: modalRef, height: modalHeight } = useElementSize();
+  const { ref: modalBodyRef, height: modalBodyHeight } = useElementSize();
+  const { ref: centerRef, height: centerHeight } = useElementSize();
 
   const marginTop = fullScreen ? 0 : 'md'; // Remove image margin when in full screen
 
   const imageSelected = image.imageUrl !== '';
 
   console.log('Viewport size:', viewportWidth, viewportHeight);
-  console.log('Center height', centerHeight, 'Center width', centerWidth);
 
   useLayoutEffect(() => {
     console.log('useLayoutEffect triggered');
-    console.log('Closest modalRef:', modalRef.current?.closest('section'));
-    console.log('Image shown:', imageShown);
-    // console.log('Modal height', modalHeight, 'Modal width', modalWidth);
     console.log('Modal height', modalHeight);
-    const scrollWidth = modalRef.current?.scrollWidth;
-    const scrollHeight = modalRef.current?.scrollHeight;
-    // console.log('ScrollWidth:', scrollWidth);
-    // console.log('ScrollHeight:', scrollHeight);
+    console.log('Modal body height', modalBodyHeight);
+    console.log('Center height', centerHeight);
+
     const modalPosition = modalRef.current?.getBoundingClientRect();
-    // console.log('Modal position:', modalPosition);
+
     if (centerRef.current) {
       const centerPosition = centerRef.current.getBoundingClientRect();
-      // console.log('Center position (layout):', centerPosition);
-      // console.log('Center styles:', centerRef.current?.style);
-      // console.log('Center styles margin top:', centerRef.current?.style.marginTop);
-      // console.log('Computed style', getComputedStyle(centerRef.current).marginTop);
-      const centerMarginTop =
-        (centerRef.current && Number.parseInt(getComputedStyle(centerRef.current).marginTop)) || 0;
-      const centerTopOffset = centerPosition?.top - modalPosition?.top;
+      const centerTopOffset = centerPosition.top - modalPosition.top;
+      const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
       console.log('Center top offset', centerTopOffset);
-      // console.log('Side margin', centerPosition?.x - modalPosition?.x);
       console.log('Calculated center bottom margin', modalPosition?.bottom - centerPosition?.bottom);
-      console.log('Calculated max image height', modalHeight - centerTopOffset - 16);
+      console.log('Calculated max image height', modalHeight - centerTopOffset - modalBottomPadding);
       if (modalHeight > 300) {
         setImageShown(true);
       }
+      console.log('Image shown:', imageShown);
       if (imageShown) {
-        setImageHeight(Math.trunc(modalHeight - centerTopOffset - 16));
+        console.log('Setting final image height');
+        setImageHeight(Math.trunc(modalHeight - centerTopOffset - modalBottomPadding));
       }
     }
-  }, [modalHeight, modalWidth, modalRef, imageShown, centerRef]);
+  }, [modalHeight, modalRef, modalBodyHeight, modalBodyRef, centerHeight, imageShown, centerRef]);
 
   // Function to handle button click
   function handleButtonClicked() {
@@ -103,7 +95,7 @@ export default function FileModal() {
             </Modal.Title>
             <Modal.CloseButton />
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body ref={modalBodyRef}>
             {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} />}
             <Center mt={marginTop} ref={centerRef}>
               {imageSelected ? (

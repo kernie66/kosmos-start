@@ -15,24 +15,23 @@ type PreviewImageProps = {
 };
 
 export default function PreviewImage({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) {
-  // const imageUrl = useMemo(() => (file ? URL.createObjectURL(file) : ''), [file]);
   const [dimensions, { loading, error }] = useImageSize(image.imageUrl);
   const [imageHeight, setImageHeight] = useState<ImageStateProps>(0);
   const [imageWidth, setImageWidth] = useState('100%');
-  const [maxImageHeight, setMaxImageHeight] = useState<ImageStateProps>('80vh');
+  const [maxImageHeight, setMaxImageHeight] = useState<ImageStateProps>('95vh');
   const imageRef = useRef(null);
 
   useLayoutEffect(() => {
     const aspectRatio = dimensions ? dimensions.width / dimensions.height : 0;
-
+    console.log('Image size adjusted:', maxHeight);
     if (aspectRatio > 1) {
       setImageWidth('100%');
       setImageHeight('auto');
-      setMaxImageHeight(maxHeight); // `${height}px`;
+      setMaxImageHeight(maxHeight);
     } else {
       setImageWidth('auto');
-      setImageHeight(maxHeight || '100%');
-      setMaxImageHeight('90vh');
+      setImageHeight(maxHeight);
+      setMaxImageHeight('95vh');
     }
   }, [dimensions, maxHeight]);
 

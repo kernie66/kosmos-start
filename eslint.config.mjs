@@ -27,7 +27,6 @@ export default defineConfig([
       ],
       curly: ['error', 'multi-line'],
       'no-shadow': 'off',
-      radix: 'as-needed',
       'react/no-children-prop': 'off',
     },
   },

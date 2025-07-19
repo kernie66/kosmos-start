@@ -2,8 +2,8 @@ import { Group, Stack, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
-import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 import { checkFileError } from '~/lib/utils/checkFileError';
+import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 
 export type FileStateProps = FileWithPath | null;
 
@@ -14,11 +14,14 @@ type SelectFileProps = {
 export default function SelectFile({ onSelectFile }: SelectFileProps) {
   const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
 
-  const handleDrop = useCallback((acceptedFiles: Array<FileWithPath>) => {
-    console.log('acceptedFiles', acceptedFiles);
-    setSubText('Välj en ny bildfil för att byta ut den nuvarande');
-    onSelectFile(acceptedFiles[0]);
-  }, []);
+  const handleDrop = useCallback(
+    (acceptedFiles: Array<FileWithPath>) => {
+      console.log('acceptedFiles', acceptedFiles);
+      setSubText('Välj en ny bildfil för att byta ut den nuvarande');
+      onSelectFile(acceptedFiles[0]);
+    },
+    [onSelectFile],
+  );
 
   const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
     console.log('rejectedFiles', rejectedFiles);
