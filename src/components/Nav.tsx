@@ -1,9 +1,8 @@
 import { SignedIn, SignedOut } from '@clerk/tanstack-react-start';
 import { NavLink, RemoveScroll, ScrollArea } from '@mantine/core';
-import { useThrottledCallback } from '@mantine/hooks';
+import { useThrottledCallback, useWindowEvent } from '@mantine/hooks';
 import { useLocation } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
-import { useEffect } from 'react';
 import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
 import { useConfirmLogout } from '~/hooks/useConfirmModal';
@@ -39,12 +38,7 @@ export function Nav() {
     if (!desktopNavVisible) toggleDesktopNav(true);
   }, 500);
 
-  useEffect(() => {
-    window.addEventListener('resize', throttledHideMobileNav);
-    return () => {
-      window.removeEventListener('resize', throttledHideMobileNav);
-    };
-  }, [throttledHideMobileNav]);
+  useWindowEvent('resize', throttledHideMobileNav);
 
   const handleLogout = () => {
     logoutModal({ onConfirm: signOut }); // Open the confirm modal
@@ -57,7 +51,7 @@ export function Nav() {
           <RouterNavLink bdrs="md" to="/" label="Hem" leftSection={<TbHome2 size={16} strokeWidth={1.5} />} />
           <RouterNavLink
             bdrs="md"
-            to="/invoices"
+            to="/upload"
             label="Uppdatera veckoinfo"
             leftSection={<TbFileUpload size={16} strokeWidth={1.5} />}
             preload={false}
