@@ -14,8 +14,7 @@ export default function FileModal() {
   const { width: viewportWidth, height: viewportHeight } = useViewportSize();
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
 
-  const { ref: modalRef, height: modalHeight } = useElementSize();
-  // const { ref: modalBodyRef } = useElementSize();
+  const modalRef = useRef<HTMLDivElement>(null);
   const modalBodyRef = useRef<HTMLDivElement>(null);
   const { ref: centerRef, height: centerHeight } = useElementSize();
 
@@ -27,7 +26,6 @@ export default function FileModal() {
 
   useLayoutEffect(() => {
     console.log('useLayoutEffect triggered');
-    console.log('Modal height', modalHeight);
     console.log('Center height', centerHeight);
 
     if (centerRef.current && modalRef.current && modalBodyRef.current) {
@@ -36,19 +34,20 @@ export default function FileModal() {
       const centerPosition = centerRef.current.getBoundingClientRect();
       const centerTopOffset = centerPosition.top - modalPosition.top;
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
+      const maxImageHeight = Math.trunc(modalPosition.height - centerTopOffset - modalBottomPadding);
       console.log('Center top offset', centerTopOffset);
-      console.log('Calculated center bottom margin', modalPosition?.bottom - centerPosition?.bottom);
-      console.log('Calculated max image height', modalHeight - centerTopOffset - modalBottomPadding);
-      if (modalHeight > 300) {
+      console.log('Calculated center bottom margin', modalPosition.bottom - centerPosition.bottom);
+      console.log('Calculated max image height', maxImageHeight);
+      if (maxImageHeight) {
         setImageShown(true);
       }
       console.log('Image shown:', imageShown);
       if (imageShown) {
         console.log('Setting final image height');
-        setImageHeight(Math.trunc(modalHeight - centerTopOffset - modalBottomPadding));
+        setImageHeight(maxImageHeight);
       }
     }
-  }, [modalHeight, modalRef, modalBodyRef, centerHeight, imageShown, centerRef]);
+  }, [modalRef, modalBodyRef, centerHeight, imageShown, centerRef]);
 
   // Function to handle button click
   function handleButtonClicked() {
