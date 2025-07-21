@@ -1,6 +1,6 @@
 import { Box, Button, Center, Modal, Text } from '@mantine/core';
 import { useDisclosure, useElementSize, useViewportSize } from '@mantine/hooks';
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import PreviewImage from './PreviewImage';
 import SelectFile from './SelectFile';
 import type { ImageProps, ImageStateProps } from './PreviewImage';
@@ -15,7 +15,8 @@ export default function FileModal() {
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
 
   const { ref: modalRef, height: modalHeight } = useElementSize();
-  const { ref: modalBodyRef, height: modalBodyHeight } = useElementSize();
+  // const { ref: modalBodyRef } = useElementSize();
+  const modalBodyRef = useRef<HTMLDivElement>(null);
   const { ref: centerRef, height: centerHeight } = useElementSize();
 
   const marginTop = fullScreen ? 0 : 'md'; // Remove image margin when in full screen
@@ -27,12 +28,11 @@ export default function FileModal() {
   useLayoutEffect(() => {
     console.log('useLayoutEffect triggered');
     console.log('Modal height', modalHeight);
-    console.log('Modal body height', modalBodyHeight);
     console.log('Center height', centerHeight);
 
-    const modalPosition = modalRef.current?.getBoundingClientRect();
-
-    if (centerRef.current) {
+    if (centerRef.current && modalRef.current && modalBodyRef.current) {
+      const modalPosition = modalRef.current.getBoundingClientRect();
+      console.log('Modal position:', modalPosition);
       const centerPosition = centerRef.current.getBoundingClientRect();
       const centerTopOffset = centerPosition.top - modalPosition.top;
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
@@ -48,7 +48,7 @@ export default function FileModal() {
         setImageHeight(Math.trunc(modalHeight - centerTopOffset - modalBottomPadding));
       }
     }
-  }, [modalHeight, modalRef, modalBodyHeight, modalBodyRef, centerHeight, imageShown, centerRef]);
+  }, [modalHeight, modalRef, modalBodyRef, centerHeight, imageShown, centerRef]);
 
   // Function to handle button click
   function handleButtonClicked() {
@@ -72,8 +72,6 @@ export default function FileModal() {
   function handleImageClicked() {
     toggleFullScreen();
     setImageHeight('100%');
-    const modalPosition = modalRef.current?.getBoundingClientRect();
-    console.log('Modal position when image clicked:', modalPosition);
   }
 
   // Function to handle modal close
