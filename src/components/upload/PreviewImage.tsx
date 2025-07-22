@@ -19,11 +19,13 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
   const [imageHeight, setImageHeight] = useState<ImageStateProps>(0);
   const [imageWidth, setImageWidth] = useState('100%');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageStateProps>('95vh');
+  const [maxImageWidth, setMaxImageWidth] = useState<ImageStateProps>('100vw');
   const imageRef = useRef(null);
 
   useLayoutEffect(() => {
-    const aspectRatio = dimensions ? dimensions.width / dimensions.height : 0;
     console.log('Image size adjusted:', maxHeight);
+    const aspectRatio = dimensions ? dimensions.width / dimensions.height : 0;
+    const newMaxImageWidth = typeof maxHeight === 'number' ? maxHeight * aspectRatio : '100vw';
     if (aspectRatio > 1) {
       setImageWidth('100%');
       setImageHeight('auto');
@@ -33,6 +35,7 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
       setImageHeight(maxHeight);
       setMaxImageHeight('95vh');
     }
+    setMaxImageWidth(newMaxImageWidth);
   }, [dimensions, maxHeight]);
 
   if (loading) {
@@ -50,10 +53,11 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
   console.log('fileName', image.fileName);
   console.log('imageWidth', imageWidth);
   console.log('imageHeight', imageHeight);
+  console.log('maxImageWidth', maxImageWidth, maxHeight);
   console.log('maxImageHeight', maxImageHeight);
 
   return (
-    <UnstyledButton onClick={onImageClicked} h={imageHeight} mah={maxImageHeight} w={imageWidth} maw="100vw">
+    <UnstyledButton onClick={onImageClicked} h={imageHeight} mah={maxImageHeight} w={imageWidth} maw={maxImageWidth}>
       <Image
         key={image.fileName}
         src={image.imageUrl}
@@ -65,6 +69,7 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
         h={imageHeight}
         mah={maxImageHeight}
         w={imageWidth}
+        maw={maxImageWidth}
       />
     </UnstyledButton>
   );
