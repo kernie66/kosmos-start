@@ -53,7 +53,7 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
   console.log('fileName', image.fileName);
   console.log('imageWidth', imageWidth);
   console.log('imageHeight', imageHeight);
-  console.log('maxImageWidth', maxImageWidth, maxHeight);
+  console.log('maxImageWidth maxHeight', maxImageWidth, maxHeight);
   console.log('maxImageHeight', maxImageHeight);
 
   return (
