@@ -1,8 +1,9 @@
 import { Image, LoadingOverlay, Text, UnstyledButton } from '@mantine/core';
-import { memo, useLayoutEffect, useRef, useState } from 'react';
+import { memo, useLayoutEffect, useState } from 'react';
 import { useImageSize } from 'react-image-size';
 
-export type ImageStateProps = string | number;
+type ImageStateSelections = '100%' | '95vh' | '100vh' | '100vw' | 'auto';
+export type ImageStateProps = ImageStateSelections | number;
 export type ImageProps = {
   imageUrl: string;
   fileName: string;
@@ -11,7 +12,7 @@ export type ImageProps = {
 type PreviewImageProps = {
   image: ImageProps;
   onImageClicked?: () => void;
-  maxHeight?: string | number;
+  maxHeight?: ImageStateSelections | number;
 };
 
 const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) => {
@@ -20,7 +21,6 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
   const [imageWidth, setImageWidth] = useState('100%');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageStateProps>('95vh');
   const [maxImageWidth, setMaxImageWidth] = useState<ImageStateProps>('100vw');
-  const imageRef = useRef(null);
 
   useLayoutEffect(() => {
     console.log('Image size adjusted:', maxHeight);
@@ -65,11 +65,6 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
         fit="contain"
         alt={image.fileName}
         radius="md"
-        ref={imageRef}
-        h={imageHeight}
-        mah={maxImageHeight}
-        w={imageWidth}
-        maw={maxImageWidth}
       />
     </UnstyledButton>
   );
