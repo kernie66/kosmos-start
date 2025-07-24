@@ -59,8 +59,17 @@ export default function FileModal() {
 
   useWindowEvent('resize', throttledResizeImage);
 
+  // Function to handle modal close
+  const handleClose = useCallback(() => {
+    closeFullScreen();
+    setImage({ imageUrl: '', fileName: '' });
+    setImageShown(false);
+    setImageHeight('100%');
+    close();
+  }, [closeFullScreen, close]);
+
   // Function to handle button click
-  function handleButtonClicked() {
+  const handleButtonClicked = useCallback(() => {
     if (fileModalOpened) {
       handleClose();
     } else {
@@ -68,14 +77,17 @@ export default function FileModal() {
       setImageShown(false);
       setImageHeight('100%');
     }
-  }
+  }, [fileModalOpened, open, handleClose]);
 
   // Function to handle file selection
-  function handleSelectedFile(file: FileStateProps) {
-    const imageUrl = file ? URL.createObjectURL(file) : '';
-    const fileName = file ? file.name.split('.').slice(0, -1).join('.') : '';
-    setImage({ imageUrl, fileName });
-  }
+  const handleSelectedFile = useCallback(
+    (file: FileStateProps) => {
+      const imageUrl = file ? URL.createObjectURL(file) : '';
+      const fileName = file ? file.name.split('.').slice(0, -1).join('.') : '';
+      setImage({ imageUrl, fileName });
+    },
+    [setImage],
+  );
 
   // Function to handle image click
   const handleImageClicked = useCallback(() => {
@@ -84,15 +96,6 @@ export default function FileModal() {
     setImageShown(false);
     setImageHeight('100%');
   }, [toggleFullScreen]);
-
-  // Function to handle modal close
-  function handleClose() {
-    closeFullScreen();
-    setImage({ imageUrl: '', fileName: '' });
-    setImageShown(false);
-    setImageHeight('100%');
-    close();
-  }
 
   return (
     <>
