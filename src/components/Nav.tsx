@@ -9,6 +9,7 @@ import { useConfirmLogout } from '~/hooks/useConfirmModal';
 import { useSignOut } from '~/hooks/useSignOut';
 import classes from './Nav.module.css';
 import { RouterNavLink } from './RouterNavLink';
+import type { ParsedLocation } from '@tanstack/react-router';
 
 export function Nav() {
   const [mobileNavVisible, toggleMobileNav] = useAtom(mobileToggleState);
@@ -19,7 +20,7 @@ export function Nav() {
   let onSignInPage = false;
 
   const pathName = useLocation({
-    select: (location) => location.pathname,
+    select: (location: ParsedLocation) => location.pathname,
   });
 
   console.log('pathName', pathName);

@@ -1,5 +1,5 @@
 import { Image, LoadingOverlay, Text, UnstyledButton } from '@mantine/core';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { memo, useLayoutEffect, useRef, useState } from 'react';
 import { useImageSize } from 'react-image-size';
 
 export type ImageStateProps = string | number;
@@ -14,7 +14,7 @@ type PreviewImageProps = {
   maxHeight?: string | number;
 };
 
-export default function PreviewImage({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) {
+const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) => {
   const [dimensions, { loading, error }] = useImageSize(image.imageUrl);
   const [imageHeight, setImageHeight] = useState<ImageStateProps>(0);
   const [imageWidth, setImageWidth] = useState('100%');
@@ -25,7 +25,7 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
   useLayoutEffect(() => {
     console.log('Image size adjusted:', maxHeight);
     const aspectRatio = dimensions ? dimensions.width / dimensions.height : 0;
-    const newMaxImageWidth = typeof maxHeight === 'number' ? maxHeight * aspectRatio : '100vw';
+    const newMaxImageWidth = typeof maxHeight === 'number' ? Math.trunc(maxHeight * aspectRatio) : '100vw';
     if (aspectRatio > 1) {
       setImageWidth('100%');
       setImageHeight('auto');
@@ -73,4 +73,6 @@ export default function PreviewImage({ image, onImageClicked, maxHeight = '100%'
       />
     </UnstyledButton>
   );
-}
+});
+
+export default PreviewImage;

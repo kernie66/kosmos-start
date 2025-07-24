@@ -1,6 +1,6 @@
 import { Box, Button, Center, Modal, Text } from '@mantine/core';
-import { useDisclosure, useElementSize, useThrottledCallback, useWindowEvent } from '@mantine/hooks';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useDisclosure, useElementSize, usePrevious, useThrottledCallback, useWindowEvent } from '@mantine/hooks';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import PreviewImage from './PreviewImage';
 import SelectFile from './SelectFile';
 import type { ImageProps, ImageStateProps } from './PreviewImage';
@@ -15,17 +15,17 @@ export default function FileModal() {
 
   const { ref: modalRef, height: modalHeight } = useElementSize();
   const modalBodyRef = useRef<HTMLDivElement>(null);
-  const { ref: centerRef, height: centerHeight } = useElementSize();
+  const centerRef = useRef<HTMLDivElement>(null);
 
-  const marginTop = fullScreen ? 0 : 'md'; // Remove image margin when in full screen
+  const previousModalHeight = usePrevious(modalHeight);
+  const marginTop = useMemo(() => (fullScreen ? 0 : 'md'), [fullScreen]); // Remove image margin when in full screen
 
-  const imageSelected = image.imageUrl !== '';
-
+  const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
+  const modalResized = useMemo(() => modalHeight !== previousModalHeight, [modalHeight, previousModalHeight]);
   console.log('Image height:', imageHeight);
 
   useLayoutEffect(() => {
     console.log('useLayoutEffect triggered');
-    console.log('Center height', centerHeight);
     console.log('Image shown:', imageShown);
 
     if (centerRef.current && modalRef.current && modalBodyRef.current) {
@@ -38,13 +38,9 @@ export default function FileModal() {
       const centerHeightInt = Math.trunc(centerPosition.height);
       const maxImageHeight = Math.trunc(modalPosition.height - centerTopOffset - modalBottomPadding);
       console.log('Center top offset', centerTopOffset);
-      console.log('Calculated center bottom margin', modalPosition.bottom - centerPosition.bottom);
       console.log('Calculated max image height', maxImageHeight);
       console.log('Center height difference:', centerHeightInt - maxImageHeight);
-      // if (centerHeightInt - maxImageHeight < 0) {
-      //   setImageShown(false);
-      // } else
-      if (maxImageHeight) {
+      if (maxImageHeight && centerHeightInt) {
         setImageShown(true);
       }
       if (imageShown) {
@@ -52,7 +48,7 @@ export default function FileModal() {
         setImageHeight(Math.min(centerHeightInt, maxImageHeight));
       }
     }
-  }, [modalRef, modalHeight, modalBodyRef, centerHeight, imageShown, centerRef]);
+  }, [modalRef, modalResized, modalBodyRef, imageShown, centerRef]);
 
   const throttledResizeImage = useThrottledCallback(() => {
     console.log('Throttled resize image triggered');
@@ -79,16 +75,15 @@ export default function FileModal() {
     const imageUrl = file ? URL.createObjectURL(file) : '';
     const fileName = file ? file.name.split('.').slice(0, -1).join('.') : '';
     setImage({ imageUrl, fileName });
-    setImageHeight('100%');
   }
 
   // Function to handle image click
-  function handleImageClicked() {
+  const handleImageClicked = useCallback(() => {
     console.log('Image clicked, toggling full screen');
     toggleFullScreen();
     setImageShown(false);
     setImageHeight('100%');
-  }
+  }, [toggleFullScreen]);
 
   // Function to handle modal close
   function handleClose() {
