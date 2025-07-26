@@ -1,12 +1,13 @@
-import { Image, LoadingOverlay, Text, UnstyledButton } from '@mantine/core';
+import { Box, Image, Text, UnstyledButton } from '@mantine/core';
 import { memo, useLayoutEffect, useState } from 'react';
-import { useImageSize } from 'react-image-size';
 
-type ImageStateSelections = '100%' | '95vh' | '100vh' | '100vw' | 'auto';
+export type ImageStateSelections = '100%' | '95vh' | '100vh' | '100vw' | 'auto';
 export type ImageStateProps = ImageStateSelections | number;
 export type ImageProps = {
   imageUrl: string;
   fileName: string;
+  width: number;
+  height: number;
 };
 
 type PreviewImageProps = {
@@ -15,8 +16,9 @@ type PreviewImageProps = {
   maxHeight?: ImageStateSelections | number;
 };
 
+const isNumber = (value: ImageStateSelections | number) => typeof value === 'number';
+
 const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) => {
-  const [dimensions, { loading, error }] = useImageSize(image.imageUrl);
   const [imageHeight, setImageHeight] = useState<ImageStateProps>(0);
   const [imageWidth, setImageWidth] = useState('100%');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageStateProps>('95vh');
@@ -24,8 +26,10 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
 
   useLayoutEffect(() => {
     console.log('Image size adjusted:', maxHeight);
-    const aspectRatio = dimensions ? dimensions.width / dimensions.height : 0;
-    const newMaxImageWidth = typeof maxHeight === 'number' ? Math.trunc(maxHeight * aspectRatio) : '100vw';
+
+    const aspectRatio = image.width / image.height;
+    const newMaxImageWidth =
+      isNumber(maxHeight) && isNumber(aspectRatio) ? Math.trunc(maxHeight * aspectRatio) : '100vw';
     if (aspectRatio > 1) {
       setImageWidth('100%');
       setImageHeight('auto');
@@ -36,18 +40,16 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
       setMaxImageHeight('95vh');
     }
     setMaxImageWidth(newMaxImageWidth);
-  }, [dimensions, maxHeight]);
+  }, [image, maxHeight]);
 
-  if (loading) {
-    return <LoadingOverlay visible overlayProps={{ blur: 2 }} />;
-  }
-  if (error) {
-    if (error === 'Url is not defined') {
-      console.warn('Image URL is not defined, returning null');
-      return null;
-    }
-    console.error('Error loading image:', error);
-    return <Text>Error loading image: {error}</Text>;
+  if (!image.imageUrl || image.width === 0 || image.height === 0) {
+    return (
+      <Box>
+        <Text c="dimmed" fz="md">
+          Ingen bild vald
+        </Text>
+      </Box>
+    );
   }
 
   console.log('fileName', image.fileName);

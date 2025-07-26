@@ -1,6 +1,14 @@
-import { Box, Button, Center, Modal, Text } from '@mantine/core';
-import { useDisclosure, useElementSize, usePrevious, useThrottledCallback, useWindowEvent } from '@mantine/hooks';
+import { Button, Center, Modal } from '@mantine/core';
+import {
+  useDisclosure,
+  useElementSize,
+  usePrevious,
+  useSetState,
+  useThrottledCallback,
+  useWindowEvent,
+} from '@mantine/hooks';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { getImageSize } from 'react-image-size';
 import PreviewImage from './PreviewImage';
 import SelectFile from './SelectFile';
 import type { ImageProps, ImageStateProps } from './PreviewImage';
@@ -9,7 +17,7 @@ import type { FileStateProps } from './SelectFile';
 export default function FileModal() {
   const [fileModalOpened, { open, close }] = useDisclosure(false);
   const [fullScreen, { close: closeFullScreen, toggle: toggleFullScreen }] = useDisclosure(false);
-  const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '' });
+  const [image, setImage] = useSetState<ImageProps>({ imageUrl: '', fileName: '', width: 0, height: 0 });
   const [imageShown, setImageShown] = useState(false);
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
 
@@ -81,10 +89,20 @@ export default function FileModal() {
 
   // Function to handle file selection
   const handleSelectedFile = useCallback(
-    (file: FileStateProps) => {
+    async (file: FileStateProps) => {
       const imageUrl = file ? URL.createObjectURL(file) : '';
       const fileName = file ? file.name.split('.').slice(0, -1).join('.') : '';
-      setImage({ imageUrl, fileName });
+      try {
+        if (imageUrl !== '') {
+          const { width, height } = await getImageSize(imageUrl);
+          setImage({ width, height });
+          setImage({ imageUrl, fileName });
+        } else {
+          setImage({ width: 0, height: 0 });
+        }
+      } catch (error) {
+        console.error('Error getting image size:', error);
+      }
     },
     [setImage],
   );
@@ -111,15 +129,7 @@ export default function FileModal() {
           <Modal.Body ref={modalBodyRef}>
             {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} />}
             <Center mt={marginTop} ref={centerRef}>
-              {imageSelected ? (
-                <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={imageHeight} />
-              ) : (
-                <Box>
-                  <Text c="dimmed" fz="md">
-                    Ingen bild vald
-                  </Text>
-                </Box>
-              )}
+              <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={imageHeight} />
             </Center>
           </Modal.Body>
         </Modal.Content>
