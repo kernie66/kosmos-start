@@ -13,9 +13,13 @@ import PreviewImage from './PreviewImage';
 import SelectFile from './SelectFile';
 import type { ImageProps, ImageStateProps } from './PreviewImage';
 import type { FileStateProps } from './SelectFile';
+import { useNavigate } from '@tanstack/react-router';
+import { useConfirmClose } from '~/hooks/useConfirmClose';
 
 export default function FileModal() {
-  const [fileModalOpened, { open, close }] = useDisclosure(false);
+  const [fileModalOpened, { open, close }] = useDisclosure(true);
+  const { closeImageModal } = useConfirmClose();
+  const navigate = useNavigate();
   const [fullScreen, { close: closeFullScreen, toggle: toggleFullScreen }] = useDisclosure(false);
   const [image, setImage] = useSetState<ImageProps>({ imageUrl: '', fileName: '', width: 0, height: 0 });
   const [imageShown, setImageShown] = useState(false);
@@ -67,14 +71,20 @@ export default function FileModal() {
 
   useWindowEvent('resize', throttledResizeImage);
 
-  // Function to handle modal close
-  const handleClose = useCallback(() => {
-    closeFullScreen();
-    setImage({ imageUrl: '', fileName: '' });
-    setImageShown(false);
-    setImageHeight('100%');
+  // Function for closing the modal and return to the main page
+  const leaveFileModal = useCallback(() => {
     close();
+    navigate({ to: '/' });
   }, [closeFullScreen, close]);
+
+  // Function to handle modal close actions
+  const handleClose = useCallback(() => {
+    if (imageSelected) {
+      closeImageModal({ onConfirm: leaveFileModal });
+    } else {
+      leaveFileModal();
+    }
+  }, [closeImageModal, leaveFileModal, imageSelected]);
 
   // Function to handle button click
   const handleButtonClicked = useCallback(() => {

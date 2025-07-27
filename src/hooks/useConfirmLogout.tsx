@@ -15,8 +15,12 @@ export const useConfirmLogout = () => {
 
     // Open a confirm modal with Mantine's modals
     modals.openConfirmModal({
-      title: 'Loggar ut',
-      children: <Text size="sm">Är du säker på att du vill logga ut?</Text>,
+      title: (
+        <Text size="lg" fw={700} c="teal.6">
+          Loggar ut
+        </Text>
+      ),
+      children: <Text size="md">Är du säker på att du vill logga ut?</Text>,
       labels: { confirm: 'Logga ut', cancel: 'Avbryt' },
       onCancel: () => {
         nprogress.reset(); // Reset progress bar on cancel

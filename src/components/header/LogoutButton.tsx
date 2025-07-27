@@ -1,7 +1,7 @@
 import { ActionIcon, Button } from '@mantine/core';
 import { useRouteContext } from '@tanstack/react-router';
 import { TbLogout } from 'react-icons/tb';
-import { useConfirmLogout } from '~/hooks/useConfirmModal';
+import { useConfirmLogout } from '~/hooks/useConfirmLogout';
 import { useSignOut } from '~/hooks/useSignOut';
 
 /**

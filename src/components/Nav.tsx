@@ -5,7 +5,7 @@ import { useLocation } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
-import { useConfirmLogout } from '~/hooks/useConfirmModal';
+import { useConfirmLogout } from '~/hooks/useConfirmLogout';
 import { useSignOut } from '~/hooks/useSignOut';
 import classes from './Nav.module.css';
 import { RouterNavLink } from './RouterNavLink';
