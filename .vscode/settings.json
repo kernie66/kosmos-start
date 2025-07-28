@@ -16,13 +16,6 @@
     "source.removeUnusedImports": "explicit"
   },
   "cssVariables.lookupFiles": ["**/*.css", "node_modules/@mantine/core/styles.css"],
-  // allow autocomplete for ArkType expressions like "string | num"
-  "editor.quickSuggestions": {
-    "strings": "on"
-  },
-  // prioritize ArkType's "type" for autoimports
-  "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"],
-  //
   "workbench.colorCustomizations": {
     "activityBar.background": "#2f0b44",
     "titleBar.activeBackground": "#1a0426",

@@ -1,6 +1,7 @@
 import { ActionIcon, Button } from '@mantine/core';
-import { ParsedLocation, useLocation, useNavigate, useRouteContext } from '@tanstack/react-router';
+import { useLocation, useNavigate, useRouteContext } from '@tanstack/react-router';
 import { TbPlus } from 'react-icons/tb';
+import type { ParsedLocation } from '@tanstack/react-router';
 
 export function NewUploadButton() {
   const navigate = useNavigate();

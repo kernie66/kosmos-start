@@ -1,15 +1,21 @@
 import { tanstackConfig } from '@tanstack/eslint-config';
-import { defineConfig } from 'eslint/config';
 import mantine from 'eslint-config-mantine';
 import importXPlugin from 'eslint-plugin-import-x';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import unusedImportsPlugin from 'eslint-plugin-unused-imports';
+import tseslint from 'typescript-eslint';
 
-export default defineConfig([
+export default tseslint.config([
   ...tanstackConfig,
   reactHooksPlugin.configs['recommended-latest'],
   ...mantine,
   {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+      },
+    },
+    ignores: ['**/dist/**', '**/build/**', '**/coverage/**', '**/node_modules/**', 'eslint.config.mjs'],
     plugins: {
       'unused-imports': unusedImportsPlugin,
       'import-x': importXPlugin,
