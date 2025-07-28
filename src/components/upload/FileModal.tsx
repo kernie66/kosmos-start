@@ -75,7 +75,7 @@ export default function FileModal() {
   const leaveFileModal = useCallback(() => {
     close();
     navigate({ to: '/' });
-  }, [closeFullScreen, close]);
+  }, [close]);
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {

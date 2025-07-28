@@ -3,9 +3,9 @@ import { NavLink, RemoveScroll, ScrollArea } from '@mantine/core';
 import { useThrottledCallback, useWindowEvent } from '@mantine/hooks';
 import { useLocation } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
-import { TbBrandGithub, TbFileUpload, TbHeart, TbHome2, TbLogin, TbLogout } from 'react-icons/tb';
-import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
+import { TbBrandGithub, TbHeart, TbHome2, TbLogin, TbLogout, TbPlus } from 'react-icons/tb';
 import { useConfirmLogout } from '~/hooks/useConfirmLogout';
+import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
 import { useSignOut } from '~/hooks/useSignOut';
 import classes from './Nav.module.css';
 import { RouterNavLink } from './RouterNavLink';
@@ -54,7 +54,7 @@ export function Nav() {
             bdrs="md"
             to="/upload"
             label="Uppdatera veckoinfo"
-            leftSection={<TbFileUpload size={16} strokeWidth={1.5} />}
+            leftSection={<TbPlus size={16} strokeWidth={1.5} />}
             preload={false}
           />
           <NavLink

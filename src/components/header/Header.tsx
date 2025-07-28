@@ -8,7 +8,7 @@ import { DevtoolsActionIcon } from './DevtoolsActionIcon';
 import DibberButton from './DibberButton';
 import classes from './Header.module.css';
 import { LogoutButton } from './LogoutButton';
-import { NewInvoiceButton } from './NewInvoiceButton';
+import { NewUploadButton } from './NewUploadButton';
 
 export function Header() {
   const [mobileOpened, toggleMobile] = useAtom(mobileToggleState);
@@ -38,7 +38,7 @@ export function Header() {
           <SignedIn>
             <UserButton />
           </SignedIn>
-          <NewInvoiceButton />
+          <NewUploadButton />
           <LogoutButton />
           {import.meta.env.DEV && <DevtoolsActionIcon />}
           <ActionIcon

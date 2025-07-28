@@ -14,10 +14,6 @@ export default defineConfig([
       'unused-imports': unusedImportsPlugin,
       'import-x': importXPlugin,
     },
-    parserOptions: {
-      project: ['./tsconfig.json'],
-      tsconfigRootDir: __dirname,
-    },
     rules: {
       'no-useless-rename': 'error',
       'no-duplicate-imports': 'off',
