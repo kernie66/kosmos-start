@@ -5,7 +5,7 @@ import { useLocation } from '@tanstack/react-router';
 import { useAtom } from 'jotai';
 import { TbBrandGithub, TbHeart, TbHome2, TbLogin, TbLogout, TbPlus } from 'react-icons/tb';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
-import { useConfirmLogout } from '~/hooks/useConfirmLogout';
+import { logoutMessage, useConfirmModal } from '~/hooks/useConfirmModal';
 import { useSignOut } from '~/hooks/useSignOut';
 import classes from './Nav.module.css';
 import { RouterNavLink } from './RouterNavLink';
@@ -15,7 +15,7 @@ export function Nav() {
   const [mobileNavVisible, toggleMobileNav] = useAtom(mobileToggleState);
   const [desktopNavVisible, toggleDesktopNav] = useAtom(desktopToggleState);
   const { signOut } = useSignOut();
-  const { logoutModal } = useConfirmLogout();
+  const { confirmModal: logoutModal } = useConfirmModal();
 
   let onSignInPage = false;
 
@@ -42,7 +42,7 @@ export function Nav() {
   useWindowEvent('resize', throttledHideMobileNav);
 
   const handleLogout = () => {
-    logoutModal({ onConfirm: signOut }); // Open the confirm modal
+    logoutModal({ message: logoutMessage, onConfirm: signOut }); // Open the confirm modal
   };
 
   return (

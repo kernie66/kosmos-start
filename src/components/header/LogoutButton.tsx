@@ -1,7 +1,7 @@
 import { ActionIcon, Button } from '@mantine/core';
 import { useRouteContext } from '@tanstack/react-router';
 import { TbLogout } from 'react-icons/tb';
-import { useConfirmLogout } from '~/hooks/useConfirmLogout';
+import { logoutMessage, useConfirmModal } from '~/hooks/useConfirmModal';
 import { useSignOut } from '~/hooks/useSignOut';
 
 /**
@@ -14,13 +14,13 @@ import { useSignOut } from '~/hooks/useSignOut';
 export function LogoutButton() {
   const { isAuthenticated } = useRouteContext({ from: '__root__' });
   const { signOut } = useSignOut();
-  const { logoutModal } = useConfirmLogout();
+  const { confirmModal: logoutModal } = useConfirmModal();
 
   // If the user is not authenticated, we don't render the button
   if (!isAuthenticated) return null;
 
   const handleLogout = () => {
-    logoutModal({ onConfirm: signOut }); // Open the confirm modal
+    logoutModal({ message: logoutMessage, onConfirm: signOut }); // Open the confirm modal
   };
 
   // If the user is authenticated, we render a responsive logout button

@@ -7,20 +7,20 @@ import {
   useThrottledCallback,
   useWindowEvent,
 } from '@mantine/hooks';
+import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getImageSize } from 'react-image-size';
+import { closeImageModalMessage, useConfirmModal } from '~/hooks/useConfirmModal';
 import PreviewImage from './PreviewImage';
 import SelectFile from './SelectFile';
 import type { ImageProps, ImageStateProps } from './PreviewImage';
 import type { FileStateProps } from './SelectFile';
-import { useNavigate } from '@tanstack/react-router';
-import { useConfirmClose } from '~/hooks/useConfirmClose';
 
 export default function FileModal() {
   const [fileModalOpened, { open, close }] = useDisclosure(true);
-  const { closeImageModal } = useConfirmClose();
+  const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
-  const [fullScreen, { close: closeFullScreen, toggle: toggleFullScreen }] = useDisclosure(false);
+  const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
   const [image, setImage] = useSetState<ImageProps>({ imageUrl: '', fileName: '', width: 0, height: 0 });
   const [imageShown, setImageShown] = useState(false);
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
@@ -75,12 +75,12 @@ export default function FileModal() {
   const leaveFileModal = useCallback(() => {
     close();
     navigate({ to: '/' });
-  }, [close]);
+  }, [close, navigate]);
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {
     if (imageSelected) {
-      closeImageModal({ onConfirm: leaveFileModal });
+      closeImageModal({ message: closeImageModalMessage, onConfirm: leaveFileModal });
     } else {
       leaveFileModal();
     }

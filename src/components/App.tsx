@@ -7,7 +7,7 @@ import { Header } from './header/Header';
 import { Nav } from './Nav';
 import type { PropsWithChildren } from 'react';
 
-export default function App({ children }: PropsWithChildren) {
+export function App({ children }: PropsWithChildren) {
   const [mobileOpened, toggleMobileOpened] = useAtom(mobileToggleState);
   const desktopOpened = useAtomValue(desktopToggleState);
 
