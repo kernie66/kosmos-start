@@ -1,10 +1,10 @@
 import { AppShell, Box, ScrollArea } from '@mantine/core';
 import { useAtom, useAtomValue } from 'jotai';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
+import classes from './App.module.css';
 import { Footer } from './Footer';
 import { Header } from './header/Header';
 import { Nav } from './Nav';
-import classes from './RootDocument.module.css';
 import type { PropsWithChildren } from 'react';
 
 export default function App({ children }: PropsWithChildren) {
