@@ -11,4 +11,4 @@ export function atomWithToggle(initialValue?: boolean): WritableAtom<boolean, [b
 }
 export const mobileToggleState = atomWithToggle(false);
 
-export const desktopToggleState = atomWithToggle(false);
+export const desktopToggleState = atomWithToggle(true);
