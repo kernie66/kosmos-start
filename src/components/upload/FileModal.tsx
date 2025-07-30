@@ -1,4 +1,4 @@
-import { Button, Center, Modal } from '@mantine/core';
+import { Center, Modal } from '@mantine/core';
 import {
   useDisclosure,
   useElementSize,
@@ -8,7 +8,7 @@ import {
   useWindowEvent,
 } from '@mantine/hooks';
 import { useNavigate } from '@tanstack/react-router';
-import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { getImageSize } from 'react-image-size';
 import { closeImageModalMessage, useConfirmModal } from '~/hooks/useConfirmModal';
 import PreviewImage from './PreviewImage';
@@ -16,8 +16,17 @@ import SelectFile from './SelectFile';
 import type { ImageProps, ImageStateProps } from './PreviewImage';
 import type { FileStateProps } from './SelectFile';
 
-export default function FileModal() {
-  const [fileModalOpened, { open, close }] = useDisclosure(true);
+type OnModalResizeProps = {
+  modalHeight: number;
+};
+type FileModalProps = {
+  children?: React.ReactNode;
+  // setModalParams?: (params: { opened: boolean }) => void;
+  onModalResize?: ({ modalHeight }: OnModalResizeProps) => void;
+};
+
+export default function FileModal({ children, onModalResize }: FileModalProps) {
+  const [fileModalOpened, { close }] = useDisclosure(true);
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
   const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
@@ -33,7 +42,13 @@ export default function FileModal() {
   const marginTop = useMemo(() => (fullScreen ? 0 : 'md'), [fullScreen]); // Remove image margin when in full screen
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
-  const modalResized = useMemo(() => modalHeight !== previousModalHeight, [modalHeight, previousModalHeight]);
+
+  useEffect(() => {
+    if (onModalResize && modalHeight !== previousModalHeight) {
+      onModalResize({ modalHeight });
+    }
+  }, [modalHeight, previousModalHeight, onModalResize]);
+
   console.log('Image height:', imageHeight);
 
   useLayoutEffect(() => {
@@ -60,7 +75,7 @@ export default function FileModal() {
         setImageHeight(Math.min(centerHeightInt, maxImageHeight));
       }
     }
-  }, [modalRef, modalResized, modalBodyRef, imageShown, centerRef]);
+  }, [modalRef, modalBodyRef, imageShown, centerRef]);
 
   const throttledResizeImage = useThrottledCallback(() => {
     console.log('Throttled resize image triggered');
@@ -86,17 +101,6 @@ export default function FileModal() {
     }
   }, [closeImageModal, leaveFileModal, imageSelected]);
 
-  // Function to handle button click
-  const handleButtonClicked = useCallback(() => {
-    if (fileModalOpened) {
-      handleClose();
-    } else {
-      open();
-      setImageShown(false);
-      setImageHeight('100%');
-    }
-  }, [fileModalOpened, open, handleClose]);
-
   // Function to handle file selection
   const handleSelectedFile = useCallback(
     async (file: FileStateProps) => {
@@ -105,8 +109,7 @@ export default function FileModal() {
       try {
         if (imageUrl !== '') {
           const { width, height } = await getImageSize(imageUrl);
-          setImage({ width, height });
-          setImage({ imageUrl, fileName });
+          setImage({ imageUrl, fileName, width, height });
         } else {
           setImage({ width: 0, height: 0 });
         }
@@ -141,13 +144,10 @@ export default function FileModal() {
             <Center mt={marginTop} ref={centerRef}>
               <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={imageHeight} />
             </Center>
+            {children}
           </Modal.Body>
         </Modal.Content>
       </Modal.Root>
-
-      <Button variant="default" onClick={handleButtonClicked}>
-        {!fileModalOpened ? 'Öppna filväljare' : 'Stäng filväljare'}
-      </Button>
     </>
   );
 }
