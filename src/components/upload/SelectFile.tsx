@@ -38,7 +38,6 @@ export default function SelectFile({ onSelectFile }: SelectFileProps) {
         accept={IMAGE_MIME_TYPE}
         onDrop={handleDrop}
         onReject={handleReject}
-        onDragEnter={restoreSubText}
         onFileDialogOpen={restoreSubText}
         maxFiles={1}
         bg="teal.1"
