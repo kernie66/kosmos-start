@@ -48,16 +48,16 @@ export function Upload() {
   const handleImageClicked = useCallback(() => {
     console.log('Image clicked, toggling full screen');
     toggleFullScreen();
-    clearImageResize();
-    setModalResized(true);
-  }, [toggleFullScreen, clearImageResize, setModalResized]);
+    // clearImageResize();
+    // setModalResized(true);
+  }, [toggleFullScreen, setModalResized]);
 
   // Function to handle modal resize
   const handleModalResize = useCallback(
     (modalParams: ModalParamProps) => {
       console.log('Modal parameters (Upload)', modalParams);
-      clearImageResize();
-      setModalResized(true);
+      clearImageResize({ innerHeight: modalParams.modalInnerHeight, topPosition: modalParams.modalTopPosition });
+      // setModalResized(true);
     },
     [clearImageResize],
   );

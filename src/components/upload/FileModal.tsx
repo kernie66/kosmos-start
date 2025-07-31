@@ -3,10 +3,10 @@ import { useElementSize, useShallowEffect } from '@mantine/hooks';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 export type ModalParamProps = {
-  modalHeight: number;
+  modalInnerHeight: number;
   modalTopPosition: number;
-  modalBottomPadding: number;
 };
+
 type FileModalProps = {
   children?: React.ReactNode;
   modalOpened?: boolean;
@@ -26,34 +26,31 @@ export default function FileModal({
   const { ref: modalRef, height: modalHeight } = useElementSize();
   const modalBodyRef = useRef<HTMLDivElement>(null);
   const [modalParams, setModalParams] = useState<ModalParamProps>({
-    modalHeight: 0,
+    modalInnerHeight: 0,
     modalTopPosition: 0,
-    modalBottomPadding: 0,
   });
 
   useShallowEffect(() => {
-    console.log('First useLayoutEffect triggered (FileModal)');
+    console.log('useShallowEffect triggered (FileModal)');
     if (onModalResize) {
       onModalResize(modalParams);
     }
   }, [onModalResize, modalParams]);
 
   useLayoutEffect(() => {
-    console.log('Second useLayoutEffect triggered (FileModal)');
+    console.log('useLayoutEffect triggered (FileModal)');
 
     if (modalRef.current && modalBodyRef.current) {
       const modalPosition = modalRef.current.getBoundingClientRect();
       console.log('Modal position:', modalPosition);
-      const intModalHeight = Math.trunc(modalHeight);
-      const modalTopPosition = Math.trunc(modalPosition.top);
+      const modalTopPosition = modalPosition.top;
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
-      console.log('modalHeight', intModalHeight);
+      console.log('modalHeight', modalHeight);
       console.log('modalBottomPadding', modalBottomPadding);
       console.log('Modal top position', modalTopPosition);
       setModalParams({
-        modalHeight: intModalHeight,
+        modalInnerHeight: modalHeight - modalBottomPadding,
         modalTopPosition,
-        modalBottomPadding,
       });
     }
   }, [modalRef, modalHeight, modalBodyRef, setModalParams]);
