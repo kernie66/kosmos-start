@@ -15,6 +15,7 @@ export const useImageParams = ({ image, maxHeight }: UseImageParamsProps) => {
   const [maxImageWidth, setMaxImageWidth] = useState<ImageStateProps>('100vw');
 
   useLayoutEffect(() => {
+    console.log('useLayoutEffect triggered (useImageParams)', maxHeight);
     const aspectRatio = image.width / image.height;
     const newMaxImageWidth =
       isNumber(maxHeight) && isNumber(aspectRatio) ? Math.trunc(maxHeight * aspectRatio) : '100vw';
@@ -27,8 +28,9 @@ export const useImageParams = ({ image, maxHeight }: UseImageParamsProps) => {
       setImageHeight(maxHeight);
       setMaxImageHeight('95vh');
     }
+    console.log('newMaxImageWidth', newMaxImageWidth);
     setMaxImageWidth(newMaxImageWidth);
   }, [image, maxHeight]);
 
-  return { imageHeight, imageWidth, maxImageHeight, maxImageWidth };
+  return { imageHeight, imageWidth, maxImageHeight, maxImageWidth, maxHeight };
 };

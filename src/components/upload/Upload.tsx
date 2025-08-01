@@ -19,7 +19,7 @@ export function Upload() {
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
 
-  const { clearImageResize, centerRef, imageHeight, setModalResized } = useImageResize();
+  const { clearImageResize, centerRef, imageHeight, imageShown, setModalResized } = useImageResize();
 
   // const centerRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +49,7 @@ export function Upload() {
     console.log('Image clicked, toggling full screen');
     toggleFullScreen();
     // clearImageResize();
-    // setModalResized(true);
+    setModalResized(true);
   }, [toggleFullScreen, setModalResized]);
 
   // Function to handle modal resize
@@ -57,9 +57,9 @@ export function Upload() {
     (modalParams: ModalParamProps) => {
       console.log('Modal parameters (Upload)', modalParams);
       clearImageResize({ innerHeight: modalParams.modalInnerHeight, topPosition: modalParams.modalTopPosition });
-      // setModalResized(true);
+      setModalResized(true);
     },
-    [clearImageResize],
+    [clearImageResize, setModalResized],
   );
 
   // Function for closing the modal and return to the main page
@@ -81,6 +81,7 @@ export function Upload() {
     <FileModal
       modalOpened={fileModalOpened}
       fullScreen={fullScreen}
+      imageShown={imageShown}
       onModalResize={handleModalResize}
       onModalClose={handleClose}
     >

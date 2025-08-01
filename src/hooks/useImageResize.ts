@@ -27,7 +27,7 @@ export const useImageResize = () => {
     console.log('useLayoutEffect triggered (hook)');
     console.log('Image shown:', imageShown);
 
-    if (centerRef.current && resizeParams.innerHeight && resizeParams.topPosition) {
+    if (centerRef.current && resizeParams.innerHeight) {
       // const modalPosition = modalRef.current.getBoundingClientRect();
       // console.log('Modal position:', modalPosition);
       const centerPosition = centerRef.current.getBoundingClientRect();

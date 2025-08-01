@@ -11,6 +11,7 @@ type FileModalProps = {
   children?: React.ReactNode;
   modalOpened?: boolean;
   fullScreen?: boolean;
+  imageShown?: boolean;
   // setModalParams?: (params: { opened: boolean }) => void;
   onModalResize?: (modalParams: ModalParamProps) => void;
   onModalClose?: () => void;
@@ -20,6 +21,7 @@ export default function FileModal({
   children,
   modalOpened = true,
   fullScreen = false,
+  imageShown = false,
   onModalResize,
   onModalClose,
 }: FileModalProps) {
@@ -43,17 +45,18 @@ export default function FileModal({
     if (modalRef.current && modalBodyRef.current) {
       const modalPosition = modalRef.current.getBoundingClientRect();
       console.log('Modal position:', modalPosition);
+      const modalPositionHeight = modalPosition.height; // Get the actual DOM height of the modal
       const modalTopPosition = modalPosition.top;
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
-      console.log('modalHeight', modalHeight);
+      console.log('modalHeight', modalPositionHeight);
       console.log('modalBottomPadding', modalBottomPadding);
       console.log('Modal top position', modalTopPosition);
       setModalParams({
-        modalInnerHeight: modalHeight - modalBottomPadding,
+        modalInnerHeight: modalPositionHeight - modalBottomPadding,
         modalTopPosition,
       });
     }
-  }, [modalRef, modalHeight, modalBodyRef, setModalParams]);
+  }, [modalRef, modalHeight, modalBodyRef, setModalParams, imageShown]);
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {
