@@ -9,9 +9,10 @@ export type FileStateProps = FileWithPath | null;
 
 type SelectFileProps = {
   onSelectFile: (file: FileStateProps) => void;
+  selectRef?: React.RefObject<HTMLDivElement | null>;
 };
 
-export default function SelectFile({ onSelectFile }: SelectFileProps) {
+export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps) {
   const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
 
   const handleDrop = useCallback(
@@ -42,6 +43,8 @@ export default function SelectFile({ onSelectFile }: SelectFileProps) {
         maxFiles={1}
         bg="teal.1"
         radius="md"
+        mb="md"
+        ref={selectRef}
       >
         <Group justify="center" gap="xl" mih={80} style={{ pointerEvents: 'none' }}>
           <Dropzone.Accept>

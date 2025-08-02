@@ -19,11 +19,10 @@ export function Upload() {
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
 
-  const { clearImageResize, centerRef, imageHeight, imageShown, setModalResized } = useImageResize();
+  const { clearImageResize, centerRef, selectRef, imageHeight, imageShown, setModalResized } = useImageResize();
 
   // const centerRef = useRef<HTMLDivElement>(null);
 
-  const marginTop = useMemo(() => (fullScreen ? 0 : 'md'), [fullScreen]); // Remove image margin when in full screen
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
   // Function to handle file selection
   const handleSelectedFile = useCallback(
@@ -56,7 +55,7 @@ export function Upload() {
   const handleModalResize = useCallback(
     (modalParams: ModalParamProps) => {
       console.log('Modal parameters (Upload)', modalParams);
-      clearImageResize({ innerHeight: modalParams.modalInnerHeight, topPosition: modalParams.modalTopPosition });
+      clearImageResize({ innerHeight: modalParams.modalInnerHeight });
       setModalResized(true);
     },
     [clearImageResize, setModalResized],
@@ -85,8 +84,8 @@ export function Upload() {
       onModalResize={handleModalResize}
       onModalClose={handleClose}
     >
-      {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} />}
-      <Center mt={marginTop} ref={centerRef}>
+      {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} selectRef={selectRef} />}
+      <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={imageHeight} />
       </Center>
     </FileModal>

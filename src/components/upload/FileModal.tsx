@@ -4,7 +4,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 
 export type ModalParamProps = {
   modalInnerHeight: number;
-  modalTopPosition: number;
 };
 
 type FileModalProps = {
@@ -16,6 +15,8 @@ type FileModalProps = {
   onModalResize?: (modalParams: ModalParamProps) => void;
   onModalClose?: () => void;
 };
+
+const modalHeaderHeight = 60; // Default header height for the modal
 
 export default function FileModal({
   children,
@@ -29,7 +30,6 @@ export default function FileModal({
   const modalBodyRef = useRef<HTMLDivElement>(null);
   const [modalParams, setModalParams] = useState<ModalParamProps>({
     modalInnerHeight: 0,
-    modalTopPosition: 0,
   });
 
   useShallowEffect(() => {
@@ -46,14 +46,11 @@ export default function FileModal({
       const modalPosition = modalRef.current.getBoundingClientRect();
       console.log('Modal position:', modalPosition);
       const modalPositionHeight = modalPosition.height; // Get the actual DOM height of the modal
-      const modalTopPosition = modalPosition.top;
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
       console.log('modalHeight', modalPositionHeight);
       console.log('modalBottomPadding', modalBottomPadding);
-      console.log('Modal top position', modalTopPosition);
       setModalParams({
-        modalInnerHeight: modalPositionHeight - modalBottomPadding,
-        modalTopPosition,
+        modalInnerHeight: modalPositionHeight - modalHeaderHeight - modalBottomPadding,
       });
     }
   }, [modalRef, modalHeight, modalBodyRef, setModalParams, imageShown]);
@@ -70,7 +67,7 @@ export default function FileModal({
       <Modal.Root opened={modalOpened} onClose={handleClose} fullScreen={fullScreen} size="lg">
         <Modal.Overlay />
         <Modal.Content ref={modalRef}>
-          <Modal.Header p={0} m={0} h={60}>
+          <Modal.Header p={0} m={0} h={modalHeaderHeight}>
             <Modal.Title fw={700} fz="xl" p={8} c="teal.6">
               {!fullScreen ? 'Välj en fil att ladda upp' : 'Klicka på bilden för att gå tillbaka'}
             </Modal.Title>

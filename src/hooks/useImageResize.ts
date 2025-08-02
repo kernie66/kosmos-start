@@ -4,7 +4,6 @@ import type { ImageStateProps } from '~/components/upload/PreviewImage';
 
 export type ResizeParamProps = {
   innerHeight: number;
-  topPosition: number;
 };
 
 export const useImageResize = () => {
@@ -13,11 +12,11 @@ export const useImageResize = () => {
   const [modalResized, setModalResized] = useState(false);
   const [resizeParams, setResizeParams] = useState<ResizeParamProps>({
     innerHeight: 0,
-    topPosition: 0,
   });
   // const { ref: modalRef, height: modalHeight } = useElementSize();
   // const modalBodyRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
+  const selectRef = useRef<HTMLDivElement>(null);
 
   // const previousModalHeight = usePrevious(modalHeight);
   // const modalResized = useMemo(() => modalHeight !== previousModalHeight, [modalHeight, previousModalHeight]);
@@ -31,11 +30,19 @@ export const useImageResize = () => {
       // const modalPosition = modalRef.current.getBoundingClientRect();
       // console.log('Modal position:', modalPosition);
       const centerPosition = centerRef.current.getBoundingClientRect();
+      let dropzoneHeight = 0;
       console.log('Center position:', centerPosition);
-      const centerTopOffset = centerPosition.top - resizeParams.topPosition;
+      if (selectRef.current?.parentElement) {
+        const dropzoneElement = selectRef.current.parentElement.closest('div');
+        if (dropzoneElement) {
+          dropzoneHeight = dropzoneElement.getBoundingClientRect().height || 0;
+          const dropzoneBottomMargin = Number.parseInt(getComputedStyle(dropzoneElement).marginBottom, 10);
+          dropzoneHeight += dropzoneBottomMargin;
+        }
+      }
+      console.log('dropzoneHeight', dropzoneHeight);
       const centerHeightInt = Math.trunc(centerPosition.height);
-      const maxImageHeight = Math.trunc(resizeParams.innerHeight - centerTopOffset);
-      console.log('Center top offset', centerTopOffset);
+      const maxImageHeight = Math.trunc(resizeParams.innerHeight - dropzoneHeight);
       console.log('Calculated max image height', maxImageHeight);
       console.log('Center height difference:', centerHeightInt - maxImageHeight);
       if (maxImageHeight && centerHeightInt) {
@@ -65,6 +72,7 @@ export const useImageResize = () => {
 
   return {
     centerRef,
+    selectRef,
     imageHeight,
     imageShown,
     setImageShown,
