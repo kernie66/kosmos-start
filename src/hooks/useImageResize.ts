@@ -1,5 +1,7 @@
 import { useThrottledCallback, useWindowEvent } from '@mantine/hooks';
+import { useAtom } from 'jotai';
 import { useLayoutEffect, useRef, useState } from 'react';
+import { imageShownAtom } from '~/atoms/imageAtoms';
 import type { ImageStateProps } from '~/components/upload/PreviewImage';
 
 export type ResizeParamProps = {
@@ -8,7 +10,7 @@ export type ResizeParamProps = {
 
 export const useImageResize = () => {
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
-  const [imageShown, setImageShown] = useState(false);
+  const [imageShown, setImageShown] = useAtom(imageShownAtom);
   const [resizeParams, setResizeParams] = useState<ResizeParamProps>({
     innerHeight: 0,
   });
@@ -67,8 +69,6 @@ export const useImageResize = () => {
     centerRef,
     selectRef,
     imageHeight,
-    imageShown,
-    setImageShown,
     setImageHeight,
     clearImageResize,
   };

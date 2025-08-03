@@ -1,6 +1,6 @@
 import { Modal } from '@mantine/core';
-import { useElementSize, useShallowEffect } from '@mantine/hooks';
-import { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback } from 'react';
+import { useModalResize } from '~/hooks/useModalResize';
 
 export type ModalParamProps = {
   modalInnerHeight: number;
@@ -10,28 +10,28 @@ type FileModalProps = {
   children?: React.ReactNode;
   modalOpened?: boolean;
   fullScreen?: boolean;
-  imageShown?: boolean;
   // setModalParams?: (params: { opened: boolean }) => void;
   onModalResize?: (modalParams: ModalParamProps) => void;
   onModalClose?: () => void;
 };
 
-const modalHeaderHeight = 60; // Default header height for the modal
+export const FileModalHeaderHeight = 60; // Default header height for the modal
 
 export default function FileModal({
   children,
   modalOpened = true,
   fullScreen = false,
-  imageShown = false,
   onModalResize,
   onModalClose,
 }: FileModalProps) {
-  const { ref: modalRef, height: modalHeight } = useElementSize();
-  const modalBodyRef = useRef<HTMLDivElement>(null);
-  const [modalParams, setModalParams] = useState<ModalParamProps>({
-    modalInnerHeight: 0,
-  });
+  const { modalRef, modalBodyRef } = useModalResize(onModalResize);
+  // const { ref: modalRef, height: modalHeight } = useElementSize();
+  // const modalBodyRef = useRef<HTMLDivElement>(null);
+  // const [modalParams, setModalParams] = useState<ModalParamProps>({
+  // modalInnerHeight: 0,
+  // });
 
+  /*
   useShallowEffect(() => {
     if (onModalResize && modalParams.modalInnerHeight) {
       console.log('useShallowEffect triggered (FileModal), modalParams updated:', modalParams);
@@ -46,10 +46,11 @@ export default function FileModal({
       const modalRenderedHeight = modalParameters.height; // Get the actual DOM height of the modal
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
       setModalParams({
-        modalInnerHeight: Math.trunc(modalRenderedHeight - modalHeaderHeight - modalBottomPadding),
+        modalInnerHeight: Math.trunc(modalRenderedHeight - FileModalHeaderHeight - modalBottomPadding),
       });
     }
   }, [modalRef, modalHeight, setModalParams, imageShown]);
+*/
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {
@@ -63,7 +64,7 @@ export default function FileModal({
       <Modal.Root opened={modalOpened} onClose={handleClose} fullScreen={fullScreen} size="lg">
         <Modal.Overlay />
         <Modal.Content ref={modalRef}>
-          <Modal.Header p={0} m={0} h={modalHeaderHeight}>
+          <Modal.Header p={0} m={0} h={FileModalHeaderHeight}>
             <Modal.Title fw={700} fz="xl" p={8} c="teal.6">
               {!fullScreen ? 'Välj en fil att ladda upp' : 'Klicka på bilden för att gå tillbaka'}
             </Modal.Title>

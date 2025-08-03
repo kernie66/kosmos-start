@@ -19,7 +19,7 @@ export function Upload() {
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
 
-  const { clearImageResize, centerRef, selectRef, imageHeight, imageShown } = useImageResize();
+  const { clearImageResize, centerRef, selectRef, imageHeight } = useImageResize();
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
 
@@ -76,7 +76,6 @@ export function Upload() {
     <FileModal
       modalOpened={fileModalOpened}
       fullScreen={fullScreen}
-      imageShown={imageShown}
       onModalResize={handleModalResize}
       onModalClose={handleClose}
     >
