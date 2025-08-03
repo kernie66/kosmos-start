@@ -3,8 +3,8 @@ import { useDisclosure, useSetState } from '@mantine/hooks';
 import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useMemo } from 'react';
 import { getImageSize } from 'react-image-size';
+import { useCenterSize } from '~/hooks/useCenterSize';
 import { closeImageModalMessage, useConfirmModal } from '~/hooks/useConfirmModal';
-import { useImageResize } from '~/hooks/useImageResize';
 import FileModal from './FileModal';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
@@ -20,7 +20,7 @@ export function Upload() {
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
 
-  const { clearImageResize, centerRef, selectRef, buttonRef, imageHeight } = useImageResize();
+  const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
 
@@ -53,9 +53,9 @@ export function Upload() {
   const handleModalResize = useCallback(
     (modalParams: ModalParamProps) => {
       console.log('Modal parameters (Upload)', modalParams);
-      clearImageResize({ innerHeight: modalParams.modalInnerHeight });
+      clearCenterSize({ innerHeight: modalParams.modalInnerHeight });
     },
-    [clearImageResize],
+    [clearCenterSize],
   );
 
   // Function for closing the modal and return to the main page
@@ -80,11 +80,11 @@ export function Upload() {
       onModalResize={handleModalResize}
       onModalClose={handleClose}
     >
-      {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} selectRef={selectRef} />}
+      {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
-        <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={imageHeight} />
+        <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
       </Center>
-      <SelectButtons showButtons={imageSelected} buttonRef={buttonRef} />
+      <SelectButtons showButtons={imageSelected} buttonRef={bottomRef} />
     </FileModal>
   );
 }
