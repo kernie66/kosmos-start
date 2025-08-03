@@ -33,27 +33,23 @@ export default function FileModal({
   });
 
   useShallowEffect(() => {
-    console.log('useShallowEffect triggered (FileModal)');
-    if (onModalResize) {
+    if (onModalResize && modalParams.modalInnerHeight) {
+      console.log('useShallowEffect triggered (FileModal), modalParams updated:', modalParams);
       onModalResize(modalParams);
     }
   }, [onModalResize, modalParams]);
 
   useLayoutEffect(() => {
-    console.log('useLayoutEffect triggered (FileModal)');
-
     if (modalRef.current && modalBodyRef.current) {
-      const modalPosition = modalRef.current.getBoundingClientRect();
-      console.log('Modal position:', modalPosition);
-      const modalPositionHeight = modalPosition.height; // Get the actual DOM height of the modal
+      console.log('useLayoutEffect triggered (FileModal), imageShown modalHeight:', imageShown, modalHeight);
+      const modalParameters = modalRef.current.getBoundingClientRect();
+      const modalRenderedHeight = modalParameters.height; // Get the actual DOM height of the modal
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
-      console.log('modalHeight', modalPositionHeight);
-      console.log('modalBottomPadding', modalBottomPadding);
       setModalParams({
-        modalInnerHeight: modalPositionHeight - modalHeaderHeight - modalBottomPadding,
+        modalInnerHeight: Math.trunc(modalRenderedHeight - modalHeaderHeight - modalBottomPadding),
       });
     }
-  }, [modalRef, modalHeight, modalBodyRef, setModalParams, imageShown]);
+  }, [modalRef, modalHeight, setModalParams, imageShown]);
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {

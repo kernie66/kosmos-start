@@ -19,11 +19,10 @@ export function Upload() {
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
 
-  const { clearImageResize, centerRef, selectRef, imageHeight, imageShown, setModalResized } = useImageResize();
-
-  // const centerRef = useRef<HTMLDivElement>(null);
+  const { clearImageResize, centerRef, selectRef, imageHeight, imageShown } = useImageResize();
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
+
   // Function to handle file selection
   const handleSelectedFile = useCallback(
     async (file: FileStateProps) => {
@@ -47,18 +46,15 @@ export function Upload() {
   const handleImageClicked = useCallback(() => {
     console.log('Image clicked, toggling full screen');
     toggleFullScreen();
-    // clearImageResize();
-    setModalResized(true);
-  }, [toggleFullScreen, setModalResized]);
+  }, [toggleFullScreen]);
 
   // Function to handle modal resize
   const handleModalResize = useCallback(
     (modalParams: ModalParamProps) => {
       console.log('Modal parameters (Upload)', modalParams);
       clearImageResize({ innerHeight: modalParams.modalInnerHeight });
-      setModalResized(true);
     },
-    [clearImageResize, setModalResized],
+    [clearImageResize],
   );
 
   // Function for closing the modal and return to the main page

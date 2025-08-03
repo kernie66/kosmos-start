@@ -9,22 +9,15 @@ export type ResizeParamProps = {
 export const useImageResize = () => {
   const [imageHeight, setImageHeight] = useState<ImageStateProps>('100%');
   const [imageShown, setImageShown] = useState(false);
-  const [modalResized, setModalResized] = useState(false);
   const [resizeParams, setResizeParams] = useState<ResizeParamProps>({
     innerHeight: 0,
   });
-  // const { ref: modalRef, height: modalHeight } = useElementSize();
-  // const modalBodyRef = useRef<HTMLDivElement>(null);
   const centerRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  // const previousModalHeight = usePrevious(modalHeight);
-  // const modalResized = useMemo(() => modalHeight !== previousModalHeight, [modalHeight, previousModalHeight]);
-  console.log('Image height (hook):', imageHeight);
-
+  // Function to handle window resize events
   useLayoutEffect(() => {
-    console.log('useLayoutEffect triggered (hook)');
-    console.log('Image shown:', imageShown);
+    console.log('useLayoutEffect triggered (useImageResize)', resizeParams, imageShown);
 
     if (centerRef.current && resizeParams.innerHeight) {
       // const modalPosition = modalRef.current.getBoundingClientRect();
@@ -53,7 +46,7 @@ export const useImageResize = () => {
         setImageHeight(Math.min(centerHeightInt, maxImageHeight));
       }
     }
-  }, [modalResized, imageShown, imageHeight, centerRef, resizeParams]);
+  }, [imageShown, centerRef, resizeParams]);
 
   const throttledResizeImage = useThrottledCallback(() => {
     console.log('Throttled resize image triggered');
@@ -77,7 +70,6 @@ export const useImageResize = () => {
     imageShown,
     setImageShown,
     setImageHeight,
-    setModalResized,
     clearImageResize,
   };
 };
