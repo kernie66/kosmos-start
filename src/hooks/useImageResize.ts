@@ -16,6 +16,7 @@ export const useImageResize = () => {
   });
   const centerRef = useRef<HTMLDivElement>(null);
   const selectRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   // Function to handle window resize events
   useLayoutEffect(() => {
@@ -26,6 +27,7 @@ export const useImageResize = () => {
       // console.log('Modal position:', modalPosition);
       const centerPosition = centerRef.current.getBoundingClientRect();
       let dropzoneHeight = 0;
+      let buttonsHeight = 0;
       console.log('Center position:', centerPosition);
       if (selectRef.current?.parentElement) {
         const dropzoneElement = selectRef.current.parentElement.closest('div');
@@ -35,9 +37,15 @@ export const useImageResize = () => {
           dropzoneHeight += dropzoneBottomMargin;
         }
       }
+      if (buttonRef.current) {
+        buttonsHeight = buttonRef.current.getBoundingClientRect().height || 0;
+        const buttonsTopMargin = Number.parseInt(getComputedStyle(buttonRef.current).marginTop, 10);
+        buttonsHeight += buttonsTopMargin;
+      }
       console.log('dropzoneHeight', dropzoneHeight);
+      console.log('buttonsHeight', buttonsHeight);
       const centerHeightInt = Math.trunc(centerPosition.height);
-      const maxImageHeight = Math.trunc(resizeParams.innerHeight - dropzoneHeight);
+      const maxImageHeight = Math.trunc(resizeParams.innerHeight - dropzoneHeight - buttonsHeight);
       console.log('Calculated max image height', maxImageHeight);
       console.log('Center height difference:', centerHeightInt - maxImageHeight);
       if (maxImageHeight && centerHeightInt) {
@@ -68,8 +76,8 @@ export const useImageResize = () => {
   return {
     centerRef,
     selectRef,
+    buttonRef,
     imageHeight,
-    setImageHeight,
     clearImageResize,
-  };
+  } as const;
 };

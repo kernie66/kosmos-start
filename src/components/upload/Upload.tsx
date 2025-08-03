@@ -7,6 +7,7 @@ import { closeImageModalMessage, useConfirmModal } from '~/hooks/useConfirmModal
 import { useImageResize } from '~/hooks/useImageResize';
 import FileModal from './FileModal';
 import PreviewImage from './PreviewImage';
+import { SelectButtons } from './SelectButtons';
 import SelectFile from './SelectFile';
 import type { ModalParamProps } from './FileModal';
 import type { ImageProps } from './PreviewImage';
@@ -19,7 +20,7 @@ export function Upload() {
   const { confirmModal: closeImageModal } = useConfirmModal();
   const navigate = useNavigate();
 
-  const { clearImageResize, centerRef, selectRef, imageHeight } = useImageResize();
+  const { clearImageResize, centerRef, selectRef, buttonRef, imageHeight } = useImageResize();
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
 
@@ -83,6 +84,7 @@ export function Upload() {
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={imageHeight} />
       </Center>
+      <SelectButtons showButtons={imageSelected} buttonRef={buttonRef} />
     </FileModal>
   );
 }

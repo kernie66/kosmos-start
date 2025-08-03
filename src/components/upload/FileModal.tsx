@@ -10,7 +10,6 @@ type FileModalProps = {
   children?: React.ReactNode;
   modalOpened?: boolean;
   fullScreen?: boolean;
-  // setModalParams?: (params: { opened: boolean }) => void;
   onModalResize?: (modalParams: ModalParamProps) => void;
   onModalClose?: () => void;
 };
@@ -25,32 +24,6 @@ export default function FileModal({
   onModalClose,
 }: FileModalProps) {
   const { modalRef, modalBodyRef } = useModalResize(onModalResize);
-  // const { ref: modalRef, height: modalHeight } = useElementSize();
-  // const modalBodyRef = useRef<HTMLDivElement>(null);
-  // const [modalParams, setModalParams] = useState<ModalParamProps>({
-  // modalInnerHeight: 0,
-  // });
-
-  /*
-  useShallowEffect(() => {
-    if (onModalResize && modalParams.modalInnerHeight) {
-      console.log('useShallowEffect triggered (FileModal), modalParams updated:', modalParams);
-      onModalResize(modalParams);
-    }
-  }, [onModalResize, modalParams]);
-
-  useLayoutEffect(() => {
-    if (modalRef.current && modalBodyRef.current) {
-      console.log('useLayoutEffect triggered (FileModal), imageShown modalHeight:', imageShown, modalHeight);
-      const modalParameters = modalRef.current.getBoundingClientRect();
-      const modalRenderedHeight = modalParameters.height; // Get the actual DOM height of the modal
-      const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
-      setModalParams({
-        modalInnerHeight: Math.trunc(modalRenderedHeight - FileModalHeaderHeight - modalBottomPadding),
-      });
-    }
-  }, [modalRef, modalHeight, setModalParams, imageShown]);
-*/
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {
