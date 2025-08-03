@@ -1,10 +1,9 @@
 import { Center } from '@mantine/core';
 import { useDisclosure, useSetState } from '@mantine/hooks';
-import { useNavigate } from '@tanstack/react-router';
 import { useCallback, useMemo } from 'react';
 import { getImageSize } from 'react-image-size';
 import { useCenterSize } from '~/hooks/useCenterSize';
-import { closeImageModalMessage, useConfirmModal } from '~/hooks/useConfirmModal';
+import { useCloseModal } from '~/hooks/useCloseModal';
 import FileModal from './FileModal';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
@@ -16,9 +15,7 @@ import type { FileStateProps } from './SelectFile';
 export function Upload() {
   const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
   const [image, setImage] = useSetState<ImageProps>({ imageUrl: '', fileName: '', width: 0, height: 0 });
-  const [fileModalOpened, { close }] = useDisclosure(true);
-  const { confirmModal: closeImageModal } = useConfirmModal();
-  const navigate = useNavigate();
+  const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
 
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
 
@@ -51,39 +48,32 @@ export function Upload() {
   // Function to handle modal resize
   const handleModalResize = useCallback(
     (modalSize: ModalParamProps) => {
-      console.log('Modal parameters (Upload)', modalSize);
       clearCenterSize({ innerHeight: modalSize.modalInnerHeight });
     },
     [clearCenterSize],
   );
 
-  // Function for closing the modal and return to the main page
-  const leaveFileModal = useCallback(() => {
-    close();
-    navigate({ to: '/' });
-  }, [close, navigate]);
+  // Functions to handle modal close actions
+  const handleModalClose = useCallback(() => {
+    closeModal({ confirm: imageSelected });
+  }, [closeModal, imageSelected]);
 
-  // Function to handle modal close actions
-  const handleClose = useCallback(() => {
-    if (imageSelected) {
-      closeImageModal({ message: closeImageModalMessage, onConfirm: leaveFileModal });
-    } else {
-      leaveFileModal();
-    }
-  }, [closeImageModal, leaveFileModal, imageSelected]);
+  const handleButtonClose = useCallback(() => {
+    closeModal({ confirm: false });
+  }, [closeModal]);
 
   return (
     <FileModal
       modalOpened={fileModalOpened}
       fullScreen={fullScreen}
       onModalResize={handleModalResize}
-      onModalClose={handleClose}
+      onModalClose={handleModalClose}
     >
       {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
       </Center>
-      <SelectButtons showButtons={imageSelected} buttonRef={bottomRef} />
+      <SelectButtons showButtons={imageSelected} buttonRef={bottomRef} onCancel={handleButtonClose} />
     </FileModal>
   );
 }
