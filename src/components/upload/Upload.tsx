@@ -45,15 +45,14 @@ export function Upload() {
 
   // Function to handle image click
   const handleImageClicked = useCallback(() => {
-    console.log('Image clicked, toggling full screen');
     toggleFullScreen();
   }, [toggleFullScreen]);
 
   // Function to handle modal resize
   const handleModalResize = useCallback(
-    (modalParams: ModalParamProps) => {
-      console.log('Modal parameters (Upload)', modalParams);
-      clearCenterSize({ innerHeight: modalParams.modalInnerHeight });
+    (modalSize: ModalParamProps) => {
+      console.log('Modal parameters (Upload)', modalSize);
+      clearCenterSize({ innerHeight: modalSize.modalInnerHeight });
     },
     [clearCenterSize],
   );

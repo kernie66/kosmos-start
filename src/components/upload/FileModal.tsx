@@ -1,6 +1,6 @@
 import { Modal } from '@mantine/core';
 import { useCallback } from 'react';
-import { useModalResize } from '~/hooks/useModalResize';
+import { useModalSize } from '~/hooks/useModalSize';
 
 export type ModalParamProps = {
   modalInnerHeight: number;
@@ -23,7 +23,7 @@ export default function FileModal({
   onModalResize,
   onModalClose,
 }: FileModalProps) {
-  const { modalRef, modalBodyRef } = useModalResize(onModalResize);
+  const { modalRef, modalBodyRef } = useModalSize(onModalResize);
 
   // Function to handle modal close actions
   const handleClose = useCallback(() => {
