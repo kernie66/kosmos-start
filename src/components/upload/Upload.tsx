@@ -1,9 +1,9 @@
 import { Center } from '@mantine/core';
-import { useDisclosure, useSetState } from '@mantine/hooks';
-import { useCallback, useMemo } from 'react';
-import { getImageSize } from 'react-image-size';
+import { useDisclosure } from '@mantine/hooks';
+import { useCallback, useMemo, useState } from 'react';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
+import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
 import FileModal from './FileModal';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
@@ -14,7 +14,7 @@ import type { FileStateProps } from './SelectFile';
 
 export function Upload() {
   const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
-  const [image, setImage] = useSetState<ImageProps>({ imageUrl: '', fileName: '', width: 0, height: 0 });
+  const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
 
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
@@ -24,18 +24,8 @@ export function Upload() {
   // Function to handle file selection
   const handleSelectedFile = useCallback(
     async (file: FileStateProps) => {
-      const imageUrl = file ? URL.createObjectURL(file) : '';
-      const fileName = file ? file.name.split('.').slice(0, -1).join('.') : '';
-      try {
-        if (imageUrl !== '') {
-          const { width, height } = await getImageSize(imageUrl);
-          setImage({ imageUrl, fileName, width, height });
-        } else {
-          setImage({ width: 0, height: 0 });
-        }
-      } catch (error) {
-        console.error('Error getting image size:', error);
-      }
+      const imageFileInfo = await getImageFileInfo(file);
+      setImage(imageFileInfo);
     },
     [setImage],
   );
@@ -48,7 +38,7 @@ export function Upload() {
   // Function to handle modal resize
   const handleModalResize = useCallback(
     (modalSize: ModalParamProps) => {
-      clearCenterSize({ innerHeight: modalSize.modalInnerHeight });
+      clearCenterSize({ centerHeight: modalSize.modalInnerHeight });
     },
     [clearCenterSize],
   );

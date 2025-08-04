@@ -18,14 +18,14 @@ import type { ImageStateProps } from '~/components/upload/PreviewImage';
  */
 
 export type ResizeParamProps = {
-  innerHeight: number;
+  centerHeight: number;
 };
 
 export const useCenterSize = () => {
   const [centerHeight, setCenterHeight] = useState<ImageStateProps>('100%');
   const [imageShown, setImageShown] = useAtom(imageShownAtom);
   const [resizeParams, setResizeParams] = useState<ResizeParamProps>({
-    innerHeight: 0,
+    centerHeight: 0,
   });
   const centerRef = useRef<HTMLDivElement>(null);
   const topRef = useRef<HTMLDivElement>(null);
@@ -35,7 +35,7 @@ export const useCenterSize = () => {
   useLayoutEffect(() => {
     console.log('useLayoutEffect triggered (useCenterSize)', resizeParams, imageShown);
 
-    if (centerRef.current && resizeParams.innerHeight) {
+    if (centerRef.current && resizeParams.centerHeight) {
       const centerParams = centerRef.current.getBoundingClientRect();
       let dropzoneHeight = 0;
       let bottomHeight = 0;
@@ -53,7 +53,7 @@ export const useCenterSize = () => {
         bottomHeight += bottomTopMargin;
       }
       const centerHeightInt = Math.trunc(centerParams.height);
-      const maxCenterHeight = Math.trunc(resizeParams.innerHeight - dropzoneHeight - bottomHeight);
+      const maxCenterHeight = Math.trunc(resizeParams.centerHeight - dropzoneHeight - bottomHeight);
       console.log('Calculated max center height', maxCenterHeight);
       console.log('Center height difference:', centerHeightInt - maxCenterHeight);
       if (maxCenterHeight && centerHeightInt) {

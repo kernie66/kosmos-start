@@ -7,6 +7,7 @@ export type ImageStateProps = ImageStateSelections | number;
 export type ImageProps = {
   imageUrl: string;
   fileName: string;
+  imageName?: string;
   width: number;
   height: number;
 };
@@ -37,7 +38,7 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
         src={image.imageUrl}
         onLoad={() => URL.revokeObjectURL(image.imageUrl)}
         fit="contain"
-        alt={image.fileName}
+        alt={image.imageName || image.fileName}
         radius="md"
       />
     </UnstyledButton>
