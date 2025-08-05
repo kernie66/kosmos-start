@@ -1,9 +1,8 @@
 import { Box, Image, Text, UnstyledButton } from '@mantine/core';
 import { memo } from 'react';
-import { useImageParams } from '~/hooks/useImageParams';
 
-export type ImageStateSelections = '100%' | '95vh' | '100vh' | '100vw' | 'auto';
-export type ImageStateProps = ImageStateSelections | number;
+export type ImageSizeSelections = '100%' | '95vh' | '100vh' | '100vw' | 'auto';
+export type ImageSizeProps = ImageSizeSelections | number;
 export type ImageProps = {
   imageUrl: string;
   fileName: string;
@@ -15,12 +14,15 @@ export type ImageProps = {
 type PreviewImageProps = {
   image: ImageProps;
   onImageClicked?: () => void;
-  maxHeight?: ImageStateSelections | number;
+  maxHeight?: ImageSizeProps;
 };
 
-const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) => {
-  const { imageHeight, imageWidth, maxImageHeight, maxImageWidth } = useImageParams({ image, maxHeight });
+const imageHeight = 'auto';
+const imageWidth = '100%';
+const maxImageWidth = '100vw';
 
+function PreviewImage({ image, onImageClicked, maxHeight = '100%' }: PreviewImageProps) {
+  // If no image is selected or the image dimensions are not valid, show a placeholder
   if (!image.imageUrl || image.width === 0 || image.height === 0) {
     return (
       <Box>
@@ -32,7 +34,7 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
   }
 
   return (
-    <UnstyledButton onClick={onImageClicked} h={imageHeight} mah={maxImageHeight} w={imageWidth} maw={maxImageWidth}>
+    <UnstyledButton onClick={onImageClicked}>
       <Image
         key={image.fileName}
         src={image.imageUrl}
@@ -40,9 +42,13 @@ const PreviewImage = memo(({ image, onImageClicked, maxHeight = '100%' }: Previe
         fit="contain"
         alt={image.imageName || image.fileName}
         radius="md"
+        h={imageHeight}
+        mah={maxHeight}
+        w={imageWidth}
+        maw={maxImageWidth}
       />
     </UnstyledButton>
   );
-});
+}
 
-export default PreviewImage;
+export default memo(PreviewImage);

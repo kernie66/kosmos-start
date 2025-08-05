@@ -26,8 +26,9 @@ export function Upload() {
     async (file: FileStateProps) => {
       const imageFileInfo = await getImageFileInfo(file);
       setImage(imageFileInfo);
+      clearCenterSize();
     },
-    [setImage],
+    [setImage, clearCenterSize],
   );
 
   // Function to handle image click

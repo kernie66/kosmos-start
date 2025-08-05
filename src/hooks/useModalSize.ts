@@ -18,7 +18,7 @@ export const useModalSize = (onModalResize?: (params: ModalParamProps) => void) 
       console.log('useShallowEffect triggered (FileModal), modalParams updated:', modalSize);
       onModalResize(modalSize);
     }
-  }, [onModalResize, modalSize]);
+  }, [modalSize]);
 
   useLayoutEffect(() => {
     if (modalRef.current && modalBodyRef.current) {
@@ -26,6 +26,7 @@ export const useModalSize = (onModalResize?: (params: ModalParamProps) => void) 
       const modalParameters = modalRef.current.getBoundingClientRect();
       const modalRenderedHeight = modalParameters.height; // Get the actual DOM height of the modal
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalBodyRef.current).paddingBottom, 10);
+      console.log('modalRenderedHeight', modalRenderedHeight, 'modalBottomPadding', modalBottomPadding);
       setModalSize({
         modalInnerHeight: Math.trunc(modalRenderedHeight - FileModalHeaderHeight - modalBottomPadding),
       });

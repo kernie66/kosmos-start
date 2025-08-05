@@ -1,8 +1,8 @@
 import { useThrottledCallback, useWindowEvent } from '@mantine/hooks';
 import { useAtom } from 'jotai';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { imageShownAtom } from '~/atoms/imageAtoms';
-import type { ImageStateProps } from '~/components/upload/PreviewImage';
+import type { ImageSizeProps } from '~/components/upload/PreviewImage';
 
 /**
  * Hook for calculating the height of the center part of a box.
@@ -22,7 +22,7 @@ export type ResizeParamProps = {
 };
 
 export const useCenterSize = () => {
-  const [centerHeight, setCenterHeight] = useState<ImageStateProps>('100%');
+  const [centerHeight, setCenterHeight] = useState<ImageSizeProps>('100%');
   const [imageShown, setImageShown] = useAtom(imageShownAtom);
   const [resizeParams, setResizeParams] = useState<ResizeParamProps>({
     centerHeight: 0,
@@ -75,11 +75,16 @@ export const useCenterSize = () => {
 
   useWindowEvent('resize', throttledResizeCenter);
 
-  const clearCenterSize = (resizeParams: ResizeParamProps) => {
-    setResizeParams(resizeParams);
-    setImageShown(false);
-    setCenterHeight('100%');
-  };
+  const clearCenterSize = useCallback(
+    (resizeParams?: ResizeParamProps) => {
+      if (resizeParams) {
+        setResizeParams(resizeParams);
+      }
+      setImageShown(false);
+      setCenterHeight('100%');
+    },
+    [setImageShown],
+  );
 
   return {
     centerRef,
