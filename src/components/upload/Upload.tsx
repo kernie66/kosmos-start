@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
+import { uploadImage } from '~/serverActions/uploadImage';
 import FileModal from './FileModal';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
@@ -14,6 +15,7 @@ import type { FileStateProps } from './SelectFile';
 
 export function Upload() {
   const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
+  const [selectedFile, setSelectedFile] = useState<FileStateProps>(null);
   const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
 
@@ -24,6 +26,7 @@ export function Upload() {
   // Function to handle file selection
   const handleSelectedFile = useCallback(
     async (file: FileStateProps) => {
+      setSelectedFile(file);
       const imageFileInfo = await getImageFileInfo(file);
       setImage(imageFileInfo);
       clearCenterSize();
@@ -53,6 +56,15 @@ export function Upload() {
     closeModal({ confirm: false });
   }, [closeModal]);
 
+  const handleSubmitFile = useCallback(async () => {
+    if (imageSelected) {
+      const formData = new FormData();
+      formData.set('file', selectedFile as File);
+      const { fileName } = await uploadImage({ data: formData });
+      console.log('File uploaded successfully:', fileName);
+      closeModal({ confirm: false });
+    }
+  }, [imageSelected, image.imageUrl, closeModal]);
   return (
     <FileModal
       modalOpened={fileModalOpened}
@@ -64,7 +76,12 @@ export function Upload() {
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
       </Center>
-      <SelectButtons showButtons={imageSelected} buttonRef={bottomRef} onCancel={handleButtonClose} />
+      <SelectButtons
+        showButtons={imageSelected}
+        buttonRef={bottomRef}
+        onCancel={handleButtonClose}
+        onSelect={handleSubmitFile}
+      />
     </FileModal>
   );
 }

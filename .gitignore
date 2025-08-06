@@ -5,6 +5,7 @@ routeTree.gen.ts
 .nitro
 .output
 .tanstack
+uploads
 
 # Drizzle & SQLite files
 drizzle
