@@ -57,14 +57,15 @@ export function Upload() {
   }, [closeModal]);
 
   const handleSubmitFile = useCallback(async () => {
-    if (imageSelected) {
+    if (selectedFile && selectedFile instanceof File) {
       const formData = new FormData();
-      formData.set('file', selectedFile as File);
+      formData.set('file', selectedFile as File, 'weekly_info.png');
       const { fileName } = await uploadImage({ data: formData });
       console.log('File uploaded successfully:', fileName);
       closeModal({ confirm: false });
     }
-  }, [imageSelected, image.imageUrl, closeModal]);
+  }, [selectedFile, closeModal]);
+
   return (
     <FileModal
       modalOpened={fileModalOpened}
