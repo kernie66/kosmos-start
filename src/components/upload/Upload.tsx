@@ -1,10 +1,10 @@
-import { Center } from '@mantine/core';
+import { Center, LoadingOverlay } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useMemo, useState } from 'react';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
-import { uploadImage } from '~/serverActions/uploadImage';
+import { submitFile } from '~/lib/utils/submitFile';
 import FileModal from './FileModal';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
@@ -16,6 +16,7 @@ import type { FileStateProps } from './SelectFile';
 export function Upload() {
   const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
   const [selectedFile, setSelectedFile] = useState<FileStateProps>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
 
@@ -57,14 +58,19 @@ export function Upload() {
   }, [closeModal]);
 
   const handleSubmitFile = useCallback(async () => {
-    if (selectedFile && selectedFile instanceof File) {
-      const formData = new FormData();
-      formData.set('file', selectedFile as File, 'weekly_info.png');
-      const { fileName } = await uploadImage({ data: formData });
+    if (isSubmitting || !selectedFile || !(selectedFile instanceof File)) return;
+
+    try {
+      setIsSubmitting(true);
+      const { fileName } = await submitFile(selectedFile);
       console.log('File uploaded successfully:', fileName);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    } finally {
+      setIsSubmitting(false);
       closeModal({ confirm: false });
     }
-  }, [selectedFile, closeModal]);
+  }, [selectedFile, closeModal, isSubmitting]);
 
   return (
     <FileModal
@@ -73,6 +79,7 @@ export function Upload() {
       onModalResize={handleModalResize}
       onModalClose={handleModalClose}
     >
+      <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
       {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
