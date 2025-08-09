@@ -1,10 +1,10 @@
-import { uploadImage } from '~/serverActions/uploadImage';
+import { uploadImageFn } from '~/serverActions/uploadImageFn';
 
 export const submitFile = async (file: File) => {
   try {
     const formData = new FormData();
     formData.set('file', file, 'weekly_info.png');
-    const { fileName } = await uploadImage({ data: formData });
+    const { fileName } = await uploadImageFn({ data: formData });
     console.log('File uploaded successfully:', fileName);
     return { fileName };
   } catch (error) {

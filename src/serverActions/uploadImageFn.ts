@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start';
 import z from 'zod';
 import { saveFile } from '~/lib/utils/saveFile';
 
-export const uploadImage = createServerFn({ method: 'POST' })
+export const uploadImageFn = createServerFn({ method: 'POST' })
   .validator(z.instanceof(FormData))
   .handler(async ({ data: formData }) => {
     const file = formData.get('file') as File | null;

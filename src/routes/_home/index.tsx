@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { BsFillLightningFill } from 'react-icons/bs';
 import { FeatureCard } from '~/components/home/FeatureCard';
 import { GetStarted } from '~/components/home/GetStarted';
+import WeeklyInfo from '~/components/home/WeeklyInfo';
 import { BrandIconDrizzle } from '~/components/icons/BrandIconDrizzle';
 import { BrandIconMantine } from '~/components/icons/BrandIconMantine';
 import { BrandIconTRPC } from '~/components/icons/BrandIconTRPC';
@@ -15,6 +16,7 @@ function RouteComponent() {
   return (
     <>
       <Stack align="center">
+        <WeeklyInfo />
         <div className={classes.splash} aria-label="Mantine Start" />
         <Text variant="gradient" gradient={{ from: 'green', to: 'cyan' }} ta="center" fw="bold" fz={24}>
           Full-stack, type-safe, done right—with style.
