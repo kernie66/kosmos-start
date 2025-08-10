@@ -15,7 +15,7 @@ export default tseslint.config([
         projectService: true,
       },
     },
-    ignores: ['**/dist/**', '**/build/**', '**/coverage/**', '**/node_modules/**', 'eslint.config.mjs'],
+    ignores: ['**/dist/**', '**/build/**', '**/coverage/**', '**/node_modules/**', 'eslint.config.mjs', '*.json'],
     plugins: {
       'unused-imports': unusedImportsPlugin,
       'import-x': importXPlugin,

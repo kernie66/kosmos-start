@@ -1,4 +1,4 @@
-import { Image, Text, Title } from '@mantine/core';
+import { Center, Image, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { getImageFn } from '~/serverActions/getImageFn';
 
@@ -29,11 +29,12 @@ export default function WeeklyInfo() {
   }, []);
 
   return (
-    <div>
-      <Title>Weekly Information</Title>
-      <Text>This component displays weekly information.</Text>
+    <Center p="md" style={{ flexDirection: 'column', gap: '1rem' }}>
+      <Text variant="gradient" gradient={{ from: 'green', to: 'cyan' }} ta="center" fw="bold" fz={24}>
+        Veckoinformation för Kosmos Öppna Förskola
+      </Text>
       <Image src={imageFile} />
       {/* Additional content can be added here */}
-    </div>
+    </Center>
   );
 }
