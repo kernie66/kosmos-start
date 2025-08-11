@@ -5,6 +5,12 @@ import { getWebRequest } from '@tanstack/react-start/server';
 import { RootDocument } from '~/components/RootDocument';
 import { seo } from '~/lib/seo';
 import cssHref from './__root.css?url';
+import { QueryClient } from '@tanstack/react-query';
+
+interface MyRootContext {
+  isAuthenticated: boolean;
+  queryClient: QueryClient;
+}
 
 export const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async () => {
   const { userId } = await getAuth(getWebRequest());
@@ -14,7 +20,7 @@ export const fetchClerkAuth = createServerFn({ method: 'GET' }).handler(async ()
   };
 });
 
-export const Route = createRootRouteWithContext<{ isAuthenticated: boolean }>()({
+export const Route = createRootRouteWithContext<MyRootContext>()({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
