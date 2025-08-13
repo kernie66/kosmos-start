@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
 import { checkFileError } from '~/lib/utils/checkFileError';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
+import { useWindowEvent } from '@mantine/hooks';
 
 export type FileStateProps = FileWithPath | null;
 
@@ -28,6 +29,27 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
     console.log('rejectedFiles', rejectedFiles);
     setSubText(checkFileError(rejectedFiles[0]));
   }, []);
+
+  const handlePaste = (event: ClipboardEvent) => {
+    const items = event.clipboardData?.items;
+    if (!items) {
+      console.log('No items in clipboard');
+      return;
+    }
+    console.log('Pasted items:', items);
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.kind === 'file') {
+        const blob = item.getAsFile();
+        console.log('Pasted file:', blob);
+        // Do something with the file, like upload or process it
+        onSelectFile(blob);
+        setSubText('Välj en ny bildfil för att byta ut den nuvarande');
+      }
+    }
+  };
+
+  useWindowEvent('paste', handlePaste);
 
   const restoreSubText = () => {
     setSubText('Välj en bildfil att ladda upp');

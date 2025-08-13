@@ -39,7 +39,7 @@ export default function FileModal({
         <Modal.Content ref={modalRef}>
           <Modal.Header p={0} m={0} h={FileModalHeaderHeight}>
             <Modal.Title fw={700} fz="xl" p={8} c="teal.6">
-              {!fullScreen ? 'Välj en fil att ladda upp' : 'Klicka på bilden för att gå tillbaka'}
+              {!fullScreen ? 'Välj eller klistra in en fil att ladda upp' : 'Klicka på bilden för att gå tillbaka'}
             </Modal.Title>
             <Modal.CloseButton />
           </Modal.Header>
