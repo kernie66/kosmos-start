@@ -5,6 +5,7 @@ import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
 import { checkFileError } from '~/lib/utils/checkFileError';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 import { useWindowEvent } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 
 export type FileStateProps = FileWithPath | null;
 
@@ -33,6 +34,11 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
   const handlePaste = (event: ClipboardEvent) => {
     const items = event.clipboardData?.items;
     if (!items) {
+      notifications.show({
+        title: 'Ingen bild uppladdad från urklipp',
+        message: 'Det fanns inget kopierat att klistra in, välj en bild och försök igen.',
+        color: 'red',
+      });
       console.log('No items in clipboard');
       return;
     }
@@ -42,9 +48,15 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
       if (item.kind === 'file') {
         const blob = item.getAsFile();
         console.log('Pasted file:', blob);
-        // Do something with the file, like upload or process it
         onSelectFile(blob);
         setSubText('Välj en ny bildfil för att byta ut den nuvarande');
+      } else {
+        console.log('Pasted item is not a file:', item);
+        notifications.show({
+          title: 'Ingen bild uppladdad från urklipp',
+          message: 'Urklipp innehåller ingen bild, välj en bild och försök igen.',
+          color: 'red',
+        });
       }
     }
   };

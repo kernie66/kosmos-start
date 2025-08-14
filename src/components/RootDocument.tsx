@@ -7,6 +7,7 @@ import { App } from './App';
 import { Progress } from './Progress';
 import type { PropsWithChildren } from 'react';
 import './styles.css'; // Remove browser scroll bar, replace with ScrollArea
+import { Notifications } from '@mantine/notifications';
 
 export function RootDocument({ children }: PropsWithChildren) {
   return (
@@ -20,6 +21,7 @@ export function RootDocument({ children }: PropsWithChildren) {
         <body>
           <MantineProvider theme={{ primaryColor: 'green' }}>
             <Progress />
+            <Notifications />
             <ModalsProvider>
               <App>{children}</App>
             </ModalsProvider>
