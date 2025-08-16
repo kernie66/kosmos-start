@@ -4,7 +4,6 @@ import { useAtom } from 'jotai';
 import { TbBrandGithub, TbHeartFilled } from 'react-icons/tb';
 import { desktopToggleState, mobileToggleState } from '~/atoms/toggleStates';
 import { ColorSchemeActionIcon } from './ColorSchemeActionIcon';
-import { DevtoolsActionIcon } from './DevtoolsActionIcon';
 import DibberButton from './DibberButton';
 import classes from './Header.module.css';
 import { LogoutButton } from './LogoutButton';
@@ -40,7 +39,6 @@ export function Header() {
           </SignedIn>
           <NewUploadButton />
           <LogoutButton />
-          {import.meta.env.DEV && <DevtoolsActionIcon />}
           <ActionIcon
             component="a"
             href="https://github.com/sponsors/icflorescu"

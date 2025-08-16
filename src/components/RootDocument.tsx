@@ -1,5 +1,5 @@
 import { svSE } from '@clerk/localizations';
-import { ClerkProvider } from '@clerk/tanstack-react-start';
+import { ClerkProvider, SignedIn } from '@clerk/tanstack-react-start';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { HeadContent, Scripts } from '@tanstack/react-router';
@@ -8,6 +8,7 @@ import { Progress } from './Progress';
 import type { PropsWithChildren } from 'react';
 import './styles.css'; // Remove browser scroll bar, replace with ScrollArea
 import { Notifications } from '@mantine/notifications';
+import Devtools from './DevTools';
 
 export function RootDocument({ children }: PropsWithChildren) {
   return (
@@ -27,6 +28,11 @@ export function RootDocument({ children }: PropsWithChildren) {
             </ModalsProvider>
           </MantineProvider>
           <Scripts />
+          {import.meta.env.DEV && (
+            <SignedIn>
+              <Devtools />
+            </SignedIn>
+          )}
         </body>
       </html>
     </ClerkProvider>
