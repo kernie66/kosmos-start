@@ -1,4 +1,4 @@
-import { Group, Stack, Text } from '@mantine/core';
+import { Button, Group, Stack, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
@@ -32,6 +32,7 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
   }, []);
 
   const handlePaste = (event: ClipboardEvent) => {
+    event.preventDefault();
     const items = event.clipboardData?.items;
     if (!items) {
       notifications.show({
@@ -61,8 +62,28 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
     }
   };
 
+  // Listen for paste events
   useWindowEvent('paste', handlePaste);
 
+  async function pasteImage() {
+    try {
+      const clipboardContents = await navigator.clipboard.read();
+      for (const item of clipboardContents) {
+        console.log('item', item);
+        if (!item.types.includes('image/png')) {
+          throw new Error('Clipboard does not contain PNG image data.');
+        }
+        const blob = await item.getType('image/png');
+        const file = new File([blob], 'pasted-image.png', { type: 'image/png' });
+        onSelectFile(file);
+        setSubText('Välj en ny bildfil för att byta ut den nuvarande');
+        // Optionally, you can also log or display the pasted blob
+        console.log('Pasted blob:', file);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
   const restoreSubText = () => {
     setSubText('Välj en bildfil att ladda upp');
   };
@@ -99,6 +120,9 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
           </Stack>
         </Group>
       </Dropzone>
+      <Button onClick={pasteImage} variant="light" color="teal" fullWidth>
+        Klistra in bild från urklipp
+      </Button>
     </>
   );
 }

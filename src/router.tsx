@@ -1,5 +1,4 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
-// import { TRPCClientProvider } from '~/lib/trpc/client';
 import { DefaultNotFound } from './components/DefaultNotFound';
 import { routeTree } from './routeTree.gen';
 import { QueryClient } from '@tanstack/react-query';
@@ -14,7 +13,6 @@ export function createRouter() {
     defaultErrorComponent: (err) => <p>{err.error.stack}</p>,
     defaultNotFoundComponent: DefaultNotFound,
     scrollRestoration: true,
-    // Wrap: ({ children }) => <TRPCClientProvider>{children}</TRPCClientProvider>,
   });
 
   setupRouterSsrQueryIntegration({ router, queryClient });
