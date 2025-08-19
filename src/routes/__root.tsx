@@ -5,7 +5,7 @@ import { getWebRequest } from '@tanstack/react-start/server';
 import { RootDocument } from '~/components/RootDocument';
 import { seo } from '~/lib/seo';
 import cssHref from './__root.css?url';
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 
 interface MyRootContext {
   isAuthenticated: boolean;

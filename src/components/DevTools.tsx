@@ -1,4 +1,3 @@
-import { TanStackDevtools } from '@tanstack/react-devtools';
 import { lazy } from 'react';
 
 const TanstackDevtools = lazy(() =>
@@ -21,7 +20,7 @@ const RouterDevtoolsPanel = lazy(() =>
 
 export default function Devtools() {
   return (
-    <TanStackDevtools
+    <TanstackDevtools
       config={{
         defaultOpen: false,
         hideUntilHover: true,
