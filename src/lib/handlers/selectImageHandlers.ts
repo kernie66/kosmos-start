@@ -14,7 +14,6 @@ export const getRejectedImage = (rejectedFiles: Array<FileRejection>) => {
 };
 
 export const getPastedImage = (event: ClipboardEvent) => {
-  event.preventDefault();
   const items = event.clipboardData?.items;
 
   if (!items) {

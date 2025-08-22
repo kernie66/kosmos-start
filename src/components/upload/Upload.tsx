@@ -80,7 +80,7 @@ export function Upload() {
       onModalClose={handleModalClose}
     >
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
-      {!fullScreen && <SelectFile onSelectFile={handleSelectedFile} selectRef={topRef} />}
+      {!fullScreen && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
       </Center>

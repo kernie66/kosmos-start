@@ -14,20 +14,20 @@ import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 export type FileStateProps = FileWithPath | null;
 
 type SelectFileProps = {
-  onSelectFile: (file: FileStateProps) => void;
+  onFileSelected: (file: FileStateProps) => void;
   selectRef?: React.RefObject<HTMLDivElement | null>;
 };
 
-export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps) {
+export default function SelectFile({ onFileSelected, selectRef }: SelectFileProps) {
   const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
       const imageFile = getDroppedImage(acceptedFiles);
-      onSelectFile(imageFile);
+      onFileSelected(imageFile);
       setSubText('Välj en ny bildfil för att byta ut den nuvarande');
     },
-    [onSelectFile],
+    [onFileSelected],
   );
 
   const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
@@ -38,14 +38,14 @@ export default function SelectFile({ onSelectFile, selectRef }: SelectFileProps)
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {
     const blob = getPastedImage(event);
-    onSelectFile(blob);
+    onFileSelected(blob);
     setSubText('Välj en ny bildfil för att byta ut den nuvarande');
   });
 
   const handleClipboardImage = useCallback(async () => {
     const image = await getClipboardImage();
-    onSelectFile(image);
-  }, [onSelectFile]);
+    onFileSelected(image);
+  }, [onFileSelected]);
 
   const restoreSubText = useCallback(() => {
     setSubText('Välj en bildfil att ladda upp');
