@@ -1,6 +1,8 @@
 import { Center, LoadingOverlay } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useCallback, useMemo, useState } from 'react';
+import { useSelector } from '@xstate/react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
@@ -19,10 +21,22 @@ export function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
-
+  const actorState = useSelector(imageSelectionActor, (state) => state);
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
+
+  useEffect(() => {
+    // imageSelectionActor.start();
+    console.log('Image selection actor started');
+    return () => {
+      imageSelectionActor.send({ type: 'restart' });
+      // imageSelectionActor.stop();
+      console.log('Image selection actor restarted');
+    };
+  }, []);
+
+  console.log('Actor State:', actorState.value);
 
   // Function to handle file selection
   const handleSelectedFile = useCallback(

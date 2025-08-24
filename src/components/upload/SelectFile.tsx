@@ -3,6 +3,7 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useWindowEvent } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
+import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import {
   getClipboardImage,
   getDroppedImage,
@@ -23,6 +24,7 @@ export default function SelectFile({ onFileSelected, selectRef }: SelectFileProp
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
+      imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
       const imageFile = getDroppedImage(acceptedFiles);
       onFileSelected(imageFile);
       setSubText('Välj en ny bildfil för att byta ut den nuvarande');
@@ -31,18 +33,21 @@ export default function SelectFile({ onFileSelected, selectRef }: SelectFileProp
   );
 
   const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
+    imageSelectionActor.send({ type: 'get image.rejected' });
     const rejectCause = getRejectedImage(rejectedFiles);
     setSubText(rejectCause);
   }, []);
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {
+    imageSelectionActor.send({ type: 'get image.paste', data: event.clipboardData?.files[0] });
     const blob = getPastedImage(event);
     onFileSelected(blob);
     setSubText('Välj en ny bildfil för att byta ut den nuvarande');
   });
 
   const handleClipboardImage = useCallback(async () => {
+    imageSelectionActor.send({ type: 'get image.clipboard' });
     const image = await getClipboardImage();
     onFileSelected(image);
   }, [onFileSelected]);
