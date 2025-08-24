@@ -8,9 +8,9 @@ export const getDroppedImage = (acceptedFiles: Array<FileWithPath>) => {
   return acceptedFiles[0];
 };
 
-export const getRejectedImage = (rejectedFiles: Array<FileRejection>) => {
+export const getRejectedImageCause = (rejectedFiles: Array<FileRejection>) => {
   console.log('rejectedFiles', rejectedFiles);
-  return checkFileError(rejectedFiles[0]);
+  return checkFileError(rejectedFiles);
 };
 
 export const getPastedImage = (event: ClipboardEvent) => {

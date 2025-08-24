@@ -8,7 +8,7 @@ import {
   getClipboardImage,
   getDroppedImage,
   getPastedImage,
-  getRejectedImage,
+  getRejectedImageCause,
 } from '~/lib/handlers/selectImageHandlers';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 
@@ -34,7 +34,7 @@ export default function SelectFile({ onFileSelected, selectRef }: SelectFileProp
 
   const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
     imageSelectionActor.send({ type: 'get image.rejected' });
-    const rejectCause = getRejectedImage(rejectedFiles);
+    const rejectCause = getRejectedImageCause(rejectedFiles);
     setSubText(rejectCause);
   }, []);
 
@@ -81,7 +81,7 @@ export default function SelectFile({ onFileSelected, selectRef }: SelectFileProp
           </Dropzone.Idle>
 
           <Stack gap={2}>
-            <Text size="xl">Dra bilder hit eller klicka för att välja fil</Text>
+            <Text size="xl">Dra en bild hit eller klicka för att välja en fil</Text>
             <Text size="md" c="dimmed">
               {subText}
             </Text>
