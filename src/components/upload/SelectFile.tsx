@@ -24,8 +24,9 @@ export default function SelectFile({ onFileSelected, selectRef }: SelectFileProp
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
+      // Only a single file is accepted by Dropzone
       imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
-      const imageFile = getDroppedImage(acceptedFiles);
+      const imageFile = getDroppedImage(acceptedFiles[0]);
       onFileSelected(imageFile);
       setSubText('Välj en ny bildfil för att byta ut den nuvarande');
     },

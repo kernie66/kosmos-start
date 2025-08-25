@@ -22,6 +22,7 @@ export function Upload() {
   const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
   const actorState = useSelector(imageSelectionActor, (state) => state);
+  const fullscreen = useSelector(imageSelectionActor, (state) => state.context.fullscreen);
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
 
   const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
@@ -36,7 +37,7 @@ export function Upload() {
     };
   }, []);
 
-  console.log('Actor State:', actorState.value);
+  console.log('Actor State:', actorState.value, fullscreen);
 
   // Function to handle file selection
   const handleSelectedFile = useCallback(
@@ -51,7 +52,8 @@ export function Upload() {
 
   // Function to handle image click
   const handleImageClicked = useCallback(() => {
-    toggleFullScreen();
+    imageSelectionActor.send({ type: 'toggle.fullscreen' });
+    // toggleFullScreen();
   }, [toggleFullScreen]);
 
   // Function to handle modal resize
@@ -89,12 +91,12 @@ export function Upload() {
   return (
     <FileModal
       modalOpened={fileModalOpened}
-      fullScreen={fullScreen}
+      fullScreen={fullscreen}
       onModalResize={handleModalResize}
       onModalClose={handleModalClose}
     >
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
-      {!fullScreen && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
+      {!fullscreen && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
       </Center>

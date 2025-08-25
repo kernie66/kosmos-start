@@ -1,30 +1,36 @@
-import { getClipboardImage } from '~/lib/handlers/selectImageHandlers';
-import type { Events } from '../selectImageMachine';
+import { getClipboardImage, getPastedImage } from '~/lib/handlers/selectImageHandlers';
+import type { FileWithPath } from '@mantine/dropzone';
+
+export type ImageFileTypes = FileWithPath | ClipboardEvent | null;
 
 export type SelectedImageProps = {
-  event: Events;
+  selection: ImageFileTypes;
 };
 
-export const setSelectedImage = async ({ event }: SelectedImageProps) => {
-  console.log('setSelectedImage event:', event);
-  let selectedImage: File | string | null = null;
-  if (event.type === 'get image.clipboard') {
-    const blob = await getClipboardImage();
-    selectedImage = blob;
-    return selectedImage;
-  } else if (event.type === 'get image.dropzone') {
-    const file = event.data; // Assuming event.data contains the file from dropzone
-    if (file && file.type.startsWith('image/')) {
-      selectedImage = URL.createObjectURL(file);
-      return selectedImage;
+export const setSelectedImage = async ({ selection }: SelectedImageProps) => {
+  console.log(
+    'setSelectedImage:',
+    selection,
+    'Clipboard:',
+    selection instanceof ClipboardEvent,
+    selection instanceof File,
+  );
+  if (selection instanceof ClipboardEvent) {
+    const file = getPastedImage(selection);
+    return file;
+  } else if (selection instanceof File) {
+    const file = selection; // Assuming event.data contains a single file from dropzone
+    if (file.type.startsWith('image/')) {
+      return file;
     }
   } else {
-    // if (event.type === 'get image.paste') {
-    const pastedImage = await navigator.clipboard.read();
-    if (pastedImage.length > 0) {
-      const blob = await pastedImage[0].getType('image/png');
-      selectedImage = URL.createObjectURL(blob);
-      return selectedImage;
+    // If selection is null, try to read from clipboard
+    try {
+      const file = await getClipboardImage();
+      return file;
+    } catch (error) {
+      console.error('Error reading from clipboard:', error);
+      throw error;
     }
   }
 
