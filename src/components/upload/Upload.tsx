@@ -1,7 +1,8 @@
 import { Center, LoadingOverlay } from '@mantine/core';
 import { useSelector } from '@xstate/react';
 import { useCallback, useEffect, useState } from 'react';
-import { imageSelectionActor, selectFullscreen, selectImageSelected } from '~/fsm/selectImageMachine';
+import { selectFullscreen, selectImageSelected } from '~/fsm/contexts/imageSelectionContext';
+import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';

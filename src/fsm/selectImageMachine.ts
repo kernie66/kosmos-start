@@ -1,15 +1,12 @@
 import { createBrowserInspector } from '@statelyai/inspect';
 import { assertEvent, assign, createActor, fromPromise, setup } from 'xstate';
 import { setSelectedImage } from './actions/setSelectedImage';
+import { initialSelectImageContext } from './contexts/imageSelectionContext';
 import type { ImageFileTypes } from './actions/setSelectedImage';
+import type { SelectImageContext } from './contexts/imageSelectionContext';
 import type { FileWithPath } from '@mantine/dropzone';
-import type { AnyMachineSnapshot } from 'xstate';
 
-export type Context = { selectedImage: {} | null; error: unknown; fullscreen: boolean; imageSelected: boolean };
-export const selectFullscreen = (state: AnyMachineSnapshot) => state.context.fullscreen;
-export const selectImageSelected = (state: AnyMachineSnapshot) => state.context.imageSelected;
-
-export type Events =
+export type SelectImageEvents =
   | { type: 'get image.paste'; data?: null }
   | { type: 'get image.dropzone'; data?: FileWithPath }
   | { type: 'get image.clipboard'; data?: ClipboardEvent }
@@ -24,8 +21,8 @@ export type Events =
 
 export const imageSelectionMachine = setup({
   types: {
-    context: {} as Context,
-    events: {} as Events,
+    context: {} as SelectImageContext,
+    events: {} as SelectImageEvents,
   },
   actions: {
     /*
@@ -54,12 +51,7 @@ export const imageSelectionMachine = setup({
   },
 }).createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEATnEejUQNoAMAuoqAA5mwmlKXEAA9EAVgBMAOgDMrVgA5WkgJwB2ACwBGSVoBsmgDQgAnom2b101uNXbVs9bM2qV6xQF9PJtJjA4+MTkFNJYDExUbJxIILz8ghTCYgji4trS6eL6jnbasvqK+ibmCLKS+tKSiuJa8oqakpKyXj4gfth4hIlhXcQABB1gVDBE-SQYMNIEuCTcAEZkjBDRwvECIcmIirKq0vqs2upHu4rqqvYliLLyNgqsmqwX+jd23r6TAX09gd2DnyMwGMJv5pBAaGRuAAvShgVaxdaJLYIHZ7A5HE6qM4XbRXMrKTL3cSsdT6Y5NTTvdqfX7BSi9IJjIaA4GfaTcdCwIhwjhrPgbISxFKo-aHY7OLHnS5mRCaWQZe6sA7iJxuRSqKlDWk-b7-fws8ZsugAK26kHhPH5SKF212ooxEux0tKej2rFktRu2n0kk0fu9mpp3xC0gA4kC9TAqBBYdISBQAG5kADWYGkWuD9PDTM+CHjSYI6ES0QtcStmxtKLt6PFpyluJlCGcMiUkmyiiaWnSkkD-m1IezkeGYBoEJo7NwRYAZmQaKh00HGQOI0M84myIXixxS4iK6BhY9pI51LUrKodOlZHjNIoMsSFOp3UocuJKW0M0usyuASCpugCAQYDcNyKy8gi5aCvu2wEto2SqooOwnOIeLaLeNgeieWQPn6+i9p0n6hAACnQCYkGAADuQ5UAQAAW6AUDAhr+DuEFJJWzQyGSGiNFYcokg2pRSJU7q1F2bhYmkeFfAR0jEWApEUVRsDfNIsAAK7zKgAgsQke6iIgHH7OcWi+nU-F4oYlTVOIt6wa2aTqFJ-b0nJCmUcyymMtM9GAbgOkCmxUEIIZXEmbx8jHNeSrSB4tQVI8hiPEqTmZkRJFke5AJEGQUBQPg0hTmpuC4LABB0GAFD+daQWNHiTjiJkHYqjc8qxQ8KUyVgNFkJRAByZCkFOJCbiEURgZaumQfpCCqIY0g1KoaRemkuR4s0d4YYYqiSM+2gdd0IZYBpWk5vqVV6SkaR3rBOQevYBRFBZVgxTUzj6Ec6hNGS+10qEADC+D0f0ACq3BjTEE0BciV2ZDduT3YUxSNo8ihVK9sH5PYhgNN4bQUGQEBwMIH4HVNu5TSkAC0SOlNTP0-BERB8pNgXTbsMjZG2lkRRJV6NvIGSxaSCgepoZKOe+i6k6E2pDszUOVvoSv2jk+ic0qsF1eUmQYStUovOI9PLqdMDy9V03aJbeznq+1SwWcHjqChZx3AocpOLoCHJZLfapbJ6WKUMZsXRIMjyEoKjcboBjGMj6jWCJn0XLNSsIUb9JdT1-T9YNw1Fnp5OsyklsOEemi27eNnx2ceJofeDyuIUcrqntPv4dLYTHQIcvgSzyK7NYnPZGLPM1HzpSWS9p5aH6xIOOn-2AxQIPcMHFOyro0ie1jNx6DtAmyiSaO1DZzetbjnhAA */
-  context: {
-    selectedImage: null,
-    error: undefined,
-    fullscreen: false,
-    imageSelected: false,
-  },
+  context: initialSelectImageContext,
   id: 'ImageSelection',
   initial: 'Start',
   states: {
