@@ -1,8 +1,7 @@
 import { Center, LoadingOverlay } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { useSelector } from '@xstate/react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { imageSelectionActor } from '~/fsm/selectImageMachine';
+import { useCallback, useEffect, useState } from 'react';
+import { imageSelectionActor, selectFullscreen, selectImageSelected } from '~/fsm/selectImageMachine';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
@@ -16,28 +15,25 @@ import type { ImageProps } from './PreviewImage';
 import type { FileStateProps } from './SelectFile';
 
 export function Upload() {
-  const [fullScreen, { toggle: toggleFullScreen }] = useDisclosure(false);
   const [selectedFile, setSelectedFile] = useState<FileStateProps>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
-  const actorState = useSelector(imageSelectionActor, (state) => state);
-  const fullscreen = useSelector(imageSelectionActor, (state) => state.context.fullscreen);
+  const imageSelected = useSelector(imageSelectionActor, selectImageSelected);
+  const fullscreen = useSelector(imageSelectionActor, selectFullscreen);
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
 
-  const imageSelected = useMemo(() => image.imageUrl !== '', [image.imageUrl]);
+  // const imageSelected =
+  // imageSelectionState.matches("Preview Image")
+  // useMemo(() => image.imageUrl !== '', [image.imageUrl]);
 
   useEffect(() => {
-    // imageSelectionActor.start();
     console.log('Image selection actor started');
     return () => {
       imageSelectionActor.send({ type: 'restart' });
-      // imageSelectionActor.stop();
       console.log('Image selection actor restarted');
     };
   }, []);
-
-  console.log('Actor State:', actorState.value, fullscreen);
 
   // Function to handle file selection
   const handleSelectedFile = useCallback(
@@ -53,8 +49,7 @@ export function Upload() {
   // Function to handle image click
   const handleImageClicked = useCallback(() => {
     imageSelectionActor.send({ type: 'toggle.fullscreen' });
-    // toggleFullScreen();
-  }, [toggleFullScreen]);
+  }, []);
 
   // Function to handle modal resize
   const handleModalResize = useCallback(
@@ -96,7 +91,7 @@ export function Upload() {
       onModalClose={handleModalClose}
     >
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
-      {!fullscreen && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
+      {!imageSelected && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
         <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
       </Center>

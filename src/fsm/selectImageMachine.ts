@@ -3,6 +3,11 @@ import { assertEvent, assign, createActor, fromPromise, setup } from 'xstate';
 import { setSelectedImage } from './actions/setSelectedImage';
 import type { ImageFileTypes } from './actions/setSelectedImage';
 import type { FileWithPath } from '@mantine/dropzone';
+import type { AnyMachineSnapshot } from 'xstate';
+
+export type Context = { selectedImage: {} | null; error: unknown; fullscreen: boolean; imageSelected: boolean };
+export const selectFullscreen = (state: AnyMachineSnapshot) => state.context.fullscreen;
+export const selectImageSelected = (state: AnyMachineSnapshot) => state.context.imageSelected;
 
 export type Events =
   | { type: 'get image.paste'; data?: null }
@@ -19,7 +24,7 @@ export type Events =
 
 export const imageSelectionMachine = setup({
   types: {
-    context: {} as { selectedImage: {} | null; error: unknown; fullscreen: boolean },
+    context: {} as Context,
     events: {} as Events,
   },
   actions: {
@@ -48,11 +53,12 @@ export const imageSelectionMachine = setup({
     },
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEATnEejUQNoAMAuoqAA5mwmlKXEAA9EAFgBMAGhABPRAEZxAdgB0rAKwBOZds0rJAZhXjN4gL4XZaTGBz5i5CmqwMmVNpyQhe-QRTCYggAbNoAHGpG4iaSmqyKmpKs4YqyCghGkiFqkuEGikZGIZLaIYoqVjYY2HiEAa51xAAEtjBUMETNJDVgagS4JNwARmSMEF7CfgLOQUqFkmohrNpG4SWrCZLi6YhFrBqsR6ySiqymhiGaVSBt9k0NDvWtvR1gXT12ahA0ZNwAXpQwJMfNMAnMEIoFksVmsNkYtjt5Htwgd4scVNo4kkTDc7k8nJRGo4unc3h9empuOhYERgRwpnwZkIfMEoZJFstVutSgjFNtdggYopDkdCqYjAZVHjegTHg8XnZyd1KXQAFb1SAgnhM8Gs+YcmHc+GIwWSTEaSWmLQlbK6GV2OXONQABToADcSGAAO6K9oEAAW6AoMBVdm1vl1s31CE0Rm0UW0WgiFVKKiMaWRseyloMCPWa3EIXCDtqJOdbrAnp9frAVFgDzUsAArsNUAII2Do6BguYE-Hk6lDNp05mMiEi7l8umTIZwoYjKX7uWiZXq76yQ2Sf1gwQ8J2oyye4g+4nB6mRxnBeJWDkVNOOfFNOUikunUSsAGyL6AHJkUgAGYkAQ6ABJ4DKgoegQxlC-JGnCvKmlmxginGBjGOEZiosYkhvg8zpYK27akq8B7+N2oiIOs4hqDi4h6M+4jiLogoTuo94GDo5hnFkJbWLcsr4USADC+DBs0ACq3Dgd4OrkUelEIOEeRqKYpxYoo+Q6KwSIZDekR5AUKg2jemjXPx+JCS4ADi7y1lQEBAmoJAUO6ZAANZ9JZK42XZdwIC5bkgQEXhkcy0HHrG8ZnjoQ5pleWbposKRxPkymqMslgWYJPlqLZJFKmANC-DQVK4KBAFkDQqBqN59TOvltYBa5ZDBc4oUQXJ4UQrBnKwjymz8rpEipLRxyKPo5QlJofHVI6Vl5X5ryfDAajoAQe7cHSEydZG8kRYp96RFIZSaMoIQqIkhiCppIqsFamknCoKhneaeG5WuXobpSADqLmOd6VBEGQUBQPgagAc2uC4LABB0GAFBhXqkU5hNJwZreZSpMWKiCjN6iYdoTG2s94jhNo731auHpfbWagAGJQzDcNgAjQMg2DfSQ9DsPw4ju1dgpbKrDCylJiEawjjoMhZkkORQkm5PFMx2SLjcFBkBAcDCHVhIHYLB3BAAtGEaioiOxabBm4QJRkRuaGo2hOxEkpEzNigXbNAnzblbiMEQjL7RCcb9kmsUXqOgp8qpD6whdKjFpTevEs8dyB91Mb6AmXIYxNZylNoUdZLRVp8vOEv0SEScNJ9NZp5BQcxkbpxmysCdK-dmkZkY15rEsaPrBdz5JhT2U+1TLi199Xx-RQAPp8jh0yxkctqAr5wmM+2ynNXBFfr+-4kEBbUKQbPVZCKmGb-k0QpAngqjeiRzRPkZT6LvH5EQItYLxRwSXQcDS4RUgGGWJcVik4OIzmenkBcH8XCiTAOJKSv8haIGMpEIBqhTj5DiD3LMN51CGUMHEG0hQ1ZzTLBPRaBUYCoMNkoNYBx7rizCGdG8EsbrzlFEcJ8ZNbwpHga6GmddKSMx5izBG9CerPTNjoZYWRjLRATiEVixQ1BMRWBNCI5pnxVysBYIAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEATnEejUQNoAMAuoqAA5mwmlKXEAA9EAVgBMAOgDMrVgA5WkgJwB2ACwBGSVoBsmgDQgAnom2b101uNXbVs9bM2qV6xQF9PJtJjA4+MTkFNJYDExUbJxIILz8ghTCYgji4trS6eL6jnbasvqK+ibmCLKS+tKSiuJa8oqakpKyXj4gfth4hIlhXcQABB1gVDBE-SQYMNIEuCTcAEZkjBDRwvECIcmIirKq0vqs2upHu4rqqvYliLLyNgqsmqwX+jd23r6TAX09gd2DnyMwGMJv5pBAaGRuAAvShgVaxdaJLYIHZ7A5HE6qM4XbRXMrKTL3cSsdT6Y5NTTvdqfX7BSi9IJjIaA4GfaTcdCwIhwjhrPgbISxFKo-aHY7OLHnS5mRCaWQZe6sA7iJxuRSqKlDWk-b7-fws8ZsugAK26kHhPH5SKF212ooxEux0tKej2rFktRu2n0kk0fu9mpp3xC0gA4kC9TAqBBYdISBQAG5kADWYGkWuD9PDTM+CHjSYI6ES0QtcStmxtKLt6PFpyluJlCGcMiUkmyiiaWnSkkD-m1IezkeGYBoEJo7NwRYAZmQaKh00HGQOI0M84myIXixxS4iK6BhY9pI51LUrKodOlZHjNIoMsSFOp3UocuJKW0M0usyuASCpugCAQYDcNyKy8gi5aCvu2wEto2SqooOwnOIeLaLeNgeieWQPn6+i9p0n6hAACnQCYkGAADuQ5UAQAAW6AUDAhr+DuEFJJWzQyGSGiNFYcokg2pRSJU7q1F2bhYmkeFfAR0jEWApEUVRsDfNIsAAK7zKgAgsQke6iIgHH7OcWi+nU-F4oYlTVOIt6wa2aTqFJ-b0nJCmUcyymMtM9GAbgOkCmxUEIIZXEmbx8jHNeSrSB4tQVI8hiPEqTmZkRJFke5AJEGQUBQPg0hTmpuC4LABB0GAFD+daQWNHiTjiJkHYqjc8qxQ8KUyVgNFkJRAByZCkFOJCbiEURgZaumQfpCCqIY0g1KoaRemkuR4s0d4YYYqiSM+2gdd0IZYBpWk5vqVV6SkaR3rBOQevYBRFBZVgxTUzj6Ec6hNGS+10qEADC+D0f0ACq3BjTEE0BciV2ZDduT3YUxSNo8ihVK9sH5PYhgNN4bQUGQEBwMIH4HVNu5TSkAC0SOlNTP0-BERB8pNgXTbsMjZG2lkRRJV6NvIGSxaSCgepoZKOe+i6k6E2pDszUOVvoSv2jk+ic0qsF1eUmQYStUovOI9PLqdMDy9V03aJbeznq+1SwWcHjqChZx3AocpOLoCHJZLfapbJ6WKUMZsXRIMjyEoKjcboBjGMj6jWCJn0XLNSsIUb9JdT1-T9YNw1Fnp5OsyklsOEemi27eNnx2ceJofeDyuIUcrqntPv4dLYTHQIcvgSzyK7NYnPZGLPM1HzpSWS9p5aH6xIOOn-2AxQIPcMHFOyro0ie1jNx6DtAmyiSaO1DZzetbjnhAA */
   context: {
     selectedImage: null,
     error: undefined,
     fullscreen: false,
+    imageSelected: false,
   },
   id: 'ImageSelection',
   initial: 'Start',
@@ -81,71 +87,6 @@ export const imageSelectionMachine = setup({
           target: 'Show Notification',
           reenter: true,
         },
-      },
-    },
-
-    'Preview Image': {
-      initial: 'Window',
-      on: {
-        'change image': {
-          target: 'Select Image',
-        },
-
-        'select.submit': {
-          target: 'Submit Image',
-        },
-
-        'select.cancel': {
-          target: 'Clean Up',
-        },
-      },
-
-      states: {
-        Window: {
-          on: {
-            'toggle.fullscreen': {
-              target: 'Fullscreen',
-              actions: assign({
-                fullscreen: ({ context }) => !context.fullscreen,
-              }),
-            },
-          },
-        },
-
-        Fullscreen: {
-          on: {
-            'toggle.fullscreen': {
-              target: 'Window',
-              actions: assign({
-                fullscreen: ({ context }) => !context.fullscreen,
-              }),
-            },
-          },
-        },
-      },
-    },
-
-    'Show Notification': {
-      always: {
-        target: 'Select Image',
-        reenter: true,
-      },
-      entry: {
-        type: 'showNotification',
-      },
-    },
-
-    'Submit Image': {
-      always: {
-        target: 'Select Image',
-        reenter: true,
-      },
-    },
-
-    'Clean Up': {
-      always: {
-        target: 'Select Image',
-        reenter: true,
       },
     },
 
@@ -185,6 +126,58 @@ export const imageSelectionMachine = setup({
 
       on: {
         'image.accepted': 'Preview Image',
+      },
+    },
+
+    'Preview Image': {
+      entry: assign({
+        imageSelected: true,
+      }),
+      on: {
+        'change image': {
+          target: 'Select Image',
+        },
+
+        'select.submit': {
+          target: 'Submit Image',
+        },
+
+        'select.cancel': {
+          target: 'Clean Up',
+        },
+
+        'toggle.fullscreen': {
+          target: 'Preview Image',
+          actions: assign({
+            fullscreen: ({ context }) => !context.fullscreen,
+          }),
+        },
+      },
+      // Ensure that fullscreen is restored when exiting
+      exit: [assign({ fullscreen: false }), assign({ imageSelected: false })],
+    },
+
+    'Show Notification': {
+      always: {
+        target: 'Select Image',
+        reenter: true,
+      },
+      entry: {
+        type: 'showNotification',
+      },
+    },
+
+    'Submit Image': {
+      always: {
+        target: 'Select Image',
+        reenter: true,
+      },
+    },
+
+    'Clean Up': {
+      always: {
+        target: 'Select Image',
+        reenter: true,
       },
     },
   },
