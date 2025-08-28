@@ -5,20 +5,18 @@ import { selectFullscreen, selectImageSelected } from '~/fsm/contexts/imageSelec
 import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
-import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
 import { submitFile } from '~/lib/utils/submitFile';
 import FileModal from './FileModal';
+import NoImageSelected from './NoImageSelected';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
 import SelectFile from './SelectFile';
 import type { ModalParamProps } from './FileModal';
-import type { ImageProps } from './PreviewImage';
 import type { FileStateProps } from './SelectFile';
 
 export function Upload() {
   const [selectedFile, setSelectedFile] = useState<FileStateProps>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [image, setImage] = useState<ImageProps>({ imageUrl: '', fileName: '', imageName: '', width: 0, height: 0 });
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
   const imageSelected = useSelector(imageSelectionActor, selectImageSelected);
   const fullscreen = useSelector(imageSelectionActor, selectFullscreen);
@@ -38,13 +36,11 @@ export function Upload() {
 
   // Function to handle file selection
   const handleSelectedFile = useCallback(
-    async (file: FileStateProps) => {
+    (file: FileStateProps) => {
       setSelectedFile(file);
-      const imageFileInfo = await getImageFileInfo(file);
-      setImage(imageFileInfo);
       clearCenterSize();
     },
-    [setImage, clearCenterSize],
+    [clearCenterSize],
   );
 
   // Function to handle image click
@@ -94,7 +90,11 @@ export function Upload() {
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
       {!imageSelected && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
       <Center ref={centerRef}>
-        <PreviewImage image={image} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
+        {imageSelected ? (
+          <PreviewImage file={selectedFile} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
+        ) : (
+          <NoImageSelected />
+        )}
       </Center>
       <SelectButtons
         showButtons={imageSelected}

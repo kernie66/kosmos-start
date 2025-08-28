@@ -1,4 +1,4 @@
-import type { AnyMachineSnapshot } from 'xstate';
+import type { MachineSnapshot } from 'xstate';
 
 export type SelectImageContext = {
   selectedImage: {} | null;
@@ -7,6 +7,8 @@ export type SelectImageContext = {
   imageSelected: boolean;
 };
 
+type SelectImageState = MachineSnapshot<SelectImageContext, any, any, any, any, any, any, any>;
+
 export const initialSelectImageContext = {
   selectedImage: null,
   error: undefined,
@@ -14,5 +16,5 @@ export const initialSelectImageContext = {
   imageSelected: false,
 };
 
-export const selectFullscreen = (state: AnyMachineSnapshot) => state.context.fullscreen;
-export const selectImageSelected = (state: AnyMachineSnapshot) => state.context.imageSelected;
+export const selectFullscreen = (state: SelectImageState) => state.context.fullscreen;
+export const selectImageSelected = (state: SelectImageState) => state.context.imageSelected;
