@@ -5,9 +5,9 @@ import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
 import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import {
-  getClipboardImage,
-  getDroppedImage,
-  getPastedImage,
+  // getClipboardImage,
+  // getDroppedImage,
+  // getPastedImage,
   getRejectedImageCause,
 } from '~/lib/handlers/selectImageHandlers';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
@@ -15,23 +15,17 @@ import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 export type FileStateProps = FileWithPath | null;
 
 type SelectFileProps = {
-  onFileSelected: (file: FileStateProps) => void;
   selectRef?: React.RefObject<HTMLDivElement | null>;
 };
 
-export default function SelectFile({ onFileSelected, selectRef }: SelectFileProps) {
+export default function SelectFile({ selectRef }: SelectFileProps) {
   const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
 
-  const handleDrop = useCallback(
-    (acceptedFiles: Array<FileWithPath>) => {
-      // Only a single file is accepted by Dropzone
-      imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
-      const imageFile = getDroppedImage(acceptedFiles[0]);
-      onFileSelected(imageFile);
-      setSubText('Välj en ny bildfil för att byta ut den nuvarande');
-    },
-    [onFileSelected],
-  );
+  const handleDrop = useCallback((acceptedFiles: Array<FileWithPath>) => {
+    // Only a single file is accepted by Dropzone
+    imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
+    setSubText('Välj en ny bildfil för att byta ut den nuvarande');
+  }, []);
 
   const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
     imageSelectionActor.send({ type: 'get image.rejected' });
@@ -41,17 +35,16 @@ export default function SelectFile({ onFileSelected, selectRef }: SelectFileProp
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {
-    imageSelectionActor.send({ type: 'get image.paste', data: event.clipboardData?.files[0] });
-    const blob = getPastedImage(event);
-    onFileSelected(blob);
+    const clipboardFile = event.clipboardData?.files[0];
+    imageSelectionActor.send({ type: 'get image.paste', data: clipboardFile });
+    // const blob = getPastedImage(event);
+    // onFileSelected(blob);
     setSubText('Välj en ny bildfil för att byta ut den nuvarande');
   });
 
-  const handleClipboardImage = useCallback(async () => {
+  const handleClipboardImage = useCallback(() => {
     imageSelectionActor.send({ type: 'get image.clipboard' });
-    const image = await getClipboardImage();
-    onFileSelected(image);
-  }, [onFileSelected]);
+  }, []);
 
   const restoreSubText = useCallback(() => {
     setSubText('Välj en bildfil att ladda upp');

@@ -18,6 +18,7 @@ const maxImageWidth = '100vw';
 
 function PreviewImage({ file, onImageClicked, maxHeight = '100%' }: PreviewImageProps) {
   const image = getImageFileInfo(file);
+  console.log('image', file, image);
 
   return (
     <UnstyledButton onClick={onImageClicked}>

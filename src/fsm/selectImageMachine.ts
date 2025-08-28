@@ -7,9 +7,9 @@ import type { SelectImageContext } from './contexts/imageSelectionContext';
 import type { FileWithPath } from '@mantine/dropzone';
 
 export type SelectImageEvents =
-  | { type: 'get image.paste'; data?: null }
+  | { type: 'get image.paste'; data?: File }
   | { type: 'get image.dropzone'; data?: FileWithPath }
-  | { type: 'get image.clipboard'; data?: ClipboardEvent }
+  | { type: 'get image.clipboard'; data?: null }
   | { type: 'get image.rejected' }
   | { type: 'image.accepted'; data?: File }
   | { type: 'image.rejected'; data?: string }
@@ -97,10 +97,10 @@ export const imageSelectionMachine = setup({
           target: 'Preview Image',
           actions: [
             ({ event }) => {
-              console.log('Image successfully selected and loaded', event.output);
+              console.log('Image successfully selected and loaded', event.output, event);
             },
             assign(({ event }) => ({
-              selectedImage: event.output,
+              selectedFile: event.output,
             })),
           ],
         },
