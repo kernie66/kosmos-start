@@ -1,9 +1,8 @@
-import { createBrowserInspector } from '@statelyai/inspect';
-import { assertEvent, assign, createActor, fromPromise, setup } from 'xstate';
+import { assertEvent, assign, fromPromise, setup } from 'xstate';
 import { setSelectedImage } from './actions/setSelectedImage';
 import { initialSelectImageContext } from './contexts/imageSelectionContext';
 import type { ImageFileTypes } from './actions/setSelectedImage';
-import type { SelectImageContext } from './contexts/imageSelectionContext';
+import type { ImageSelectionContext } from './contexts/imageSelectionContext';
 import type { FileWithPath } from '@mantine/dropzone';
 
 export type SelectImageEvents =
@@ -21,7 +20,7 @@ export type SelectImageEvents =
 
 export const imageSelectionMachine = setup({
   types: {
-    context: {} as SelectImageContext,
+    context: {} as ImageSelectionContext,
     events: {} as SelectImageEvents,
   },
   actions: {
@@ -177,17 +176,6 @@ export const imageSelectionMachine = setup({
     },
   },
   on: {
-    restart: {
-      target: '.Select Image',
-      actions: () => {
-        console.log('Image selection restarted');
-      },
-    },
     'get image.paste': '.Get Image',
   },
 });
-
-const { inspect } = createBrowserInspector();
-
-export const imageSelectionActor = createActor(imageSelectionMachine, { inspect });
-imageSelectionActor.start();

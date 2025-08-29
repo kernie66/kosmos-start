@@ -3,13 +3,13 @@ import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useWindowEvent } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
-import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import {
   // getClipboardImage,
   // getDroppedImage,
   // getPastedImage,
   getRejectedImageCause,
 } from '~/lib/handlers/selectImageHandlers';
+import { ImageSelectionContext } from '~/routes/_auth/upload';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 
 export type FileStateProps = FileWithPath | null;
@@ -19,19 +19,26 @@ type SelectFileProps = {
 };
 
 export default function SelectFile({ selectRef }: SelectFileProps) {
+  const imageSelectionActor = ImageSelectionContext.useActorRef();
   const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
 
-  const handleDrop = useCallback((acceptedFiles: Array<FileWithPath>) => {
-    // Only a single file is accepted by Dropzone
-    imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
-    setSubText('Välj en ny bildfil för att byta ut den nuvarande');
-  }, []);
+  const handleDrop = useCallback(
+    (acceptedFiles: Array<FileWithPath>) => {
+      // Only a single file is accepted by Dropzone
+      imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
+      setSubText('Välj en ny bildfil för att byta ut den nuvarande');
+    },
+    [imageSelectionActor],
+  );
 
-  const handleReject = useCallback((rejectedFiles: Array<FileRejection>) => {
-    imageSelectionActor.send({ type: 'get image.rejected' });
-    const rejectCause = getRejectedImageCause(rejectedFiles);
-    setSubText(rejectCause);
-  }, []);
+  const handleReject = useCallback(
+    (rejectedFiles: Array<FileRejection>) => {
+      imageSelectionActor.send({ type: 'get image.rejected' });
+      const rejectCause = getRejectedImageCause(rejectedFiles);
+      setSubText(rejectCause);
+    },
+    [imageSelectionActor],
+  );
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {

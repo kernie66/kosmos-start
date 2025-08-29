@@ -1,6 +1,6 @@
 import { Button, Group } from '@mantine/core';
 import { useCallback } from 'react';
-import { imageSelectionActor } from '~/fsm/selectImageMachine';
+import { ImageSelectionContext } from '~/routes/_auth/upload';
 
 type SelectButtonProps = {
   showButtons?: boolean;
@@ -10,6 +10,8 @@ type SelectButtonProps = {
 };
 
 export function SelectButtons({ showButtons = true, buttonRef, onSelect, onCancel }: SelectButtonProps) {
+  const imageSelectionActor = ImageSelectionContext.useActorRef();
+
   const handleSelect = useCallback(() => {
     if (onSelect) {
       onSelect();
@@ -24,7 +26,7 @@ export function SelectButtons({ showButtons = true, buttonRef, onSelect, onCance
 
   const handleChangeImage = useCallback(() => {
     imageSelectionActor.send({ type: 'change image' });
-  }, []);
+  }, [imageSelectionActor]);
 
   // If showButtons is false, we don't render the buttons
   if (!showButtons) return null;

@@ -1,7 +1,7 @@
 import { Image, UnstyledButton } from '@mantine/core';
 import { memo, useCallback } from 'react';
-import { imageSelectionActor } from '~/fsm/selectImageMachine';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
+import { ImageSelectionContext } from '~/routes/_auth/upload';
 import type { FileStateProps } from './SelectFile';
 
 export type ImageSizeSelections = '100%' | '95vh' | '100vh' | '100vw' | 'auto';
@@ -17,12 +17,14 @@ const imageWidth = '100%';
 const maxImageWidth = '100vw';
 
 function PreviewImage({ file, maxHeight = '100%' }: PreviewImageProps) {
+  const imageSelectionActor = ImageSelectionContext.useActorRef();
+
   const image = getImageFileInfo(file);
 
   // Function to handle image click
   const handleImageClicked = useCallback(() => {
     imageSelectionActor.send({ type: 'toggle.fullscreen' });
-  }, []);
+  }, [imageSelectionActor]);
 
   return (
     <UnstyledButton onClick={handleImageClicked}>

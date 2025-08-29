@@ -1,14 +1,14 @@
 import type { FileWithPath } from '@mantine/dropzone';
 import type { MachineSnapshot } from 'xstate';
 
-export type SelectImageContext = {
+export type ImageSelectionContext = {
   selectedFile: FileWithPath | null;
   error: unknown;
   fullscreen: boolean;
   imageSelected: boolean;
 };
 
-type SelectImageState = MachineSnapshot<SelectImageContext, any, any, any, any, any, any, any>;
+type SelectImageState = MachineSnapshot<ImageSelectionContext, any, any, any, any, any, any, any>;
 
 export const initialSelectImageContext = {
   selectedFile: null,
