@@ -1,4 +1,4 @@
-import { Button, Group, Stack, Text } from '@mantine/core';
+import { Group, Stack, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useWindowEvent } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
@@ -42,10 +42,6 @@ export default function SelectFile({ selectRef }: SelectFileProps) {
     setSubText('Välj en ny bildfil för att byta ut den nuvarande');
   });
 
-  const handleClipboardImage = useCallback(() => {
-    imageSelectionActor.send({ type: 'get image.clipboard' });
-  }, []);
-
   const restoreSubText = useCallback(() => {
     setSubText('Välj en bildfil att ladda upp');
   }, []);
@@ -82,9 +78,6 @@ export default function SelectFile({ selectRef }: SelectFileProps) {
           </Stack>
         </Group>
       </Dropzone>
-      <Button onClick={handleClipboardImage} variant="light" color="teal" fullWidth>
-        Klistra in bild från urklipp
-      </Button>
     </>
   );
 }

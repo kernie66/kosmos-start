@@ -8,6 +8,7 @@ import { useCloseModal } from '~/hooks/useCloseModal';
 import { submitFile } from '~/lib/utils/submitFile';
 import FileModal from './FileModal';
 import NoImageSelected from './NoImageSelected';
+import PasteClipboardButton from './PasteClipboardButton';
 import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
 import SelectFile from './SelectFile';
@@ -22,10 +23,6 @@ export function Upload() {
   const imageSelected = useSelector(imageSelectionActor, selectImageSelected);
   const fullscreen = useSelector(imageSelectionActor, selectFullscreen);
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
-
-  // const imageSelected =
-  // imageSelectionState.matches("Preview Image")
-  // useMemo(() => image.imageUrl !== '', [image.imageUrl]);
 
   useEffect(() => {
     console.log('Image selection actor started');
@@ -45,11 +42,6 @@ export function Upload() {
     [clearCenterSize],
   );
   console.log('selectedFile', selectedFile);
-
-  // Function to handle image click
-  const handleImageClicked = useCallback(() => {
-    imageSelectionActor.send({ type: 'toggle.fullscreen' });
-  }, []);
 
   // Function to handle modal resize
   const handleModalResize = useCallback(
@@ -91,13 +83,14 @@ export function Upload() {
       onModalClose={handleModalClose}
     >
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
-      {!imageSelected && <SelectFile onFileSelected={handleSelectedFile} selectRef={topRef} />}
+      {!imageSelected && (
+        <>
+          <SelectFile selectRef={topRef} />
+          <PasteClipboardButton />
+        </>
+      )}
       <Center ref={centerRef}>
-        {selectedFile ? (
-          <PreviewImage file={selectedFile} onImageClicked={handleImageClicked} maxHeight={centerHeight} />
-        ) : (
-          <NoImageSelected />
-        )}
+        {selectedFile ? <PreviewImage file={selectedFile} maxHeight={centerHeight} /> : <NoImageSelected />}
       </Center>
       <SelectButtons
         showButtons={selectedFile !== null}
