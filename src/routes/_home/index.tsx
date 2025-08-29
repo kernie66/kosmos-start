@@ -10,6 +10,14 @@ function RouteComponent() {
       <Stack align="center">
         <WeeklyInfo />
       </Stack>
+      <button
+        type="button"
+        onClick={() => {
+          throw new Error('Sentry Test Error');
+        }}
+      >
+        Break the world
+      </button>
     </>
   );
 }
