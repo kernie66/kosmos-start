@@ -1,7 +1,9 @@
 onlyBuiltDependencies:
   - '@clerk/shared'
   - '@parcel/watcher'
+  - '@sentry-internal/node-cpu-profiler'
   - esbuild
   - unrs-resolver
+
 overrides:
   esbuild@<=0.24.2: '>=0.25.0'

@@ -4,6 +4,8 @@ import { setHeader } from '@tanstack/react-start/server';
 
 export const getImageFn = createServerFn({ method: 'GET', response: 'raw' }).handler(async () => {
   setHeader('Content-Type', 'image/jpg');
+  setHeader('Document-Policy', 'js-profiling');
+
   try {
     const filePath = `${process.cwd()}/uploads/weekly_info.png`;
     const imageBuffer = await fs.readFile(filePath);
