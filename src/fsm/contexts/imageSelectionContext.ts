@@ -6,6 +6,7 @@ export type ImageSelectionContext = {
   error: unknown;
   fullscreen: boolean;
   imageSelected: boolean;
+  dropzoneSubText: string;
 };
 
 type SelectImageState = MachineSnapshot<ImageSelectionContext, any, any, any, any, any, any, any>;
@@ -15,8 +16,10 @@ export const initialSelectImageContext = {
   error: undefined,
   fullscreen: false,
   imageSelected: false,
+  dropzoneSubText: 'Välj en bildfil att ladda upp',
 };
 
 export const selectSelectedFile = (state: SelectImageState) => state.context.selectedFile;
 export const selectFullscreen = (state: SelectImageState) => state.context.fullscreen;
 export const selectImageSelected = (state: SelectImageState) => state.context.imageSelected;
+export const selectDropzoneSubText = (state: SelectImageState) => state.context.dropzoneSubText;

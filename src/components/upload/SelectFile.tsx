@@ -1,8 +1,8 @@
 import { Group, Stack, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import { useWindowEvent } from '@mantine/hooks';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
+import { selectDropzoneSubText } from '~/fsm/contexts/imageSelectionContext';
 import {
   // getClipboardImage,
   // getDroppedImage,
@@ -20,38 +20,23 @@ type SelectFileProps = {
 
 export default function SelectFile({ selectRef }: SelectFileProps) {
   const imageSelectionActor = ImageSelectionContext.useActorRef();
-  const [subText, setSubText] = useState('Välj en bildfil att ladda upp');
+  const subText = ImageSelectionContext.useSelector(selectDropzoneSubText);
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
-      // Only a single file is accepted by Dropzone
+      // Only a single file is accepted by Dropzone, so we can safely use the first file
       imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
-      setSubText('Välj en ny bildfil för att byta ut den nuvarande');
     },
     [imageSelectionActor],
   );
 
   const handleReject = useCallback(
     (rejectedFiles: Array<FileRejection>) => {
-      imageSelectionActor.send({ type: 'get image.rejected' });
       const rejectCause = getRejectedImageCause(rejectedFiles);
-      setSubText(rejectCause);
+      imageSelectionActor.send({ type: 'get image.rejected', cause: rejectCause });
     },
     [imageSelectionActor],
   );
-
-  // Listen for paste events
-  useWindowEvent('paste', (event: ClipboardEvent) => {
-    const clipboardFile = event.clipboardData?.files[0];
-    imageSelectionActor.send({ type: 'get image.paste', data: clipboardFile });
-    // const blob = getPastedImage(event);
-    // onFileSelected(blob);
-    setSubText('Välj en ny bildfil för att byta ut den nuvarande');
-  });
-
-  const restoreSubText = useCallback(() => {
-    setSubText('Välj en bildfil att ladda upp');
-  }, []);
 
   return (
     <>
@@ -59,7 +44,6 @@ export default function SelectFile({ selectRef }: SelectFileProps) {
         accept={IMAGE_MIME_TYPE}
         onDrop={handleDrop}
         onReject={handleReject}
-        onFileDialogOpen={restoreSubText}
         maxFiles={1}
         bg="teal.1"
         radius="md"

@@ -1,4 +1,5 @@
 import { Center, LoadingOverlay } from '@mantine/core';
+import { useWindowEvent } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
 import { selectFullscreen, selectImageSelected, selectSelectedFile } from '~/fsm/contexts/imageSelectionContext';
 import { useCenterSize } from '~/hooks/useCenterSize';
@@ -16,10 +17,17 @@ import type { ModalParamProps } from './FileModal';
 export function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
+  const imageSelectionActor = ImageSelectionContext.useActorRef();
   const selectedFile = ImageSelectionContext.useSelector(selectSelectedFile);
   const imageSelected = ImageSelectionContext.useSelector(selectImageSelected);
   const fullscreen = ImageSelectionContext.useSelector(selectFullscreen);
   const { clearCenterSize, centerRef, topRef, bottomRef, centerHeight } = useCenterSize();
+
+  // Listen for paste events
+  useWindowEvent('paste', (event: ClipboardEvent) => {
+    const clipboardFile = event.clipboardData?.files[0];
+    imageSelectionActor.send({ type: 'get image.paste', data: clipboardFile });
+  });
 
   // Function to handle modal resize
   const handleModalResize = useCallback(

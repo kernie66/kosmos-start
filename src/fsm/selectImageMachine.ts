@@ -9,7 +9,7 @@ export type SelectImageEvents =
   | { type: 'get image.paste'; data?: File }
   | { type: 'get image.dropzone'; data?: FileWithPath }
   | { type: 'get image.clipboard'; data?: null }
-  | { type: 'get image.rejected' }
+  | { type: 'get image.rejected'; cause: string }
   | { type: 'image.accepted'; data?: File }
   | { type: 'image.rejected'; data?: string }
   | { type: 'change image' }
@@ -77,6 +77,10 @@ export const imageSelectionMachine = setup({
 
         'get image.rejected': {
           target: 'Show Notification',
+          actions: assign({
+            error: ({ event }) => event.cause || 'Okänd orsak',
+            dropzoneSubText: ({ event }) => event.cause,
+          }),
           reenter: true,
         },
       },
@@ -128,6 +132,9 @@ export const imageSelectionMachine = setup({
       on: {
         'change image': {
           target: 'Select Image',
+          actions: assign({
+            dropzoneSubText: 'Välj en ny bildfil för att byta ut den nuvarande',
+          }),
         },
 
         'select.submit': {

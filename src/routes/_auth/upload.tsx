@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_auth/upload')({
   component: RouteComponent,
 });
 
-const { inspect } = createBrowserInspector({ autoStart: true });
+const { inspect } = createBrowserInspector({ autoStart: false });
 
 export const ImageSelectionContext = createActorContext(imageSelectionMachine, { inspect });
 
