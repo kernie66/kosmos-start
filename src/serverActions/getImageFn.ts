@@ -9,10 +9,11 @@ export const getImageFn = createServerFn({ method: 'GET', response: 'raw' }).han
   try {
     const filePath = `${process.cwd()}/uploads/weekly_info.png`;
     const imageBuffer = await fs.readFile(filePath);
-    console.log('Image Size:', imageBuffer.length);
+    const imageBlob = new Blob([imageBuffer as BlobPart], { type: 'image/png' });
+    console.log('Image Size:', imageBlob.size);
     // return imageBuffer;
 
-    return new Response(imageBuffer, {
+    return new Response(imageBlob, {
       headers: {
         'Content-Type': 'image/png',
         'Content-Length': Buffer.byteLength(imageBuffer).toString(),
