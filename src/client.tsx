@@ -12,7 +12,12 @@ Sentry.init({
   // https://docs.sentry.io/platforms/javascript/guides/tanstackstart-react/configuration/options/#sendDefaultPii
   sendDefaultPii: true,
 
-  integrations: [Sentry.browserTracingIntegration(), Sentry.browserProfilingIntegration()],
+  integrations: [
+    Sentry.browserTracingIntegration(),
+    Sentry.browserProfilingIntegration(),
+    // send console.log, console.warn, and console.error calls as logs to Sentry
+    Sentry.consoleLoggingIntegration({ levels: ['log', 'warn', 'error'] }),
+  ],
   // Tracing
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
@@ -23,6 +28,8 @@ Sentry.init({
   // For example, a tracesSampleRate of 0.5 and profilesSampleRate of 0.5 would
   // results in 25% of transactions being profiled (0.5*0.5=0.25)
   profilesSampleRate: 1.0,
+  // Enable logs to be sent to Sentry
+  enableLogs: false,
 });
 
 hydrateRoot(document, <StartClient router={router} />);

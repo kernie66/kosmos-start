@@ -6,7 +6,11 @@ import { createRouter } from './router';
 
 Sentry.init({
   dsn: 'https://41f0a16db3b97b10d87503d31b8e30a8@o4509929289220096.ingest.de.sentry.io/4509929292038224',
-  integrations: [nodeProfilingIntegration()],
+  integrations: [
+    nodeProfilingIntegration(),
+    // send console.log, console.warn, and console.error calls as logs to Sentry
+    Sentry.consoleLoggingIntegration({ levels: ['log', 'warn', 'error'] }),
+  ],
   // Tracing must be enabled for profiling to work
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set sampling rate for profiling - this is evaluated only once per SDK.init call
@@ -16,6 +20,8 @@ Sentry.init({
   // Adds request headers and IP for users, for more info visit:
   // https://docs.sentry.io/platforms/javascript/guides/tanstackstart-react/configuration/options/#sendDefaultPii
   sendDefaultPii: true,
+  // Enable logs to be sent to Sentry
+  enableLogs: true,
 });
 
 // Profiling happens automatically after setting it up with `Sentry.init()`.
