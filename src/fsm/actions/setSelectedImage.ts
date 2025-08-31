@@ -8,22 +8,17 @@ export type SelectedImageProps = {
 };
 
 export const setSelectedImage = async ({ selection }: SelectedImageProps) => {
-  console.log(
-    'setSelectedImage:',
-    selection,
-    'Clipboard:',
-    selection instanceof ClipboardEvent,
-    selection instanceof File,
-  );
-  if (selection instanceof ClipboardEvent) {
-    const file = getPastedImage(selection);
-    return file;
-  } else if (selection instanceof File) {
+  if (selection instanceof File) {
     const file = selection; // Assuming event.data contains a single file from dropzone
     if (file.type.startsWith('image/')) {
       return file;
     }
-  } else {
+    // eslint-disable-next-line
+  } else if (navigator.clipboard) {
+    if (selection instanceof ClipboardEvent) {
+      const file = getPastedImage(selection);
+      return file;
+    }
     // If selection is null, try to read from clipboard
     try {
       const file = await getClipboardImage();
@@ -32,6 +27,9 @@ export const setSelectedImage = async ({ selection }: SelectedImageProps) => {
       console.error('Error reading from clipboard:', error);
       throw error;
     }
+  } else {
+    console.warn('Clipboard API not supported');
+    throw new Error('Clipboard API not supported');
   }
 
   throw new Error('No valid image selected');
