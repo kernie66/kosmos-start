@@ -1,7 +1,7 @@
 // import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { createActor } from 'xstate';
-import { imageSelectionMachine } from '../selectImageMachine';
+import { imageSelectionMachine } from '../imageSelectionMachine';
 
 describe('selectImageMachine', () => {
   it('should handle paste events correctly', () => {

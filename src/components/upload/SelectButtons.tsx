@@ -25,14 +25,14 @@ export function SelectButtons({ showButtons = true, buttonRef, onSelect, onCance
   }, [onCancel]);
 
   const handleChangeImage = useCallback(() => {
-    imageSelectionActor.send({ type: 'change image' });
+    imageSelectionActor.send({ type: 'image.update' });
   }, [imageSelectionActor]);
 
   // If showButtons is false, we don't render the buttons
   if (!showButtons) return null;
 
   return (
-    <Group mt="md" ref={buttonRef}>
+    <Group py="sm" ref={buttonRef} id="select-buttons">
       <Button variant="light" me="auto" onClick={handleChangeImage}>
         Byt ut bild
       </Button>

@@ -10,7 +10,7 @@ export default function PasteClipboardButton() {
   }, [imageSelectionActor]);
 
   return (
-    <Button onClick={handleClipboardImage} variant="light" color="teal" my="md" fullWidth>
+    <Button onClick={handleClipboardImage} variant="light" color="teal" fullWidth>
       Klistra in bild från urklipp
     </Button>
   );

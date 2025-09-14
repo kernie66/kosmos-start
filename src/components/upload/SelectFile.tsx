@@ -47,7 +47,6 @@ export default function SelectFile({ selectRef }: SelectFileProps) {
         maxFiles={1}
         bg="teal.1"
         radius="md"
-        mb="md"
         ref={selectRef}
       >
         <Group justify="center" gap="xl" mih={80} style={{ pointerEvents: 'none' }}>

@@ -2,13 +2,13 @@ import { createBrowserInspector } from '@statelyai/inspect';
 import { createFileRoute } from '@tanstack/react-router';
 import { createActorContext } from '@xstate/react';
 import { Upload } from '~/components/upload/Upload';
-import { imageSelectionMachine } from '~/fsm/selectImageMachine';
+import { imageSelectionMachine } from '~/fsm/imageSelectionMachine';
 
 export const Route = createFileRoute('/_auth/upload')({
   component: RouteComponent,
 });
 
-const { inspect } = createBrowserInspector({ autoStart: false });
+const { inspect } = createBrowserInspector({ autoStart: true });
 
 export const ImageSelectionContext = createActorContext(imageSelectionMachine, { inspect });
 

@@ -14,7 +14,7 @@ Sentry.init({
   // Tracing must be enabled for profiling to work
   tracesSampleRate: 1.0, //  Capture 100% of the transactions
   // Set sampling rate for profiling - this is evaluated only once per SDK.init call
-  profileSessionSampleRate: 1.0,
+  profileSessionSampleRate: 0.0, // 1.0, to profile all sessions
   // Trace lifecycle automatically enables profiling during active traces
   profileLifecycle: 'trace',
   // Adds request headers and IP for users, for more info visit:
@@ -28,7 +28,8 @@ Sentry.init({
 // All spans (unless those discarded by sampling) will have profiling data attached to them.
 Sentry.startSpan(
   {
-    name: 'My Span',
+    op: 'server',
+    name: 'Server span',
   },
   () => {
     // The code executed here will be profiled

@@ -4,24 +4,27 @@ import { initialSelectImageContext } from './contexts/imageSelectionContext';
 import type { ImageFileTypes } from './actions/setSelectedImage';
 import type { ImageSelectionContext } from './contexts/imageSelectionContext';
 import type { FileWithPath } from '@mantine/dropzone';
+import type { ImageSizeProps } from '~/components/upload/PreviewImage';
 
-export type SelectImageEvents =
+export type ImageSelectionEvents =
   | { type: 'get image.paste'; data?: File }
   | { type: 'get image.dropzone'; data?: FileWithPath }
   | { type: 'get image.clipboard'; data?: null }
   | { type: 'get image.rejected'; cause: string }
-  | { type: 'image.accepted'; data?: File }
-  | { type: 'image.rejected'; data?: string }
-  | { type: 'change image' }
+  | { type: 'image.pre-render' }
+  | { type: 'image.pre-rendered'; newSize: number }
+  | { type: 'image.fitted'; newSize: number }
+  | { type: 'image.finalize'; newSize: ImageSizeProps }
+  | { type: 'image.resize'; newSize: ImageSizeProps }
+  | { type: 'image.update' }
   | { type: 'select.submit' }
   | { type: 'select.cancel' }
-  | { type: 'toggle.fullscreen' }
-  | { type: 'restart' };
+  | { type: 'fullscreen.toggle' };
 
 export const imageSelectionMachine = setup({
   types: {
     context: {} as ImageSelectionContext,
-    events: {} as SelectImageEvents,
+    events: {} as ImageSelectionEvents,
   },
   actions: {
     /*
@@ -49,7 +52,7 @@ export const imageSelectionMachine = setup({
     },
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEATnEejUQNoAMAuoqAA5mwmlKXEAA9EAVgBMAOgDMrVgHZF48QA5FagCxqAbLK0AaEAE9EWrbOmtJBtbPUbZagIziAvu+NpMYHPmJyahgiAAISDBhpbnRYIjA2TiQQXn5BCmExBC1FaX1JNVZZWQBOXTU1EskLYzMEF0lxXWkS1l0XXUUc2UUHSU9vSL88QnTpLAYmKkThVIEgzIkyvMUytXVxG0k22sRZaukVBWdFSRcS8VWtAZAfbBHAynGHsLuwKhDwoekCXBJuABGZEYEBmyTm6UWCEqWkOulULjU1VkDT0u2yDRaKk2JQaujOOhub38oyCzwCryGHzAYQivmkEBoZG4AC9KAkOLM+PMhMksjC4QikZZUbp0Vp9NIcgj2pcqpJqkShiTHhRyaNQm9qbTvjE4hykjxuZC+YgBYp4eJEcjReirVYStjbIiypJHUrfCqxl7NVTPnSonQAFajSBgo1pBam6ElWEWoU2gpi0yIBolawKGyKNxW3S43Qe+4UskAcRpvt8VAg7OkJAoADcyABrMDSYkvUvlt4IOuNgjodKJcMpY1R0D82OCq3ClFJ9EuNrNaolFcryTZ+yF4bFp5lymVsA0Jk0aK4AcAMzINFQbeVHd3XaGPYbZH7g44w4hY9EZuWC5cOhJtsSIuHauiwtKEriGULg9DkW5ep2+4wFQAatugBAEGA3DxKCnLgqOvLjogJQOHI2y2CovTqMo86rNImzHFoiLlPG-ReLcd47mqAAKdD1iQYAAO4VihBAABboBQMBfL4n6ERk0aSPiKxlK0lwdKRoEpggihtBmCjrBaFzwuxgyevevH8YJIlarALzSLAACuAKoAI8mRkRP4IMpMidGprAaXmKLokiS5aKuBQXNKsgIZZ0h8WAAnCaJ7z2RSPxSVhuAeTyinET5Kn+XmgXZsF2l1OozRHEUSJlKsrAlHF3EJdZKVakQZBQFA+DSOeTm4LgsAEHQYAULlJoFcxLSrrNc1ojprQyNmWjKc4si6PobjNaSTyJcltl+uWaHRLE8QTd+WS+apJVBVp6KxuIDGZg0ORbWUO2quM4lkCJAByZCkOeJBvkE0z4RGeVQgu2zWLYDhFNRxSyKFLhSrN4F5uoBQuJ93ouW5yHvBdXlZNBzTFes6xbDsOlIrkNXKFo6g5B9HHti1ADC+BSaEACq3Dg4aI6efl3nkzdVObAqtOVRU0iNAoykSiU6zbTcFBkBAcDCBzu1i1+pOIAAtM0mbmxbrAAeixtPXN9srqseNkhMjBEFyotQpYDPKfaOjwgY4jovIrAK4xPR6eu8ixezXH6+qxCpR7UPRnpaPxizK4s7LEgaGHxx1f5jXOw+RPJ5N3kuABT0LqRmhFK0mh2k00gNPIuhKG0bQx+ZRbx-tNlJwRnvRlIcgKMoqgaNoeiSPOCiwh0vS9I0Ud5iXapYD9-2AyQwOg15hti1kVfM63jU9IUpRKGoD0yOoxRSJU9gKg0G-jATAhD5DFdZBYy2+1gv7cQgdQrKUOIxDSqhvaKHftzMAvMBbl0uuYS4CsqikXkJcLQVtLh2jzorWqboi5NU8O4IAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBGDXI3MAnAGYA7Bt689OgKwAOWwF87KtJjA58xchWZYi6AE5EVHyCSCAiYhIUUrIIAGy8scyxRnpGcjrWBnp6Cnoq6gjWCrpyxrwKxZYKBpaxsQ5OTK54hJHeLcR0zjA0YPSMLswEuCSsAEZk-hDBUuHintGIerxyzEaxtQZ1FZVG+YhGuWsb8QYG1hrLFg0g3c3ubW6tXU29-U3MEH5krABelDwBLNRPNJKEYstVutNtsKhpLHs1AdrLxmAoNpYqnJypY9Bsbncnh5KO0Hi8XG8GB92JxASFhCDIosEJDjjDYjt4YiCplUdCERzrHJLMKDASmkTHh16HdKQMWH4wAArVqQGahOZM8FLFZs2JbDlwhH7BCWDQKfQJCpyIxGC4KXjWcUuSWeZgAcT65J6EABzBIFAAbmQANZgZiE6Vuz0ypoIAPBgjoSLBdUMiILbUIDTnRLaIWxOS2dIKIyWE12vRJM7WWIWUymIxixy3CVRkkx71gKhgPzfPxsXDJgBmZD8qAjbYe0a9d3jQbISZTAjTYUZmdAEN10P1sN2JviVZqhht6UO6ydLcj05JADFxF2qPLw8PxFxpkCNeuwZvNNDmOklgGA62RpHIsQmgY6RJLUGi2JYvBGOYhbNo0Lrtl494UOgIy-GAj7Pswr7YbhdLAhmP4yH+GwAaKIGpOkEFIoUugIWYvBwXoKI2s62AYcwABqJBgAA7gRHyKmIeGrpqG5UQg6JGMwKyxNYJiXOxxSQcUSQpIWQrqQhWy8fcrRukJoniYMACurAQMmZFfhRURZopyngWpWjLGYWnMRsBhoqY4HrOpZZGCZrokhZYmyrA0rMLA1ljKg4gyd+Lm-gpyTuap6neeUGgmssuiGEhtY6IcqR6BF-HRY+cUPEM6AUAQeBpc5zJuSpnkaT5hXMZiiSlbwxgbPCtQKDVN5eHVsrDtZuC4LABCKmAXhEGQUBQPg7Wghl8ldR5eWaf1BQVJYaLops1TogoCFyFNZlRcJMWvLQVKDDSXC7VqmWHblXknSapg6XBJiISYuKoa26HTd4AAWZBiQAcmQpCvkunhBJ+6Z7cyIPWEkalVEBCjcdYeTMeBF3YrElymJCOY5o9xJeFgSUpbGFI-XJMTxIkyQMRkWQ5JTBTLAFpRIekjrGGp4VXlOT1eAAwvgzV0AAqqw2P0muHVZvzulC3BIu5CamKE1LI2lkWySqQ4LYUGQEBwFI17K+ReNZgAtExBQ+xd2TByHIcIizjy+AEXu-fJZ5rOidMKHI2T6rYFZ4voZS5GYCJAQraF8XDkpdjHvMHFoeq8DYZx1mLiAXIkjpIWTOgcSs0Me6zHqzk0ZeUTEWilGsTa5qktqYhWtjMDYSFaBo+q2xHbr3lzMD9-tg9GynxQUwYObmMozHAboJxwQz2SbAXMNF8rzBYThJB4aXTne5llxHLkqkFhsFRcZBjo0RZCqDUFEHF0jL2epZO4G9mRAWUqVYB1d9I5iKooNYKd4gL0OKpTuStu5YERijNGJAMbJjkrJAemhtABVtDWOstoyzliptkACdRTBJxFNUeEkC2YcwfDA1+scYjCgtDgpOKc8TnGsEVcoAEyhaEGiNQsvDmBqzABrbWsCszBTRIYHEE1SjJGYQUTESlrajTNINSajsgA */
   context: initialSelectImageContext,
   id: 'ImageSelection',
   initial: 'Start',
@@ -90,6 +93,7 @@ export const imageSelectionMachine = setup({
       entry: () => {
         console.log('Entering Get Image state');
       },
+
       invoke: {
         src: 'setSelectedImage',
         input: ({ event }) => {
@@ -97,14 +101,15 @@ export const imageSelectionMachine = setup({
           return { selection: event.data || null };
         },
         onDone: {
-          target: 'Preview Image',
+          target: 'Fit Image',
           actions: [
             ({ event }) => {
               console.log('Image successfully selected and loaded', event.output, event);
             },
-            assign(({ event }) => ({
-              selectedFile: event.output,
-            })),
+            assign({
+              selectedFile: ({ event }) => event.output,
+              centerHeight: '100%',
+            }),
           ],
         },
         onError: {
@@ -119,18 +124,62 @@ export const imageSelectionMachine = setup({
           ],
         },
       },
+    },
 
+    'Fit Image': {
+      entry: assign({
+        imageSelected: true,
+        // centerHeight: '100%',
+        imageShown: false,
+      }),
       on: {
-        'image.accepted': 'Preview Image',
+        'image.pre-render': {
+          actions: assign({
+            imageState: 'pre-render',
+          }),
+        },
+        'image.pre-rendered': {
+          actions: assign({
+            modalInnerHeight: ({ event }) => event.newSize,
+            imageState: 'resizing',
+          }),
+        },
+        'image.fitted': {
+          target: 'Finalize Image',
+          actions: assign({
+            modalInnerHeight: ({ event }) => event.newSize,
+          }),
+        },
       },
     },
 
-    'Preview Image': {
+    'Finalize Image': {
+      entry: assign({ imageState: 'fitted' }),
+      on: {
+        'image.finalize': {
+          target: 'View Image',
+          actions: assign({
+            imageState: 'shown',
+            centerHeight: ({ event }) => event.newSize,
+          }),
+        },
+      },
+    },
+
+    'View Image': {
       entry: assign({
-        imageSelected: true,
+        imageShown: true,
+        imageState: 'fitted',
       }),
       on: {
-        'change image': {
+        'image.resize': {
+          target: 'Fit Image',
+          actions: assign({
+            centerHeight: ({ event }) => event.newSize,
+          }),
+        },
+
+        'image.update': {
           target: 'Select Image',
           actions: assign({
             dropzoneSubText: 'Välj en ny bildfil för att byta ut den nuvarande',
@@ -145,17 +194,18 @@ export const imageSelectionMachine = setup({
           target: 'Clean Up',
         },
 
-        'toggle.fullscreen': {
-          target: 'Preview Image',
+        'fullscreen.toggle': {
+          target: 'Fit Image',
           actions: assign({
             fullscreen: ({ context }) => !context.fullscreen,
+            centerHeight: '100%',
           }),
         },
 
         'get image.paste': 'Get Image',
       },
       // Ensure that fullscreen is restored when exiting
-      exit: [assign({ fullscreen: false }), assign({ imageSelected: false })],
+      // exit: [assign({ fullscreen: false, imageSelected: false })],
     },
 
     'Show Notification': {

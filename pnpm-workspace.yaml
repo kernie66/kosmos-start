@@ -2,6 +2,7 @@ onlyBuiltDependencies:
   - '@clerk/shared'
   - '@parcel/watcher'
   - '@sentry-internal/node-cpu-profiler'
+  - '@tsparticles/engine'
   - esbuild
   - unrs-resolver
 
