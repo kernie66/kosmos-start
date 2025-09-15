@@ -1,7 +1,6 @@
 import { Center, LoadingOverlay, Stack } from '@mantine/core';
 import { useWindowEvent } from '@mantine/hooks';
 import { useCallback, useState } from 'react';
-import { useCenterSize } from '~/hooks/useCenterSize';
 import { useCloseModal } from '~/hooks/useCloseModal';
 import { useImageSelection } from '~/hooks/useImageSelection';
 import { submitFile } from '~/lib/utils/submitFile';
@@ -16,8 +15,6 @@ export function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
   const { sendEvent, selectedFile, imageSelected, fullscreen } = useImageSelection();
-
-  const { centerRef, topRef, bottomRef } = useCenterSize();
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {
@@ -54,17 +51,12 @@ export function Upload() {
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
       {!imageSelected && (
         <Stack mb="md" id="select-file-stack">
-          <SelectFile selectRef={topRef} />
+          <SelectFile />
           <PasteClipboardButton />
         </Stack>
       )}
       <Center>{selectedFile ? <PreviewImage file={selectedFile} /> : <NoImageSelected />}</Center>
-      <SelectButtons
-        showButtons={selectedFile !== null}
-        buttonRef={bottomRef}
-        onCancel={handleButtonClose}
-        onSelect={handleSubmitFile}
-      />
+      <SelectButtons showButtons={selectedFile !== null} onCancel={handleButtonClose} onSelect={handleSubmitFile} />
     </FileModal>
   );
 }
