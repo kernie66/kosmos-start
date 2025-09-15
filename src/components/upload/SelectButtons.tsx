@@ -9,7 +9,7 @@ type SelectButtonProps = {
   onCancel?: () => void;
 };
 
-export function SelectButtons({ showButtons = true, buttonRef, onSelect, onCancel }: SelectButtonProps) {
+export function SelectButtons({ showButtons = true, onSelect, onCancel }: SelectButtonProps) {
   const imageSelectionActor = ImageSelectionContext.useActorRef();
 
   const handleSelect = useCallback(() => {
@@ -32,7 +32,7 @@ export function SelectButtons({ showButtons = true, buttonRef, onSelect, onCance
   if (!showButtons) return null;
 
   return (
-    <Group py="sm" ref={buttonRef} id="select-buttons">
+    <Group pt="sm" id="select-buttons">
       <Button variant="light" me="auto" onClick={handleChangeImage}>
         Byt ut bild
       </Button>

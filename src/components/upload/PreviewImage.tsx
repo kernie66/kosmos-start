@@ -12,12 +12,13 @@ type PreviewImageProps = {
   file: FileStateProps;
 };
 
-const imageHeight = '95vh';
 const imageWidth = '100%';
 const maxImageWidth = '100vw';
 
 function PreviewImage({ file }: PreviewImageProps) {
   const { sendEvent, modalInnerHeight, imageState } = useImageSelection();
+  // Set image height to large value to get the DOM size before actual image is loaded
+  const [imageHeight, setImageHeight] = useState<ImageSizeProps>('95vh');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageSizeProps>('100%');
   const imageRef = useRef<HTMLButtonElement>(null);
 
@@ -25,6 +26,7 @@ function PreviewImage({ file }: PreviewImageProps) {
 
   let modalHeight = 0;
   let headerHeight = 0;
+  let bodyHeight = 0;
   let newModalInnerHeight = 0;
 
   if (imageState) {
@@ -33,12 +35,17 @@ function PreviewImage({ file }: PreviewImageProps) {
     const modalHeader = document.getElementById('file-modal-header');
     const selectFileStack = document.getElementById('select-file-stack');
     const selectButtons = document.getElementById('select-buttons');
+    const modalBody = selectButtons?.closest('.file-modal-body'); // 'section > div'); // document.getElementsByClassName('file-modal-body');
     if (modalContent && modalHeader && selectButtons) {
       console.log('modalContent:', modalContent);
       console.log('modalHeader:', modalHeader);
+      console.log('modalBody:', modalBody);
       console.log('selectButtons:', selectButtons);
       modalHeight = modalContent.getBoundingClientRect().height;
       headerHeight = modalHeader.getBoundingClientRect().height;
+      bodyHeight = modalBody ? modalBody.getBoundingClientRect().height : 0;
+      const bodyBottomPadding = Number.parseInt(getComputedStyle(modalBody).paddingBottom, 10);
+      console.log('bodyPadding:', bodyBottomPadding);
       let selectStackHeight = 0;
       if (selectFileStack) {
         selectStackHeight = selectFileStack.getBoundingClientRect().height;
@@ -50,7 +57,7 @@ function PreviewImage({ file }: PreviewImageProps) {
       buttonsHeight += buttonsTopMargin;
       const modalBottomPadding = Number.parseInt(getComputedStyle(modalContent).paddingBottom, 10);
       newModalInnerHeight = Math.trunc(
-        modalHeight - headerHeight - selectStackHeight - buttonsHeight - modalBottomPadding,
+        modalHeight - headerHeight - selectStackHeight - buttonsHeight - bodyBottomPadding,
       );
       console.log(
         'selectZoneHeight:',
@@ -71,7 +78,8 @@ function PreviewImage({ file }: PreviewImageProps) {
 
   useLayoutEffect(() => {
     const imageHeight = imageRef.current.getBoundingClientRect().height;
-    console.log('imageHeight', imageHeight);
+    console.log('useLayoutEffect activated, imageHeight:', imageHeight);
+    setImageHeight('100%');
     sendEvent({ type: 'image.pre-render' });
   }, []);
 
