@@ -50,7 +50,7 @@ export function Upload() {
     <FileModal modalOpened={fileModalOpened} fullScreen={fullscreen} onModalClose={handleModalClose}>
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
       {!imageSelected && (
-        <Stack mb="md" id="select-file-stack">
+        <Stack mb="md" className="select-file-stack">
           <SelectFile />
           <PasteClipboardButton />
         </Stack>

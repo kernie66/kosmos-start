@@ -32,7 +32,7 @@ export function SelectButtons({ showButtons = true, onSelect, onCancel }: Select
   if (!showButtons) return null;
 
   return (
-    <Group pt="sm" id="select-buttons">
+    <Group pt="sm" className="select-buttons">
       <Button variant="light" me="auto" onClick={handleChangeImage}>
         Byt ut bild
       </Button>
