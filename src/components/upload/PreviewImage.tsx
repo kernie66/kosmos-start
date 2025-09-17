@@ -36,8 +36,8 @@ function PreviewImage({ file }: PreviewImageProps) {
     const newMaxImageHeight = getMaxImageHeight(imageRef);
     setImageHeight('100%');
     setMaxImageHeight(newMaxImageHeight || '100%');
-    sendEvent({ type: 'image.pre-render' });
-  }, []);
+    sendEvent({ type: 'image.fitted' });
+  }, [imageState, sendEvent]);
 
   // Function to handle image click
   const handleImageClicked = useCallback(() => {

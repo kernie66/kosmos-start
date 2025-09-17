@@ -4,18 +4,14 @@ import { initialSelectImageContext } from './contexts/imageSelectionContext';
 import type { ImageFileTypes } from './actions/setSelectedImage';
 import type { ImageSelectionContext } from './contexts/imageSelectionContext';
 import type { FileWithPath } from '@mantine/dropzone';
-import type { ImageSizeProps } from '~/components/upload/PreviewImage';
 
 export type ImageSelectionEvents =
   | { type: 'get image.paste'; data?: File }
   | { type: 'get image.dropzone'; data?: FileWithPath }
   | { type: 'get image.clipboard'; data?: null }
   | { type: 'get image.rejected'; cause: string }
-  | { type: 'image.pre-render' }
-  | { type: 'image.pre-rendered'; newSize: number }
-  | { type: 'image.fitted'; newSize: number }
-  | { type: 'image.finalize'; newSize: ImageSizeProps }
-  | { type: 'image.resize'; newSize: ImageSizeProps }
+  | { type: 'image.fitted' }
+  | { type: 'image.resize' }
   | { type: 'image.update' }
   | { type: 'select.submit' }
   | { type: 'select.cancel' }
@@ -52,7 +48,7 @@ export const imageSelectionMachine = setup({
     },
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBGDXI3MAnAGYA7Bt689OgKwAOWwF87KtJjA58xchWZYi6AE5EVHyCSCAiYhIUUrIIAGy8scyxRnpGcjrWBnp6Cnoq6gjWCrpyxrwKxZYKBpaxsQ5OTK54hJHeLcR0zjA0YPSMLswEuCSsAEZk-hDBUuHintGIerxyzEaxtQZ1FZVG+YhGuWsb8QYG1hrLFg0g3c3ubW6tXU29-U3MEH5krABelDwBLNRPNJKEYstVutNtsKhpLHs1AdrLxmAoNpYqnJypY9Bsbncnh5KO0Hi8XG8GB92JxASFhCDIosEJDjjDYjt4YiCplUdCERzrHJLMKDASmkTHh16HdKQMWH4wAArVqQGahOZM8FLFZs2JbDlwhH7BCWDQKfQJCpyIxGC4KXjWcUuSWeZgAcT65J6EABzBIFAAbmQANZgZiE6Vuz0ypoIAPBgjoSLBdUMiILbUIDTnRLaIWxOS2dIKIyWE12vRJM7WWIWUymIxixy3CVRkkx71gKhgPzfPxsXDJgBmZD8qAjbYe0a9d3jQbISZTAjTYUZmdAEN10P1sN2JviVZqhht6UO6ydLcj05JADFxF2qPLw8PxFxpkCNeuwZvNNDmOklgGA62RpHIsQmgY6RJLUGi2JYvBGOYhbNo0Lrtl494UOgIy-GAj7Pswr7YbhdLAhmP4yH+GwAaKIGpOkEFIoUugIWYvBwXoKI2s62AYcwABqJBgAA7gRHyKmIeGrpqG5UQg6JGMwKyxNYJiXOxxSQcUSQpIWQrqQhWy8fcrRukJoniYMACurAQMmZFfhRURZopyngWpWjLGYWnMRsBhoqY4HrOpZZGCZrokhZYmyrA0rMLA1ljKg4gyd+Lm-gpyTuap6neeUGgmssuiGEhtY6IcqR6BF-HRY+cUPEM6AUAQeBpc5zJuSpnkaT5hXMZiiSlbwxgbPCtQKDVN5eHVsrDtZuC4LABCKmAXhEGQUBQPg7Wghl8ldR5eWaf1BQVJYaLops1TogoCFyFNZlRcJMWvLQVKDDSXC7VqmWHblXknSapg6XBJiISYuKoa26HTd4AAWZBiQAcmQpCvkunhBJ+6Z7cyIPWEkalVEBCjcdYeTMeBF3YrElymJCOY5o9xJeFgSUpbGFI-XJMTxIkyQMRkWQ5JTBTLAFpRIekjrGGp4VXlOT1eAAwvgzV0AAqqw2P0muHVZvzulC3BIu5CamKE1LI2lkWySqQ4LYUGQEBwFI17K+ReNZgAtExBQ+xd2TByHIcIizjy+AEXu-fJZ5rOidMKHI2T6rYFZ4voZS5GYCJAQraF8XDkpdjHvMHFoeq8DYZx1mLiAXIkjpIWTOgcSs0Me6zHqzk0ZeUTEWilGsTa5qktqYhWtjMDYSFaBo+q2xHbr3lzMD9-tg9GynxQUwYObmMozHAboJxwQz2SbAXMNF8rzBYThJB4aXTne5llxHLkqkFhsFRcZBjo0RZCqDUFEHF0jL2epZO4G9mRAWUqVYB1d9I5iKooNYKd4gL0OKpTuStu5YERijNGJAMbJjkrJAemhtABVtDWOstoyzliptkACdRTBJxFNUeEkC2YcwfDA1+scYjCgtDgpOKc8TnGsEVcoAEyhaEGiNQsvDmBqzABrbWsCszBTRIYHEE1SjJGYQUTESlrajTNINSajsgA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBGDb17MNANgDMAVjn6AnIY2XehgL52VaTGBz5i5CsyxF0AJyIqPkEkEBExCQopWQR9Xn1mfQB2c30ADkNFNIVeOUMVdQRDXjTmJIV9Y2N9DRM4pI0HJyZXPEJI7zbiOmcYGjB6RhdmAlwSVgAjMn8IYKlw8U9oxHNcssrqrTkUpKTjAsRquTLjJKtqquzKppBe1vcOt3aelv7BluYIPzJWAC9KHgCeaiRaSUIxVbHJIbGoabbmXb7NSIGrGZgKU5WNIaXbxZI3O5PDyUToPF4uN4MD7sTiAkLCEGRZYISHrKqw+GIg6xSonM45CwZXhJAktImPLr0O6UoYsPxgABW7Ugc1CCyZ4JWa2h7K2Oz23MySWYaQR5mMGQa5jkGjSopc4s8zAA4gNyX0IADmCQKAA3MgAazAzEJkqdrqlLQQPv9BHQkWCqoZESWmoQtTSCThVxM2O05mUyIQxnMGmYcmyZzicks5mx9uwYZJEfdYCoYD83z8bFw8YAZmQ-KgQ2Km14W3do36yHGEwIk2FGanQBDtTC9QiDUW5DvmCZtEk0ofytYRY5bqOHk6AGLiVtUWXBvviLizIFqpdgleaORVRJyWw9l4OskniJJuWxZhjB0HQNkyfc7XPUMrxJAA1EgwAAd3vR9mHlMRfjpYEUy-GREAqY1cnSU1cgArYIMMSjhUMBQdzSXgDCSOQG3udonXQrCcI+ABXVgIHjIiPxIqI0wo5gqLSGidw4uFuUUBJzE01ILhMcoFB4x00Iw7DpVgSVmFgYSJlQcQF3VZcyIQOSFKUujVKLU5dAUCpjAxTMNAULQDLHZgBJM14zIeEZ0AoAg8Dsz8ZO-JzknksxFMhNy5G5by0W8jZsg4kC0m4pDLz4ozBOlPthNwXBYAIeUwC8IgyCgKB8AS6TmWc9LXJU7Ki0sQxy2rBRdl2caFEQ5oHRCsL71oKlhhpLgutBJLHN66jMoG7lDwSaD+WsC0C3KYKUK8LAAAsyGwgA5MhSGfWdPCCd9kw25ltGmxIjzyTybUMYHDR0PczRrbIFEYnFStmxtLu8KybMjCl1o1ZK4gSZJUgyLIcjyblTjLcpKm8krQLMfSyrmxGAGF8BiugAFVWHe+lF26tMscSFJ0kyaaCfyIt8rKHycnNOFdgRBxzwoMgIDgKRkIqzb7NImIAFp9G5bWLtV7xfACYivrTHdjVJi0AuKfQjBykr0XF-QK2oqx7BphGDfFVsTYxxyGhJjZVi2G1AsNAL5J1DEDCqYxGg93jiXHN07l9hyYi2EbdmBxRDFWTINCJ1ZyxMfOuJMBRUn1pPmFvVGYDTjXNBqBIa2sbYdC423uVRcs0gtbJrao6n4cTjoFtTqTTeS4wRuAxjfJqDiMV4JFCi0MtbYAi1pqK9JjGrx5boep6SBe+MHPVzaM7hLOzgFvPbBtHLSxNOF9Al8pDHYrjD6dLBkZ3knp9P2MRfwKDFpUbE0M8TC0KJ5SBvkLQ1ECvHUehkvAMzAEzVmjdr7yFSpXSucRY4Fm-jrEWGJEHQ20s7aa7sHBAA */
   context: initialSelectImageContext,
   id: 'ImageSelection',
   initial: 'Start',
@@ -131,37 +127,17 @@ export const imageSelectionMachine = setup({
         imageSelected: true,
         // centerHeight: '100%',
         imageShown: false,
+        imageState: 'pre-render',
       }),
       on: {
-        'image.pre-render': {
-          actions: assign({
-            imageState: 'pre-render',
-          }),
-        },
-        'image.pre-rendered': {
-          actions: assign({
-            modalInnerHeight: ({ event }) => event.newSize,
-            imageState: 'resizing',
-          }),
-        },
         'image.fitted': {
-          target: 'Finalize Image',
-          actions: assign({
-            modalInnerHeight: ({ event }) => event.newSize,
-          }),
-        },
-      },
-    },
-
-    'Finalize Image': {
-      entry: assign({ imageState: 'fitted' }),
-      on: {
-        'image.finalize': {
           target: 'View Image',
+
           actions: assign({
-            imageState: 'shown',
-            centerHeight: ({ event }) => event.newSize,
+            // modalInnerHeight: ({ event }) => event.newSize,
           }),
+
+          reenter: true,
         },
       },
     },
@@ -175,7 +151,7 @@ export const imageSelectionMachine = setup({
         'image.resize': {
           target: 'Fit Image',
           actions: assign({
-            centerHeight: ({ event }) => event.newSize,
+            // centerHeight: ({ event }) => event.newSize,
           }),
         },
 
@@ -198,7 +174,7 @@ export const imageSelectionMachine = setup({
           target: 'Fit Image',
           actions: assign({
             fullscreen: ({ context }) => !context.fullscreen,
-            centerHeight: '100%',
+            // centerHeight: '100%',
           }),
         },
 

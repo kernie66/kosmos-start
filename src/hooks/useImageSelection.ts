@@ -1,13 +1,10 @@
 import { useCallback } from 'react';
 import {
-  selectCenterHeight,
   selectDropzoneSubText,
   selectFullscreen,
   selectImageSelected,
   selectImageShown,
   selectImageState,
-  selectModalInnerHeight,
-  selectNewSize,
   selectSelectedFile,
 } from '~/fsm/contexts/imageSelectionContext';
 import { ImageSelectionContext } from '~/routes/_auth/upload';
@@ -19,9 +16,6 @@ export const useImageSelection = () => {
   const fullscreen = ImageSelectionContext.useSelector(selectFullscreen);
   const imageSelected = ImageSelectionContext.useSelector(selectImageSelected);
   const dropzoneSubText = ImageSelectionContext.useSelector(selectDropzoneSubText);
-  const centerHeight = ImageSelectionContext.useSelector(selectCenterHeight);
-  const modalInnerHeight = ImageSelectionContext.useSelector(selectModalInnerHeight);
-  const newSize = ImageSelectionContext.useSelector(selectNewSize);
   const imageShown = ImageSelectionContext.useSelector(selectImageShown);
   const imageState = ImageSelectionContext.useSelector(selectImageState);
 
@@ -38,9 +32,6 @@ export const useImageSelection = () => {
     fullscreen,
     imageSelected,
     dropzoneSubText,
-    centerHeight,
-    modalInnerHeight,
-    newSize,
     imageShown,
     imageState,
   };
