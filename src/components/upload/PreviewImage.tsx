@@ -33,6 +33,7 @@ function PreviewImage({ file }: PreviewImageProps) {
 
   useLayoutEffect(() => {
     console.log('useLayoutEffect activated:', imageState);
+    if (imageState !== 'pre-render' || !imageRef.current) return;
     const newMaxImageHeight = getMaxImageHeight(imageRef);
     setImageHeight('100%');
     setMaxImageHeight(newMaxImageHeight || '100%');

@@ -104,7 +104,6 @@ export const imageSelectionMachine = setup({
             },
             assign({
               selectedFile: ({ event }) => event.output,
-              centerHeight: '100%',
             }),
           ],
         },
@@ -125,18 +124,12 @@ export const imageSelectionMachine = setup({
     'Fit Image': {
       entry: assign({
         imageSelected: true,
-        // centerHeight: '100%',
         imageShown: false,
         imageState: 'pre-render',
       }),
       on: {
         'image.fitted': {
           target: 'View Image',
-
-          actions: assign({
-            // modalInnerHeight: ({ event }) => event.newSize,
-          }),
-
           reenter: true,
         },
       },
@@ -150,9 +143,6 @@ export const imageSelectionMachine = setup({
       on: {
         'image.resize': {
           target: 'Fit Image',
-          actions: assign({
-            // centerHeight: ({ event }) => event.newSize,
-          }),
         },
 
         'image.update': {
@@ -174,7 +164,6 @@ export const imageSelectionMachine = setup({
           target: 'Fit Image',
           actions: assign({
             fullscreen: ({ context }) => !context.fullscreen,
-            // centerHeight: '100%',
           }),
         },
 
