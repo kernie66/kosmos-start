@@ -1,10 +1,6 @@
 import { Modal } from '@mantine/core';
 import { useCallback } from 'react';
 
-export type ModalParamProps = {
-  modalInnerHeight: number;
-};
-
 type FileModalProps = {
   children?: React.ReactNode;
   modalOpened?: boolean;

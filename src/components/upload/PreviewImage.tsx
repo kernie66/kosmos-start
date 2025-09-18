@@ -1,5 +1,5 @@
 import { Image, UnstyledButton } from '@mantine/core';
-import { useLogger } from '@mantine/hooks';
+import { useLogger, useThrottledCallback, useWindowEvent } from '@mantine/hooks';
 import { memo, useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { useImageSelection } from '~/hooks/useImageSelection';
 import { getImageFileInfo } from '~/lib/utils/getImageFileInfo';
@@ -30,6 +30,17 @@ function PreviewImage({ file }: PreviewImageProps) {
     console.log('previewImage found:', previewImage);
   }
   useLogger('PreviewImage', [{ imageState }]);
+
+  const throttledResize = useThrottledCallback(() => {
+    sendEvent({ type: 'image.resize' });
+    // Restore default image height so that image is resized when window is resized
+    setImageHeight('95vh');
+    setMaxImageHeight('100%');
+  }, 500);
+
+  useWindowEvent('resize', () => {
+    throttledResize();
+  });
 
   useLayoutEffect(() => {
     console.log('useLayoutEffect activated:', imageState);
