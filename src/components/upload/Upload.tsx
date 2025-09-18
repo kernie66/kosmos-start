@@ -14,7 +14,7 @@ import SelectFile from './SelectFile';
 export function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
-  const { sendEvent, selectedFile, imageSelected, fullscreen } = useImageSelection();
+  const { sendEvent, selectedFile, imageSelected, fullscreen, showSelect } = useImageSelection();
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {
@@ -49,7 +49,7 @@ export function Upload() {
   return (
     <FileModal modalOpened={fileModalOpened} fullScreen={fullscreen} onModalClose={handleModalClose}>
       <LoadingOverlay visible={isSubmitting} overlayProps={{ blur: 2 }} />
-      {!imageSelected && (
+      {showSelect && (
         <Stack mb="md" className="select-file-stack">
           <SelectFile />
           <PasteClipboardButton />

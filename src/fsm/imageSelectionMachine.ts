@@ -61,6 +61,9 @@ export const imageSelectionMachine = setup({
     },
 
     'Select Image': {
+      entry: assign({
+        showSelect: true,
+      }),
       on: {
         'get image.clipboard': {
           target: 'Get Image',
@@ -126,6 +129,7 @@ export const imageSelectionMachine = setup({
         imageSelected: true,
         imageShown: false,
         imageState: 'pre-render',
+        showSelect: false,
       }),
       on: {
         'image.fitted': {

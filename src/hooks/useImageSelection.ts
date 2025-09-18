@@ -6,6 +6,7 @@ import {
   selectImageShown,
   selectImageState,
   selectSelectedFile,
+  selectShowSelect,
 } from '~/fsm/contexts/imageSelectionContext';
 import { ImageSelectionContext } from '~/routes/_auth/upload';
 import type { ImageSelectionEvents } from '~/fsm/imageSelectionMachine';
@@ -18,6 +19,7 @@ export const useImageSelection = () => {
   const dropzoneSubText = ImageSelectionContext.useSelector(selectDropzoneSubText);
   const imageShown = ImageSelectionContext.useSelector(selectImageShown);
   const imageState = ImageSelectionContext.useSelector(selectImageState);
+  const showSelect = ImageSelectionContext.useSelector(selectShowSelect);
 
   const sendEvent = useCallback(
     (event: ImageSelectionEvents) => {
@@ -34,5 +36,6 @@ export const useImageSelection = () => {
     dropzoneSubText,
     imageShown,
     imageState,
+    showSelect,
   };
 };

@@ -11,6 +11,7 @@ export type ImageSelectionContext = {
   dropzoneSubText: string;
   imageShown: boolean | undefined;
   imageState: ImageStates;
+  showSelect: boolean;
 };
 
 type SelectImageState = MachineSnapshot<ImageSelectionContext, any, any, any, any, any, any, any>;
@@ -23,6 +24,7 @@ export const initialSelectImageContext = {
   dropzoneSubText: 'Välj en bildfil att ladda upp',
   imageShown: undefined,
   imageState: 'not shown' as ImageStates,
+  showSelect: false,
 };
 
 export const selectSelectedFile = (state: SelectImageState) => state.context.selectedFile;
@@ -31,3 +33,4 @@ export const selectImageSelected = (state: SelectImageState) => state.context.im
 export const selectDropzoneSubText = (state: SelectImageState) => state.context.dropzoneSubText;
 export const selectImageShown = (state: SelectImageState) => state.context.imageShown;
 export const selectImageState = (state: SelectImageState) => state.context.imageState;
+export const selectShowSelect = (state: SelectImageState) => state.context.showSelect;
