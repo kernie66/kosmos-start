@@ -25,7 +25,7 @@ export const setSelectedImage = async ({ selection }: SelectedImageProps) => {
       return file;
     } catch (error) {
       console.error('Error reading from clipboard:', error);
-      throw error;
+      throw new Error(`Error reading from clipboard: ${error}`);
     }
   } else {
     console.warn('Clipboard API not supported');

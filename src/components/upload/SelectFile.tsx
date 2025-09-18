@@ -2,14 +2,13 @@ import { Group, Stack, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { useCallback } from 'react';
 import { TbPhoto, TbUpload, TbX } from 'react-icons/tb';
-import { selectDropzoneSubText } from '~/fsm/contexts/imageSelectionContext';
+import { useImageSelection } from '~/hooks/useImageSelection';
 import {
   // getClipboardImage,
   // getDroppedImage,
   // getPastedImage,
   getRejectedImageCause,
 } from '~/lib/handlers/selectImageHandlers';
-import { ImageSelectionContext } from '~/routes/_auth/upload';
 import type { FileRejection, FileWithPath } from '@mantine/dropzone';
 
 export type FileStateProps = FileWithPath | null;
@@ -19,23 +18,22 @@ type SelectFileProps = {
 };
 
 export default function SelectFile({ selectRef }: SelectFileProps) {
-  const imageSelectionActor = ImageSelectionContext.useActorRef();
-  const subText = ImageSelectionContext.useSelector(selectDropzoneSubText);
+  const { sendEvent, dropzoneSubText: subText } = useImageSelection();
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
       // Only a single file is accepted by Dropzone, so we can safely use the first file
-      imageSelectionActor.send({ type: 'get image.dropzone', data: acceptedFiles[0] });
+      sendEvent({ type: 'get image.dropzone', data: acceptedFiles[0] });
     },
-    [imageSelectionActor],
+    [sendEvent],
   );
 
   const handleReject = useCallback(
     (rejectedFiles: Array<FileRejection>) => {
       const rejectCause = getRejectedImageCause(rejectedFiles);
-      imageSelectionActor.send({ type: 'get image.rejected', cause: rejectCause });
+      sendEvent({ type: 'get image.rejected', cause: rejectCause });
     },
-    [imageSelectionActor],
+    [sendEvent],
   );
 
   return (
