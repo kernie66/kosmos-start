@@ -1,5 +1,6 @@
+import { ErrorBoundary } from '@sentry/tanstackstart-react';
 import { createBrowserInspector } from '@statelyai/inspect';
-import { createFileRoute } from '@tanstack/react-router';
+import { Navigate, createFileRoute } from '@tanstack/react-router';
 import { createActorContext } from '@xstate/react';
 import { Upload } from '~/components/upload/Upload';
 import { imageSelectionMachine } from '~/fsm/imageSelectionMachine';
@@ -14,8 +15,10 @@ export const ImageSelectionContext = createActorContext(imageSelectionMachine, {
 
 function RouteComponent() {
   return (
-    <ImageSelectionContext.Provider>
-      <Upload />;
-    </ImageSelectionContext.Provider>
+    <ErrorBoundary fallback={<Navigate to="/" />}>
+      <ImageSelectionContext.Provider>
+        <Upload />;
+      </ImageSelectionContext.Provider>
+    </ErrorBoundary>
   );
 }
