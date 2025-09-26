@@ -48,7 +48,7 @@ export const imageSelectionMachine = setup({
     },
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBGXhoCczDXIAcChTo0BWAGxydcuQF97KtJjA58xchWZYi6AE5EVHyCSCAiYhIUUrIIlryWzJYA7DrJvGaGvADMGhqWKuoICobmzMnmvLwKvHLJuhUajs5MbniEUT7txHQuMDRg9IyuzAS4JKwARmQBECFSEeJeMYhmZfWGyRXmGtkKljrZhYjmpkk6lWZaWdmGzSB9bR6d7h29rQNDrcwQ-mSsAC9KDwBAtREtJGFYmtyhpNttdvtDscEOYsvoLnlsuZ0mjeOZ7o9Xp5KF1nu9XJ8GN92JwQaFhOCoisEDCNltzDs9gcjmpEJZsrxzlz4tlciYdITWsSXt16I8qcMWP4wAArDqQeZhRbMqGrCyw+GcxE8lHi5iGbHJRS8eoHDQKBxOB7SuVeZgAcUGFP6EGBzBIFAAbmQANZgZhEt2kr3y1oIQMhgjoKIhLWMyLLPUIXZpfTaHGXbSCuQozmJG2c5KGC5XKWuGXu2M+sBUMD+P7+Ni4FMAMzI-lQkddzyb3seCeDZGTqYE6fCTKzoGhBvZCO5yL5CDkGWYJUMm20loUYq29ew0e8ADFxC2qEqI73xFw5qDtYvIcvNHJLIlzIc7TFHZ8kMFFDA0ZhKiqHIUkFa0rHPJ4OndAA1EgwAAdzvB9mBVMQAXpMFM0-GREH2ZJmFqSxNmxHQMkPcwwO0ZhbGA6wdjkblEMbUk0Mw7DvgAV1YCAU0I99iOibNyMon8aP-ejcRRHc5Eok8bEtZJsh0ExSm4y9mD4rCFVgOVmFgQTJlQcR5x1JdSOKFJZOorSFJ0BiyzqPcoKtMxbAUJpnSjUdePQ4yPlM55RnQCgCDwWyPykr9HIoqj5Lo9ylK3GoFG86DjDsOitjuIKR2Q0L+IVXtBNwXBYAIFUwG8IgyCgKB8ASySWRktLXIyjyt1KXK7C5Gtc0afSQu8Iy71oakRlpLhOohJKHJ6uS+sU-EUUaZgRoybSDxrapJvK7wsAACzILCADkyFIJ8Zy8YI3wzFaWS0bSkh3FyhtOS0UX2MogOSUxLR2BQdksU6SXOyzrLjSllt1ZL4kSFI0gyOEcjyAot3MIxyig214i2HdshhzoAGF8BiugAFVWBehkFy67M0aSVJ0kyHH8kBnIiaqGptC0sUdMcZ0KDICA4CkYKzqI97swAWjxopVcp91fACIhFZRhy7Ao0HLH-Ep4l0EpAcsCDIaqODbTkSp9k10kZRbPX7NieoIOSE2Tb83JKjVsj0mYQUqgsE89iMSGXe8ZtHg9kjYjyAnyn2AVqxN7IUg0MtOTDrT0hznOcQ0ZI4+YG9EZgJPVpTywFAokbyM47QSl5Io8T2k8UgOVJrfqSuZsTiSleS8xskogDOMxHQdJMUtBsMJJNkqX2Dp-CnSobAzLuuug7oekgnpIuzk80CxVONzPDGz3PAasInHXo2obBsSusHh29R7e-XYkdrlY2ps77aB0qBfGXkKh2xxH5RQgUWi7ymswGmYA6aMzriyH8FFTDhy0vRAU-MgHEwKjYW0FQJb2CAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBGXhoCczDXIAcChTo0BWAGxydcuQF97KtJjA58xchWZYi6AE5EVHyCSCAiYhIUUrIIlryWzJYA7DrJvGaGvADMGhqWKuoICobmzMnmvLwKvHLJuhUajs5MbniEUT7txHQuMDRg9IyuzAS4JKwARmQBECFSEeJeMYhmZfWGyRXmGtkKljrZhYjmpkk6lWZaWdmGzSB9bR6d7h29rQNDrcwQ-mSsAC9KDwBAtREtJGFYmtyhpNttdvtDscEOYsvoLnlsuZ0mjeOZ7o9Xp5KF1nu9XJ8GN9-GAAFYdSDzMKLKIrBAwjZbcw7PYHI5qRC5BTMQzY5KKXj1A4aBQOJwPVrEzoAcUGFP6EGBzBIFAAbmQANZgZhE7qq9WPBC6g0EdBRELM4TgtlQzTZNL6bQ4y7abK1FE8xKSnnJQwXK6EpXmrzMNX0R5UMD+P7+Ni4e0AMzI-lQpujz1j8Y1YGt+rIdodAid4RdyzdHIssPhPMR-JRcgyzBKhk22jFCmy2S2UdcytjADFxCWqMMWJnxFw5qCWXXIaBYgZLIlzIdpUOdvlDCjDBpmJUqjkUv6JVZR9gY6SAGokMAAdxnc5NtLEAJBoWdSJ6w3RB9mSZhaksTZsR0DI+3ME9tGYWxD2sHY5D5e8ng6WMX3fT9vgAV1YCB7X-MEgPXGRQJSCC5Cg5IYLg3EO1qCDBxsMVGJ0ExSiw8dn1fD9E1gc1mFgQjJlQcQa1ZYDqOKWjIOg3dmPxQM6m7C9xTMWwFCaBUzULQT8JEsS7QoAg8FktdogbMC6IYpidHglEahFBQL14Yw7FgrY7kMgscJM4SPkzQjcFwWACFpMBvCIMgoCgfAbMouyQMU8DlMY1SXJYwUEFKEU7F5cNdjSHZ+Mfbw8NCylaGpEZ2E4cjVzS9kHOy5zXIKxpmBKjIPV7cNqiq4zvCwAALMgPwAOTIUgF0rLxghXQCIXShStA9JJOwYorTjFNzLDKA9klMMUdk8-IxuCibJOkhMPlSjb2XiRIUjSDI4RyPICgK8wjHKLzkniLZO2yW6SW8ABhfB0AoOgAFVWFWgDa3aht3qSVJ0kyX78jcnJgaqGptEYoceMcBUKDICA4CkIy7oo16GwAWn+oo2bKHRed53Ihw0LZZQMlox2qnw-ECFnXQyuxwPOk6eMMeJdBKY6z08qobylORKn2KGXnNEsZfk2J6jPUGrF3XRckqTnQPSZh-SqCxBz2IxPMNotLVaU2qM3Cw5HKfZLGHFXzGyFINEDHlncY9Io6jnEhe90kpye1x-c2zdLAUcCSrAjDtBKAUijxfrBxSA5UksIXRcVcXxuYWqTba1mMsjiC9wwzFeZMOUT0MJJNkqUHBvoyHAqbu6fGmuaFpIJb7XkuSA80IOQ+3cOTqj+o3KsYG5Tg2obBsNP7qk6dHmz9k9ZFRXdxKVXlY0hXtJxXTFAbpnoeYOGwAI2RqwW+DZ6LgVMC7RicEw5Ewfl5HyNgpQVGpvYIAA */
   context: initialSelectImageContext,
   id: 'ImageSelection',
   initial: 'Start',
@@ -70,10 +70,6 @@ export const imageSelectionMachine = setup({
         },
 
         'get image.dropzone': {
-          target: 'Get Image',
-        },
-
-        'get image.paste': {
           target: 'Get Image',
         },
 
@@ -170,8 +166,6 @@ export const imageSelectionMachine = setup({
             fullscreen: ({ context }) => !context.fullscreen,
           }),
         },
-
-        'get image.paste': 'Get Image',
       },
       // Ensure that fullscreen is restored when exiting
       // exit: [assign({ fullscreen: false, imageSelected: false })],
