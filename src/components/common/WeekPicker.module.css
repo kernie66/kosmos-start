@@ -1,0 +1,9 @@
+.weekday {
+  border: 2px solid rgba(0, 0, 0, 0.5);
+  border-radius: 20%;
+}
+
+.weekend {
+  border: 2px solid rgba(250, 82, 82, 0.5);
+  border-radius: 20%;
+}

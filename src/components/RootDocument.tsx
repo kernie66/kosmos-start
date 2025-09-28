@@ -1,6 +1,7 @@
 import { svSE } from '@clerk/localizations';
 import { ClerkProvider, SignedIn } from '@clerk/tanstack-react-start';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import { DatesProvider } from '@mantine/dates';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { HeadContent, Scripts } from '@tanstack/react-router';
@@ -8,6 +9,7 @@ import { App } from './App';
 import Devtools from './DevTools';
 import { Progress } from './Progress';
 import type { PropsWithChildren } from 'react';
+import 'dayjs/locale/sv';
 import './styles.css'; // Remove browser scroll bar, replace with ScrollArea
 
 export function RootDocument({ children }: PropsWithChildren) {
@@ -21,11 +23,13 @@ export function RootDocument({ children }: PropsWithChildren) {
         </head>
         <body>
           <MantineProvider theme={{ primaryColor: 'green' }}>
-            <Progress />
-            <Notifications />
-            <ModalsProvider>
-              <App>{children}</App>
-            </ModalsProvider>
+            <DatesProvider settings={{ locale: 'sv', consistentWeeks: true }}>
+              <Progress />
+              <Notifications />
+              <ModalsProvider>
+                <App>{children}</App>
+              </ModalsProvider>
+            </DatesProvider>
           </MantineProvider>
           <Scripts />
           {import.meta.env.DEV && (
