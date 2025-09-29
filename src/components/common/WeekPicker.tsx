@@ -17,12 +17,12 @@ export default function WeekPicker() {
     const isHovered = isInWeekRange(date, hovered);
     const isSelected = isInWeekRange(date, value);
     const isInRange = isHovered || isSelected;
-    const day = dayjs(date).date();
-    const today = dayjs().date();
+    const calendarDay = dayjs(date);
+    const today = dayjs();
     const weekDay = getDay(date);
 
     // Add custom class depending on if today is a weekday or a weekend
-    const dayClass = day === today ? (weekDay > 4 ? classes.weekend : classes.weekday) : undefined;
+    const dayClass = calendarDay.isSame(today, 'day') ? (weekDay > 4 ? classes.weekend : classes.weekday) : undefined;
 
     return {
       onMouseEnter: () => setHovered(date),
