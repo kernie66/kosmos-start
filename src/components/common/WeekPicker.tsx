@@ -1,30 +1,9 @@
 import { Calendar } from '@mantine/dates';
 import dayjs from 'dayjs';
 import { useState } from 'react';
+import { getDay, isInWeekRange } from '~/lib/utils/dayjsUtils';
 import classes from './WeekPicker.module.css';
 import type { CalendarProps } from '@mantine/dates';
-
-function getDay(date: string) {
-  const day = dayjs(date).day();
-  return day === 0 ? 6 : day - 1;
-}
-
-function startOfWeek(date: string) {
-  return dayjs(date)
-    .subtract(getDay(date) + 1, 'day')
-    .toDate();
-}
-
-function endOfWeek(date: string) {
-  return dayjs(date)
-    .add(6 - getDay(date), 'day')
-    .endOf('day')
-    .toDate();
-}
-
-function isInWeekRange(date: string, value: string | null) {
-  return value ? dayjs(date).isBefore(endOfWeek(value)) && dayjs(date).isAfter(startOfWeek(value)) : false;
-}
 
 export default function WeekPicker() {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -42,6 +21,7 @@ export default function WeekPicker() {
     const today = dayjs().date();
     const weekDay = getDay(date);
 
+    // Add custom class depending on if today is a weekday or a weekend
     const dayClass = day === today ? (weekDay > 4 ? classes.weekend : classes.weekday) : undefined;
 
     return {
