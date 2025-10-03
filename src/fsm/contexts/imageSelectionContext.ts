@@ -3,6 +3,7 @@ import type { MachineSnapshot } from 'xstate';
 
 type ImageStates = 'not shown' | 'pre-render' | 'fitted' | 'resizing' | 'shown';
 
+/*
 export type ImageSelectionContext = {
   selectedFile: FileWithPath | null;
   error: unknown;
@@ -12,25 +13,26 @@ export type ImageSelectionContext = {
   imageShown: boolean | undefined;
   imageState: ImageStates;
   showSelect: boolean;
+  showButtons: boolean;
 };
-
-type SelectImageState = MachineSnapshot<ImageSelectionContext, any, any, any, any, any, any, any>;
+*/
 
 export const initialSelectImageContext = {
-  selectedFile: null,
-  error: undefined,
+  selectedFile: <FileWithPath | null>null,
+  error: <unknown>undefined,
   fullscreen: false,
   imageSelected: false,
   dropzoneSubText: 'Välj en bildfil att ladda upp',
-  imageShown: undefined,
+  imageShown: <boolean | undefined>undefined,
   imageState: 'not shown' as ImageStates,
   showSelect: false,
+  showButtons: false,
 };
 
-export const selectSelectedFile = (state: SelectImageState) => state.context.selectedFile;
-export const selectFullscreen = (state: SelectImageState) => state.context.fullscreen;
-export const selectImageSelected = (state: SelectImageState) => state.context.imageSelected;
-export const selectDropzoneSubText = (state: SelectImageState) => state.context.dropzoneSubText;
-export const selectImageShown = (state: SelectImageState) => state.context.imageShown;
-export const selectImageState = (state: SelectImageState) => state.context.imageState;
-export const selectShowSelect = (state: SelectImageState) => state.context.showSelect;
+export type ImageSelectionContext = typeof initialSelectImageContext;
+
+type SelectImageState = MachineSnapshot<ImageSelectionContext, any, any, any, any, any, any, any>;
+
+export const imageSelector = {
+  imageSelectionValues: (state: SelectImageState) => state.context,
+};

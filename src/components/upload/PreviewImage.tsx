@@ -17,7 +17,10 @@ const imageWidth = '100%';
 const maxImageWidth = '100vw';
 
 function PreviewImage({ file }: PreviewImageProps) {
-  const { sendEvent, imageState } = useImageSelection();
+  const {
+    sendEvent,
+    imageSelectionValues: { imageState },
+  } = useImageSelection();
   // Set image height to large value to get the DOM size before actual image is loaded
   const [imageHeight, setImageHeight] = useState<ImageSizeProps>('95vh');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageSizeProps>('100%');

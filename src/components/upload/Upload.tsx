@@ -14,7 +14,10 @@ import SelectFile from './SelectFile';
 export function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
-  const { sendEvent, selectedFile, imageSelected, fullscreen, showSelect } = useImageSelection();
+  const {
+    sendEvent,
+    imageSelectionValues: { imageSelected, selectedFile, showSelect, fullscreen },
+  } = useImageSelection();
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {

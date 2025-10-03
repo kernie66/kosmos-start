@@ -3,19 +3,7 @@ import { setSelectedImage } from './actions/setSelectedImage';
 import { initialSelectImageContext } from './contexts/imageSelectionContext';
 import type { ImageFileTypes } from './actions/setSelectedImage';
 import type { ImageSelectionContext } from './contexts/imageSelectionContext';
-import type { FileWithPath } from '@mantine/dropzone';
-
-export type ImageSelectionEvents =
-  | { type: 'get image.paste'; data?: File }
-  | { type: 'get image.dropzone'; data?: FileWithPath }
-  | { type: 'get image.clipboard'; data?: null }
-  | { type: 'get image.rejected'; cause: string }
-  | { type: 'image.fitted' }
-  | { type: 'image.resize' }
-  | { type: 'image.update' }
-  | { type: 'select.submit' }
-  | { type: 'select.cancel' }
-  | { type: 'fullscreen.toggle' };
+import type { ImageSelectionEvents } from './events/imageSelectionEvents';
 
 export const imageSelectionMachine = setup({
   types: {
@@ -48,7 +36,7 @@ export const imageSelectionMachine = setup({
     },
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBGXhoCczDXIAcChTo0BWAGxydcuQF97KtJjA58xchWZYi6AE5EVHyCSCAiYhIUUrIIlryWzJYA7DrJvGaGvADMGhqWKuoICobmzMnmvLwKvHLJuhUajs5MbniEUT7txHQuMDRg9IyuzAS4JKwARmQBECFSEeJeMYhmZfWGyRXmGtkKljrZhYjmpkk6lWZaWdmGzSB9bR6d7h29rQNDrcwQ-mSsAC9KDwBAtREtJGFYmtyhpNttdvtDscEOYsvoLnlsuZ0mjeOZ7o9Xp5KF1nu9XJ8GN9-GAAFYdSDzMKLKIrBAwjZbcw7PYHI5qRC5BTMQzY5KKXj1A4aBQOJwPVrEzoAcUGFP6EGBzBIFAAbmQANZgZhE7qq9WPBC6g0EdBRELM4TgtlQzTZNL6bQ4y7abK1FE8xKSnnJQwXK6EpXmrzMNX0R5UMD+P7+Ni4e0AMzI-lQpujz1j8Y1YGt+rIdodAid4RdyzdHIssPhPMR-JRcgyzBKhk22jFCmy2S2UdcytjADFxCWqMMWJnxFw5qCWXXIaBYgZLIlzIdpUOdvlDCjDBpmJUqjkUv6JVZR9gY6SAGokMAAdxnc5NtLEAJBoWdSJ6w3RB9mSZhaksTZsR0DI+3ME9tGYWxD2sHY5D5e8ng6WMX3fT9vgAV1YCB7X-MEgPXGRQJSCC5Cg5IYLg3EO1qCDBxsMVGJ0ExSiw8dn1fD9E1gc1mFgQjJlQcQa1ZYDqOKWjIOg3dmPxQM6m7C9xTMWwFCaBUzULQT8JEsS7QoAg8FktdogbMC6IYpidHglEahFBQL14Yw7FgrY7kMgscJM4SPkzQjcFwWACFpMBvCIMgoCgfAbMouyQMU8DlMY1SXJYwUEFKEU7F5cNdjSHZ+Mfbw8NCylaGpEZ2E4cjVzS9kHOy5zXIKxpmBKjIPV7cNqiq4zvCwAALMgPwAOTIUgF0rLxghXQCIXShStA9JJOwYorTjFNzLDKA9klMMUdk8-IxuCibJOkhMPlSjb2XiRIUjSDI4RyPICgK8wjHKLzkniLZO2yW6SW8ABhfB0AoOgAFVWFWgDa3aht3qSVJ0kyX78jcnJgaqGptEYoceMcBUKDICA4CkIy7oo16GwAWn+oo2bKHRed53Ihw0LZZQMlox2qnw-ECFnXQyuxwPOk6eMMeJdBKY6z08qobylORKn2KGXnNEsZfk2J6jPUGrF3XRckqTnQPSZh-SqCxBz2IxPMNotLVaU2qM3Cw5HKfZLGHFXzGyFINEDHlncY9Io6jnEhe90kpye1x-c2zdLAUcCSrAjDtBKAUijxfrBxSA5UksIXRcVcXxuYWqTba1mMsjiC9wwzFeZMOUT0MJJNkqUHBvoyHAqbu6fGmuaFpIJb7XkuSA80IOQ+3cOTqj+o3KsYG5Tg2obBsNP7qk6dHmz9k9ZFRXdxKVXlY0hXtJxXTFAbpnoeYOGwAI2RqwW+DZ6LgVMC7RicEw5Ewfl5HyNgpQVGpvYIAA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBOBczka9ADgDMvAOwBGQ-pOKAvjZVpMYHPmLkKzLEXQAnIlT5BJBARMQkKKVkEAFYNADZmOJMNEwUtZIV9BTkVdQRMuWYFOLiLM15o0pNDErsHJmc8QnDPJuI6RxgaMHpGJ2YCXBJWACMyXwhAqVDxd0jEfQ1o5nMrfSS0wzks3MRDfcTK7LjoswUa3TqQTsbXFpdmjobu3obmCB8yVgAvSh4BaaiWaSYJRRbLVYmdapDRbHZqPb6QpmI5pfTRXilWz2a4NB5uSitO5PJwvBhvHxgABWzUgU2CM3C8wQ4JWZjWG1h22UCIQ3OYKLiCnZpXivF4ciuN3xLQA4j0SV0IH9mCQKAA3MgAazAzGlbTlCpuCDVmoI6HCgXpwiBTNBiAsSQFvBR0Wiwuicn2hl2+UWzAqhjMZg0wd4+nDSKleIN7mY8voNyoYB8nx8bFwFoAZmQfKg9TG7nGE4qwCaNWRzZaBNaQra5vaWUs2RyYXCeXlhYYihjxfoIyY3Z7otGnDK4wAxcSlqh9FhZ8RcSYAhn1kGgKJmL0JWI1DSY3jFUwdhZmZi98XbwyZJb6UfYWOEgBqJDAAHcZ3PdZSxN9-kEbTCBsN0QBRohMAM5DiRYrDiSxhWqX1Um7U5SgqIV9mySUcX1Itn1fD8ky-ZgAFdWAgC1-0BID1xkUDwMg6CNFg+CzEQ3koLPXhDCWRRUmqOJMWw+ox0fDwX3fGdYANZhYBIkZUHEWtGWAuj8gYiUmJYrI2J9XlBMKYo0LSUwllie9bmaOMJMI55pLuAZ0AoAg8GUtcIkbMCIM0mCTDgnT2LyC4VhKcp0XOKC0gs8d8MkpMsxI3BcFgAhKTADwiDIKAoHwNyaI8kD1O8qDfP8hC9LyExrADMxSnA3glhKCVorEzwAAsyA-AA5MhSAXKt3ACFdAOBAq1PKENEjkUxwK3Yp3Q0X0vUKE4hTKft1kMEccMLKzCSweTFMTZ48tG5lYgSJIUjSBQMiyHJ9IqELBNDdY2LOMwWrwjwAGF8CcugAFVWCGgC63y874kSZIYVurR7t9GoEiM4M5FOUxpsHOwcQoMgIDgKRcL2saVNoqIAFo4l9SmA3FOn6fpkwvuJzxvD8aizsbL0INSE4lihMD+xPdSNGe4M4i9aJ9DY5mCQ8GVSw5u1CpMF0QsqaJr2vE45DMJbTmYeIsXFEMKniWXDWOpwldUzczkKXnSjSUVLF9TJ9FpjDoNWfZhNxUTvuYKcrZgG2yYdWIILkNGwOyBRD34304lhHRQvKN0SgUc4LesgjFdXCHG01gNYQF4whK5JDFBWPjil0Wr9jvHaA5ZrAOu63qSH6i1VNJsa7eyFYUedkNXY46C2Sd4x1lu7Ic-2w7pxuMP+-kavedicCsil+E8gMsWQw0XW5Cqpnm4fQO-rAAHgZX5k0YgzZxQ9TFzGFmplhRtiJUPc4z7sIAA */
   context: initialSelectImageContext,
   id: 'ImageSelection',
   initial: 'Start',

@@ -18,7 +18,10 @@ type SelectFileProps = {
 };
 
 export default function SelectFile({ selectRef }: SelectFileProps) {
-  const { sendEvent, dropzoneSubText: subText } = useImageSelection();
+  const {
+    sendEvent,
+    imageSelectionValues: { dropzoneSubText: subText },
+  } = useImageSelection();
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
