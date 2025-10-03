@@ -1,29 +1,15 @@
 import type { FileWithPath } from '@mantine/dropzone';
 import type { MachineSnapshot } from 'xstate';
 
-type ImageStates = 'not shown' | 'pre-render' | 'fitted' | 'resizing' | 'shown';
-
-/*
-export type ImageSelectionContext = {
-  selectedFile: FileWithPath | null;
-  error: unknown;
-  fullscreen: boolean;
-  imageSelected: boolean;
-  dropzoneSubText: string;
-  imageShown: boolean | undefined;
-  imageState: ImageStates;
-  showSelect: boolean;
-  showButtons: boolean;
-};
-*/
+type ImageStates = 'not shown' | 'pre-render' | 'fitted';
 
 export const initialSelectImageContext = {
-  selectedFile: <FileWithPath | null>null,
-  error: <unknown>undefined,
+  selectedFile: null as FileWithPath | null,
+  error: undefined as unknown,
   fullscreen: false,
   imageSelected: false,
   dropzoneSubText: 'Välj en bildfil att ladda upp',
-  imageShown: <boolean | undefined>undefined,
+  imageShown: undefined as boolean | undefined,
   imageState: 'not shown' as ImageStates,
   showSelect: false,
   showButtons: false,
