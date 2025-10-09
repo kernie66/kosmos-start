@@ -15,14 +15,14 @@ export function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
   const {
-    sendEvent,
+    sendToImageSelection,
     imageSelectionValues: { imageSelected, selectedFile, showSelect, fullscreen },
   } = useImageSelection();
 
   // Listen for paste events
   useWindowEvent('paste', (event: ClipboardEvent) => {
     const clipboardFile = event.clipboardData?.files[0];
-    sendEvent({ type: 'get image.paste', data: clipboardFile });
+    sendToImageSelection({ type: 'get image.paste', data: clipboardFile });
   });
 
   // Functions to handle modal close actions
@@ -58,8 +58,8 @@ export function Upload() {
           <PasteClipboardButton />
         </Stack>
       )}
-      <Center>{selectedFile ? <PreviewImage file={selectedFile} /> : <NoImageSelected />}</Center>
-      <SelectButtons showButtons={selectedFile !== null} onCancel={handleButtonClose} onSelect={handleSubmitFile} />
+      <Center>{imageSelected ? <PreviewImage file={selectedFile} /> : <NoImageSelected />}</Center>
+      <SelectButtons showButtons={imageSelected} onCancel={handleButtonClose} onSelect={handleSubmitFile} />
     </FileModal>
   );
 }

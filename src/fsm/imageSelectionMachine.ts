@@ -1,13 +1,14 @@
-import { assertEvent, assign, fromPromise, setup } from 'xstate';
+import { assertEvent, assign, fromPromise, sendTo, setup } from 'xstate';
 import { setSelectedImage } from './actions/setSelectedImage';
-import { initialSelectImageContext } from './contexts/imageSelectionContext';
+import { initialSelectImageValues } from './contexts/imageSelectionValues';
+import { showImageMachine } from './showImageMachine';
 import type { ImageFileTypes } from './actions/setSelectedImage';
-import type { ImageSelectionContext } from './contexts/imageSelectionContext';
+import type { ImageSelectionValues } from './contexts/imageSelectionValues';
 import type { ImageSelectionEvents } from './events/imageSelectionEvents';
 
 export const imageSelectionMachine = setup({
   types: {
-    context: {} as ImageSelectionContext,
+    context: {} as ImageSelectionValues,
     events: {} as ImageSelectionEvents,
   },
   actions: {
@@ -24,6 +25,7 @@ export const imageSelectionMachine = setup({
       const selectedImage = await setSelectedImage({ selection: input.selection });
       return selectedImage;
     }),
+    showImageActor: showImageMachine,
   },
   guards: {
     isImage({ context, event }) {
@@ -36,10 +38,14 @@ export const imageSelectionMachine = setup({
     },
   },
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBOBczka9ADgDMvAOwBGQ-pOKAvjZVpMYHPmLkKzLEXQAnIlT5BJBARMQkKKVkEAFYNADZmOJMNEwUtZIV9BTkVdQRMuWYFOLiLM15o0pNDErsHJmc8QnDPJuI6RxgaMHpGJ2YCXBJWACMyXwhAqVDxd0jEfQ1o5nMrfSS0wzks3MRDfcTK7LjoswUa3TqQTsbXFpdmjobu3obmCB8yVgAvSh4BaaiWaSYJRRbLVYmdapDRbHZqPb6QpmI5pfTRXilWz2a4NB5uSitO5PJwvBhvHxgABWzUgU2CM3C8wQ4JWZjWG1h22UCIQ3OYKLiCnZpXivF4ciuN3xLQA4j0SV0IH9mCQKAA3MgAazAzGlbTlCpuCDVmoI6HCgXpwiBTNBiAsSQFvBR0Wiwuicn2hl2+UWzAqhjMZg0wd4+nDSKleIN7mY8voNyoYB8nx8bFwFoAZmQfKg9TG7nGE4qwCaNWRzZaBNaQra5vaWUs2RyYXCeXlhYYihjxfoIyY3Z7otGnDK4wAxcSlqh9FhZ8RcSYAhn1kGgKJmL0JWI1DSY3jFUwdhZmZi98XbwyZJb6UfYWOEgBqJDAAHcZ3PdZSxN9-kEbTCBsN0QBRohMAM5DiRYrDiSxhWqX1Um7U5SgqIV9mySUcX1Itn1fD8ky-ZgAFdWAgC1-0BID1xkUDwMg6CNFg+CzEQ3koLPXhDCWRRUmqOJMWw+ox0fDwX3fGdYANZhYBIkZUHEWtGWAuj8gYiUmJYrI2J9XlBMKYo0LSUwllie9bmaOMJMI55pLuAZ0AoAg8GUtcIkbMCIM0mCTDgnT2LyC4VhKcp0XOKC0gs8d8MkpMsxI3BcFgAhKTADwiDIKAoHwNyaI8kD1O8qDfP8hC9LyExrADMxSnA3glhKCVorEzwAAsyA-AA5MhSAXKt3ACFdAOBAq1PKENEjkUxwK3Yp3Q0X0vUKE4hTKft1kMEccMLKzCSweTFMTZ48tG5lYgSJIUjSBQMiyHJ9IqELBNDdY2LOMwWrwjwAGF8CcugAFVWCGgC63y874kSZIYVurR7t9GoEiM4M5FOUxpsHOwcQoMgIDgKRcL2saVNoqIAFo4l9SmA3FOn6fpkwvuJzxvD8aizsbL0INSE4lihMD+xPdSNGe4M4i9aJ9DY5mCQ8GVSw5u1CpMF0QsqaJr2vE45DMJbTmYeIsXFEMKniWXDWOpwldUzczkKXnSjSUVLF9TJ9FpjDoNWfZhNxUTvuYKcrZgG2yYdWIILkNGwOyBRD34304lhHRQvKN0SgUc4LesgjFdXCHG01gNYQF4whK5JDFBWPjil0Wr9jvHaA5ZrAOu63qSH6i1VNJsa7eyFYUedkNXY46C2Sd4x1lu7Ic-2w7pxuMP+-kavedicCsil+E8gMsWQw0XW5Cqpnm4fQO-rAAHgZX5k0YgzZxQ9TFzGFmplhRtiJUPc4z7sIAA */
-  context: initialSelectImageContext,
+  /** @xstate-layout N4IgpgJg5mDOIC5QEkC2BDGBlMAbMAxgC4CWA9gHYDEMRABCRjAHQAO6sRYA2gAwC6iUKzKwSpSkJAAPRABYATABoQAT0QBOBczka9ADgDMvAOwBGQ-pOKAvjZVpMYHPmLkKzLEXQAnIlT5BJBARMQkKKVkEAFYNADZmOJMNEwUtZIV9BTkVdQRMuWYFOLiLM15o0pNDErsHJmc8QnDPJuI6RxgaMHpGJ2YCXBJWACMyXwhAqVDxd0jEfQ1o5nMrfSS0wzks3MRDfcTK7LjoswUa3TqQTsbXFpdmjobu3obmCB8yVgAvSh4BaaiWaSYJRRbLVYmdapDRbHZqPb6QpmI5pfTRXilWz2a4NB5uSitO5PJwvBhvHxgABWzUgU2CM3C8wQ4JWZjWG1h22UCIQ3OYKLiCnZpXivF4ciuN3xLQA4j0SV0IH9mCQKAA3MgAazAzGlbTlCpuCDVmoI6HCgXpwiBTNBiAsSQFvBR0Wiwuicn2hl2+UWzAqhjMZg0wd4+nDSKleIN7mY8voNyoYB8nx8bFwFoAZmQfKg9TG7nGE4qwCaNWRzZaBNaQra5vaWUs2RyYXCeXlhYYihjxfoIyY3Z7otGnDK4wA1EhgADupaofRYlLE33+QRtYQboCiCmiJgDcjiiyscUswuqvtS3dOpQqQv22UlOP1RcJU9n89gBuYAFdWBALTXQFNxBbdEF4X1eFHbBYzfac5yTL87mYWAfxGVBxFrRktxkRBd33CUjw0E8zzMC9eTiCUihKco0lMJZYmg25mkneDP2-c0KAIPAsPrUDcPyPcDyIkisjIn1eQuFYaPDd0tiFDQmPHOCPyTLMf1wXBYAISkwA8IgyCgKB8F4kCIkbfDhOPExTzE8i8hMawAzMUo914JYSglJTYI8LAAAsyDnAA5MhSCzEgq3cAIAQZPjzLAhByhDRI5FMPczEUE40l9L1ChOIUyn7dZDBHZ9CxYwksDQjDE2eUzgXigTYgSJIUjSBQMiyHIKIqaTKNDdYyLOMxvNfDwAGF8HQCg6AAVVYaL1zrMzmWaxJkhhDqtC630agSYpSgy05TFSwc7BxCgyAgOApBfCrGuw-iogAWm2X1nosQpexdd1ojWDRMVG+7PG8PxgIa5kvX3VITiWKFd37Ds8NiPrgziL0-rIoGCV8g1S3Bu0EpMF1pMqaJDHOYpPTMHLTmYeIsXFEMKnibHDVqpwCZwqJg2yFYDrOeIQ0sX1Mn0ANMXOI9Vn2J96jHHzmHfBCGi5p7EHJgNYXh4xMV0LZL0UFZFBh3QXP2fQ2bjfzAroEKwoii0cMexqebOQoYdKNJRRF3lD3F8wveMdYOuyK3Kuq8R8dilbGzkI2YdiPcsj++E8koj2aJDDQ5AyxyTHDiappm+a1dd+QhM2cUPUxcwkYQGplgFsiJV4BRzgL86gA */
+  context: initialSelectImageValues,
   id: 'ImageSelection',
   initial: 'Start',
+  invoke: {
+    id: 'showImage',
+    src: 'showImageActor',
+  },
   states: {
     Start: {
       entry: () => {
@@ -84,14 +90,16 @@ export const imageSelectionMachine = setup({
           return { selection: event.data || null };
         },
         onDone: {
-          target: 'Fit Image',
+          target: 'View Image',
           actions: [
             ({ event }) => {
               console.log('Image successfully selected and loaded', event.output, event);
             },
             assign({
               selectedFile: ({ event }) => event.output,
+              imageSelected: true,
             }),
+            sendTo('showImage', { type: 'image.resize' }),
           ],
         },
         onError: {
@@ -108,35 +116,16 @@ export const imageSelectionMachine = setup({
       },
     },
 
-    'Fit Image': {
+    'View Image': {
       entry: assign({
-        imageSelected: true,
-        imageShown: false,
-        imageState: 'pre-render',
         showSelect: false,
       }),
       on: {
-        'image.fitted': {
-          target: 'View Image',
-          reenter: true,
-        },
-      },
-    },
-
-    'View Image': {
-      entry: assign({
-        imageShown: true,
-        imageState: 'fitted',
-      }),
-      on: {
-        'image.resize': {
-          target: 'Fit Image',
-        },
-
-        'image.update': {
+        'select.update': {
           target: 'Select Image',
           actions: assign({
             dropzoneSubText: 'Välj en ny bildfil för att byta ut den nuvarande',
+            fullscreen: false,
           }),
         },
 
@@ -149,10 +138,12 @@ export const imageSelectionMachine = setup({
         },
 
         'fullscreen.toggle': {
-          target: 'Fit Image',
-          actions: assign({
-            fullscreen: ({ context }) => !context.fullscreen,
-          }),
+          target: 'View Image',
+          actions: [
+            assign({
+              fullscreen: ({ context }) => !context.fullscreen,
+            }),
+          ],
         },
       },
       // Ensure that fullscreen is restored when exiting

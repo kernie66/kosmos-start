@@ -17,10 +17,7 @@ const imageWidth = '100%';
 const maxImageWidth = '100vw';
 
 function PreviewImage({ file }: PreviewImageProps) {
-  const {
-    sendEvent,
-    imageSelectionValues: { imageState },
-  } = useImageSelection();
+  const { sendToImageSelection, sendToShowImage, imageState } = useImageSelection();
   // Set image height to large value to get the DOM size before actual image is loaded
   const [imageHeight, setImageHeight] = useState<ImageSizeProps>('95vh');
   const [maxImageHeight, setMaxImageHeight] = useState<ImageSizeProps>('100%');
@@ -34,8 +31,14 @@ function PreviewImage({ file }: PreviewImageProps) {
   }
   useLogger('PreviewImage', [{ imageState }]);
 
+  // Throttled function to handle window resize events
+  // This will send an event to the showImage actor to resize the image
+  // and also reset the image height to a large value to allow resizing
+  // when the window is resized
+  // We use a throttled callback to avoid excessive calls during rapid resize events
   const throttledResize = useThrottledCallback(() => {
-    sendEvent({ type: 'image.resize' });
+    if (imageState === 'pre-render') return;
+    sendToShowImage({ type: 'image.resize' });
     // Restore default image height so that image is resized when window is resized
     setImageHeight('95vh');
     setMaxImageHeight('100%');
@@ -49,15 +52,19 @@ function PreviewImage({ file }: PreviewImageProps) {
     console.log('useLayoutEffect activated:', imageState);
     if (imageState !== 'pre-render' || !imageRef.current) return;
     const newMaxImageHeight = getMaxImageHeight(imageRef);
+    console.log('🚀 ~ PreviewImage ~ newMaxImageHeight:', newMaxImageHeight);
     setImageHeight('100%');
     setMaxImageHeight(newMaxImageHeight || '100%');
-    sendEvent({ type: 'image.fitted' });
-  }, [imageState, sendEvent]);
+    sendToShowImage({ type: 'image.fitted' });
+  }, [imageState, sendToShowImage]);
 
   // Function to handle image click
   const handleImageClicked = useCallback(() => {
-    sendEvent({ type: 'fullscreen.toggle' });
-  }, [sendEvent]);
+    sendToImageSelection({ type: 'fullscreen.toggle' });
+    sendToShowImage({ type: 'image.resize' });
+    // setImageHeight('95vh');
+    // setMaxImageHeight('100%');
+  }, [sendToImageSelection, sendToShowImage]);
 
   return (
     <UnstyledButton onClick={handleImageClicked}>

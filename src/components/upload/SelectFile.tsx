@@ -19,24 +19,24 @@ type SelectFileProps = {
 
 export default function SelectFile({ selectRef }: SelectFileProps) {
   const {
-    sendEvent,
+    sendToImageSelection,
     imageSelectionValues: { dropzoneSubText: subText },
   } = useImageSelection();
 
   const handleDrop = useCallback(
     (acceptedFiles: Array<FileWithPath>) => {
       // Only a single file is accepted by Dropzone, so we can safely use the first file
-      sendEvent({ type: 'get image.dropzone', data: acceptedFiles[0] });
+      sendToImageSelection({ type: 'get image.dropzone', data: acceptedFiles[0] });
     },
-    [sendEvent],
+    [sendToImageSelection],
   );
 
   const handleReject = useCallback(
     (rejectedFiles: Array<FileRejection>) => {
       const rejectCause = getRejectedImageCause(rejectedFiles);
-      sendEvent({ type: 'get image.rejected', cause: rejectCause });
+      sendToImageSelection({ type: 'get image.rejected', cause: rejectCause });
     },
-    [sendEvent],
+    [sendToImageSelection],
   );
 
   return (
