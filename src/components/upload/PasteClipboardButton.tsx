@@ -1,6 +1,6 @@
 import { Button } from '@mantine/core';
 import { useCallback } from 'react';
-import { ImageSelectionContext } from '~/routes/_auth/upload';
+import { ImageSelectionContext } from './UploadContext';
 
 export default function PasteClipboardButton() {
   const imageSelectionActor = ImageSelectionContext.useActorRef();

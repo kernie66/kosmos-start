@@ -11,7 +11,7 @@ import PreviewImage from './PreviewImage';
 import { SelectButtons } from './SelectButtons';
 import SelectFile from './SelectFile';
 
-export function Upload() {
+export default function Upload() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { modalOpened: fileModalOpened, closeModal } = useCloseModal();
   const {

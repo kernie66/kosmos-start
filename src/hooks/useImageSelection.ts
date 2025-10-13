@@ -1,7 +1,7 @@
 import { useSelector } from '@xstate/react';
 import { useCallback } from 'react';
+import { ImageSelectionContext } from '~/components/upload/UploadContext';
 import { imageSelector } from '~/fsm/contexts/imageSelectionValues';
-import { ImageSelectionContext } from '~/routes/_auth/upload';
 import type { ImageSelectionEvents } from '~/fsm/events/imageSelectionEvents';
 
 export const useImageSelection = () => {
