@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@clerk/localizations": "^3.26.0",
-    "@clerk/tanstack-react-start": "^0.23.0",
+    "@clerk/tanstack-react-start": "^0.26.1-canary.v20251015105019",
     "@libsql/client": "^0.15.15",
     "@mantine/core": "^8.3.5",
     "@mantine/dates": "^8.3.5",
@@ -44,7 +44,7 @@
     "@tanstack/react-query": "^5.90.3",
     "@tanstack/react-router": "1.133.3",
     "@tanstack/react-router-ssr-query": "^1.133.3",
-    "@tanstack/react-start": "1.131.28",
+    "@tanstack/react-start": "1.133.3",
     "@trpc/client": "^11.6.0",
     "@trpc/server": "^11.6.0",
     "@trpc/tanstack-react-query": "^11.6.0",
